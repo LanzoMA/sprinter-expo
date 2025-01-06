@@ -1,5 +1,3 @@
-import { useColorScheme } from "react-native"
-
 export const lightTheme = {
   onSurfaceColor: 'black',
   backgroundColor: 'white',

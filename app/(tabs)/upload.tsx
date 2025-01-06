@@ -1,9 +1,12 @@
 import { Image } from 'expo-image';
-import { View, Text, Button, Pressable, StyleSheet } from 'react-native';
+import { View, Text, Button, Pressable, StyleSheet, useColorScheme } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
+import { darkTheme, lightTheme } from '@/constants/themes';
 
 export default function UploadScreen() {
+  let colorscheme = useColorScheme();
+
   const [questionImage, setQuestionImage] = useState('');
   const [markschemeImage, setMarkschemeImage] = useState('');
 
@@ -34,6 +37,8 @@ export default function UploadScreen() {
       style={{
         gap: 8,
         padding: 8,
+        backgroundColor: colorscheme == 'light' ? lightTheme.backgroundColor : darkTheme.backgroundColor,
+        flex: 1,
       }}
     >
       <View
