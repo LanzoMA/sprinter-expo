@@ -1,8 +1,12 @@
 import { defaultStyles } from "@/constants/default-styles";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { View, Text, TextInput, Button } from "react-native";
 
 export default function LoginScreen() {
+  async function login() {
+    router.replace('/(tabs)/home');
+  }
+
   return (
     <View
       style={defaultStyles.container}
@@ -20,7 +24,7 @@ export default function LoginScreen() {
         placeholderTextColor='white'
       />
 
-      <Button title='LOGIN' />
+      <Button title='LOGIN' onPress={login} />
 
       <View
         style={{

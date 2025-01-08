@@ -1,8 +1,12 @@
 import { defaultStyles } from "@/constants/default-styles";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { View, Text, TextInput, Button } from "react-native";
 
 export default function SignUpScreen() {
+  async function signup() {
+    router.replace('/(auth)/login');
+  }
+
   return (
     <View
       style={defaultStyles.container}
@@ -33,7 +37,10 @@ export default function SignUpScreen() {
         placeholderTextColor='white'
       />
 
-      <Button title='LOGIN' />
+      <Button
+        title='SIGN UP'
+        onPress={signup}
+      />
 
       <View
         style={{
