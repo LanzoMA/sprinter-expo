@@ -36,7 +36,8 @@ export default function UploadScreen() {
     <View
       style={{
         gap: 8,
-        padding: 8,
+        paddingTop: 32,
+        padding: 16,
         backgroundColor: colorscheme == 'light' ? lightTheme.backgroundColor : darkTheme.backgroundColor,
         flex: 1,
       }}
@@ -45,7 +46,7 @@ export default function UploadScreen() {
         style={{
           flexDirection: 'row',
           height: 350,
-          gap: 8,
+          gap: 16,
         }}
       >
         <Pressable
