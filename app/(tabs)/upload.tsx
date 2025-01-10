@@ -1,10 +1,8 @@
 import { Image } from 'expo-image';
-import { View, Text, Button, Pressable, StyleSheet, useColorScheme, TextInput, FlatList, ScrollView } from 'react-native';
+import { View, Text, Pressable, StyleSheet, TextInput, FlatList, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import Slider from '@react-native-community/slider';
-import { Chip } from '@rneui/themed';
-import { darkTheme, lightTheme } from '@/constants/themes';
+import { Chip, useTheme, Button, Slider } from '@rneui/themed';
 import { defaultStyles } from '@/constants/default-styles';
 
 interface Course {
@@ -14,7 +12,7 @@ interface Course {
 }
 
 export default function UploadScreen() {
-  let colorscheme = useColorScheme();
+  const { theme } = useTheme();
 
   const [questionImage, setQuestionImage] = useState('');
   const [markschemeImage, setMarkschemeImage] = useState('');
@@ -58,22 +56,6 @@ export default function UploadScreen() {
     }
   }
 
-  function onTitleChange(title: string) {
-    setTitle(title);
-  }
-
-  function onDescriptionChange(description: string) {
-    setDescription(description);
-  }
-
-  function selectCourse(course: string) {
-    setCourse(course);
-  }
-
-  function onSliderChange(value: number) {
-    setMarks(Math.round(value));
-  }
-
   function submit() {
     console.log({
       questionImage,
@@ -90,7 +72,7 @@ export default function UploadScreen() {
       contentContainerStyle={{
         gap: 8,
         padding: 16,
-        backgroundColor: colorscheme == 'light' ? lightTheme.backgroundColor : darkTheme.backgroundColor,
+        backgroundColor: theme.colors.background,
       }}
     >
       <View
@@ -129,7 +111,7 @@ export default function UploadScreen() {
         style={{ color: 'white' }}
         placeholder='Title'
         placeholderTextColor='gray'
-        onChangeText={onTitleChange}
+        onChangeText={(title) => { setTitle(title); }}
       />
 
       <Text style={defaultStyles.text}>Description</Text>
@@ -140,7 +122,7 @@ export default function UploadScreen() {
         placeholder='Description'
         placeholderTextColor='gray'
         numberOfLines={4}
-        onChangeText={onDescriptionChange}
+        onChangeText={(description) => { setDescription(description); }}
       />
 
       <Text style={defaultStyles.text}>Course: {course}</Text>
@@ -156,7 +138,7 @@ export default function UploadScreen() {
             return (
               <Chip
                 title={title}
-                onPress={() => { selectCourse(title) }}
+                onPress={() => { setCourse(title); }}
               />
             )
           }
@@ -167,12 +149,16 @@ export default function UploadScreen() {
       <Text style={defaultStyles.text}>Number of Marks: {marks}</Text>
 
       <Slider
-        style={{ height: 40 }}
         minimumValue={1}
         maximumValue={20}
-        minimumTrackTintColor="#FFFFFF"
-        maximumTrackTintColor="green"
-        onValueChange={onSliderChange}
+        step={1}
+        thumbStyle={{
+          height: 24,
+          width: 24,
+          backgroundColor: theme.colors.primary
+        }}
+        minimumTrackTintColor={theme.colors.primary}
+        onValueChange={(mark) => { setMarks(mark) }}
       />
 
       <Button title='Submit' onPress={submit} />
