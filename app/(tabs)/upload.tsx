@@ -1,7 +1,7 @@
 import { Image } from 'expo-image';
-import { View, Text, Button, Pressable, StyleSheet, useColorScheme, TextInput, FlatList } from 'react-native';
+import { View, Text, Button, Pressable, StyleSheet, useColorScheme, TextInput, FlatList, ScrollView, SafeAreaView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { darkTheme, lightTheme } from '@/constants/themes';
 import { defaultStyles } from '@/constants/default-styles';
 
@@ -10,6 +10,17 @@ export default function UploadScreen() {
 
   const [questionImage, setQuestionImage] = useState('');
   const [markschemeImage, setMarkschemeImage] = useState('');
+
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => { getCourses() }, []);
+
+  async function getCourses() {
+    const response = await fetch('http://192.168.1.160:5000/courses/');
+    const json = await response.json();
+
+    setCourses(json);
+  }
 
   async function pickQuestionImage() {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -34,13 +45,12 @@ export default function UploadScreen() {
   }
 
   return (
-    <View
-      style={{
+
+    <ScrollView
+      contentContainerStyle={{
         gap: 8,
-        paddingTop: 32,
         padding: 16,
         backgroundColor: colorscheme == 'light' ? lightTheme.backgroundColor : darkTheme.backgroundColor,
-        flex: 1,
       }}
     >
       <View
@@ -85,26 +95,7 @@ export default function UploadScreen() {
       <Text style={defaultStyles.text}>Course</Text>
 
       <FlatList
-        data={
-          [
-            {
-              name: 'Maths',
-              qualification: 'A Level',
-              examBoard: 'Edexcel',
-            },
-            {
-              name: 'Further Maths',
-              qualification: 'A Level',
-              examBoard: 'Edexcel',
-            },
-            {
-              name: 'Physics',
-              qualification: 'A Level',
-              examBoard: 'OCR',
-            },
-          ]
-        }
-
+        data={courses}
         renderItem={
           (course) => {
             const { name, qualification, examBoard } = course.item;
@@ -116,7 +107,7 @@ export default function UploadScreen() {
       <Text style={defaultStyles.text}>Number of Marks</Text>
 
       <Button title='Submit' />
-    </View>
+    </ScrollView>
   )
 }
 
