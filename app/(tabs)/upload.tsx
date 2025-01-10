@@ -1,8 +1,8 @@
-import { Image } from 'expo-image';
+import { ImageBackground } from 'expo-image';
 import { View, Pressable, StyleSheet, TextInput, FlatList, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import { Chip, useTheme, Button, Text } from '@rneui/themed';
+import { Chip, useTheme, Button, Text, Icon } from '@rneui/themed';
 import Slider from '@react-native-community/slider';
 
 interface Course {
@@ -91,11 +91,18 @@ export default function UploadScreen() {
           }}
           onPress={pickQuestionImage}
         >
-          <Image
+          <ImageBackground
             style={styles.image}
             source={questionImage}
             contentFit='contain'
-          />
+          >
+            <Icon
+              name='add'
+              type='material'
+              color='black'
+              size={32}
+            />
+          </ImageBackground>
         </Pressable>
         <Pressable
           style={{
@@ -105,11 +112,20 @@ export default function UploadScreen() {
           }}
           onPress={pickMarkschemeImage}
         >
-          <Image
+          <ImageBackground
             style={styles.image}
             source={markschemeImage}
             contentFit='contain'
-          />
+          >
+            {
+              markschemeImage ? null : <Icon
+                name='add'
+                type='material'
+                color='black'
+                size={32}
+              />
+            }
+          </ImageBackground>
         </Pressable>
       </View>
 
@@ -136,15 +152,18 @@ export default function UploadScreen() {
       <Text>Course: {course}</Text>
 
       <FlatList
-        style={{ paddingVertical: 16 }}
+        style={{ paddingVertical: 16, flexWrap: 'wrap' }}
         data={courses}
         renderItem={
           (course) => {
             const { name, qualification, examBoard } = course.item;
-            const title = `${name} ${qualification} ${examBoard}`;
+            const title = `${qualification} ${examBoard} ${name}`;
 
             return (
               <Chip
+                containerStyle={{
+                  marginRight: 16,
+                }}
                 title={title}
                 onPress={() => { setCourse(title); }}
               />
@@ -168,7 +187,7 @@ export default function UploadScreen() {
       />
 
       <Button title='Submit' onPress={submit} />
-    </ScrollView>
+    </ScrollView >
   )
 }
 
@@ -178,5 +197,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     height: '100%',
     width: '100%',
+    justifyContent: 'center',
   }
 });
