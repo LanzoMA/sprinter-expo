@@ -1,8 +1,9 @@
 import { Image } from 'expo-image';
-import { View, Text, Button, Pressable, StyleSheet, useColorScheme } from 'react-native';
+import { View, Text, Button, Pressable, StyleSheet, useColorScheme, TextInput, FlatList } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import { darkTheme, lightTheme } from '@/constants/themes';
+import { defaultStyles } from '@/constants/default-styles';
 
 export default function UploadScreen() {
   let colorscheme = useColorScheme();
@@ -71,7 +72,48 @@ export default function UploadScreen() {
         </Pressable>
       </View>
 
-      <Text>Number of Marks</Text>
+      <TextInput
+        placeholder='Title'
+        placeholderTextColor='white'
+      />
+
+      <TextInput
+        placeholder='Description'
+        placeholderTextColor='white'
+      />
+
+      <Text style={defaultStyles.text}>Course</Text>
+
+      <FlatList
+        data={
+          [
+            {
+              name: 'Maths',
+              qualification: 'A Level',
+              examBoard: 'Edexcel',
+            },
+            {
+              name: 'Further Maths',
+              qualification: 'A Level',
+              examBoard: 'Edexcel',
+            },
+            {
+              name: 'Physics',
+              qualification: 'A Level',
+              examBoard: 'OCR',
+            },
+          ]
+        }
+
+        renderItem={
+          (course) => {
+            const { name, qualification, examBoard } = course.item;
+            return <Text style={defaultStyles.text}>{`${qualification} ${examBoard} ${name}`}</Text>
+          }
+        }
+      />
+
+      <Text style={defaultStyles.text}>Number of Marks</Text>
 
       <Button title='Submit' />
     </View>
