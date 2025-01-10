@@ -2,7 +2,8 @@ import { Image } from 'expo-image';
 import { View, Pressable, StyleSheet, TextInput, FlatList, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import { Chip, useTheme, Button, Slider, Text } from '@rneui/themed';
+import { Chip, useTheme, Button, Text } from '@rneui/themed';
+import Slider from '@react-native-community/slider';
 
 interface Course {
   name: string;
@@ -22,7 +23,7 @@ export default function UploadScreen() {
   const [courses, setCourses] = useState<Array<Course>>([]);
 
   const [course, setCourse] = useState('');
-  const [marks, setMarks] = useState(1);
+  const [marks, setMarks] = useState(5);
 
   useEffect(() => { getCourses() }, []);
 
@@ -156,15 +157,13 @@ export default function UploadScreen() {
       <Text>Number of Marks: {marks}</Text>
 
       <Slider
+        style={{ height: 40 }}
         minimumValue={1}
         maximumValue={20}
         step={1}
-        thumbStyle={{
-          height: 24,
-          width: 24,
-          backgroundColor: theme.colors.primary
-        }}
         minimumTrackTintColor={theme.colors.primary}
+        maximumTrackTintColor={theme.colors.grey0}
+        thumbTintColor={theme.colors.primary}
         onValueChange={(mark) => { setMarks(mark) }}
       />
 
