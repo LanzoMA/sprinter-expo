@@ -1,25 +1,37 @@
-import { defaultStyles } from "@/constants/default-styles";
 import { Link, router } from "expo-router";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, TextInput } from "react-native";
+import { Text, useTheme, Button } from '@rneui/themed';
 
 export default function LoginScreen() {
+  const { theme } = useTheme();
+
   async function login() {
     router.replace('/(tabs)/home');
   }
 
   return (
     <View
-      style={defaultStyles.container}
+      style={{
+        backgroundColor: theme.colors.background,
+        flex: 1,
+        padding: 16,
+        justifyContent: 'center',
+        gap: 32,
+      }}
     >
-      <Text style={defaultStyles.titleText} >Login</Text>
+      <Text>Login</Text>
 
       <TextInput
-        style={defaultStyles.textInput}
+        style={{
+          color: theme.colors.white,
+        }}
         placeholder="Email"
         placeholderTextColor='white'
       />
       <TextInput
-        style={defaultStyles.textInput}
+        style={{
+          color: theme.colors.white,
+        }}
         placeholder="Password"
         placeholderTextColor='white'
       />
@@ -33,10 +45,10 @@ export default function LoginScreen() {
           justifyContent: 'center',
         }}
       >
-        <Text style={defaultStyles.text} >No account?</Text>
+        <Text >No account?</Text>
         <Link
           href='/signup'
-          style={defaultStyles.link}
+          style={{ color: theme.colors.primary }}
         >
           Sign Up
         </Link>

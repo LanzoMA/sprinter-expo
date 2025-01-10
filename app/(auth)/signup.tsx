@@ -1,38 +1,54 @@
-import { defaultStyles } from "@/constants/default-styles";
+import { useTheme, Text, Button } from "@rneui/themed";
 import { Link, router } from "expo-router";
-import { View, Text, TextInput, Button } from "react-native";
+import { View, TextInput } from "react-native";
 
 export default function SignUpScreen() {
+  const { theme } = useTheme();
+
   async function signup() {
     router.replace('/(auth)/login');
   }
 
   return (
     <View
-      style={defaultStyles.container}
+      style={{
+        backgroundColor: theme.colors.background,
+        flex: 1,
+        padding: 16,
+        justifyContent: 'center',
+        gap: 32,
+      }}
     >
-      <Text style={defaultStyles.titleText}>Sign Up</Text>
+      <Text>Sign Up</Text>
 
       <TextInput
-        style={defaultStyles.textInput}
+        style={{
+          color: theme.colors.white,
+        }}
         placeholder="Email"
         placeholderTextColor='white'
       />
 
       <TextInput
-        style={defaultStyles.textInput}
+        style={{
+          color: theme.colors.white,
+        }}
         placeholder="Username"
         placeholderTextColor='white'
       />
 
       <TextInput
-        style={defaultStyles.textInput}
+        style={{
+          color: theme.colors.white,
+        }}
         placeholder="Password"
         placeholderTextColor='white'
       />
 
       <TextInput
-        style={defaultStyles.textInput}
+        style={{
+          color: theme.colors.white,
+        }}
         placeholder="Confirm Password"
         placeholderTextColor='white'
       />
@@ -49,8 +65,8 @@ export default function SignUpScreen() {
           justifyContent: 'center'
         }}
       >
-        <Text style={defaultStyles.text}>Already have an account?</Text>
-        <Link replace style={defaultStyles.link} href='/login' >Login</Link>
+        <Text>Already have an account?</Text>
+        <Link replace style={{ color: theme.colors.primary }} href='/login' >Login</Link>
       </View>
     </View>
   )

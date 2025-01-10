@@ -1,9 +1,8 @@
 import { Image } from 'expo-image';
-import { View, Text, Pressable, StyleSheet, TextInput, FlatList, ScrollView } from 'react-native';
+import { View, Pressable, StyleSheet, TextInput, FlatList, ScrollView } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
-import { Chip, useTheme, Button, Slider } from '@rneui/themed';
-import { defaultStyles } from '@/constants/default-styles';
+import { Chip, useTheme, Button, Slider, Text } from '@rneui/themed';
 
 interface Course {
   name: string;
@@ -84,7 +83,11 @@ export default function UploadScreen() {
         }}
       >
         <Pressable
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            borderWidth: 2,
+            borderRadius: 16,
+          }}
           onPress={pickQuestionImage}
         >
           <Image
@@ -94,7 +97,11 @@ export default function UploadScreen() {
           />
         </Pressable>
         <Pressable
-          style={{ flex: 1 }}
+          style={{
+            flex: 1,
+            borderWidth: 2,
+            borderRadius: 16,
+          }}
           onPress={pickMarkschemeImage}
         >
           <Image
@@ -105,7 +112,7 @@ export default function UploadScreen() {
         </Pressable>
       </View>
 
-      <Text style={defaultStyles.text}>Title</Text>
+      <Text>Title</Text>
 
       <TextInput
         style={{ color: 'white' }}
@@ -114,7 +121,7 @@ export default function UploadScreen() {
         onChangeText={(title) => { setTitle(title); }}
       />
 
-      <Text style={defaultStyles.text}>Description</Text>
+      <Text>Description</Text>
 
       <TextInput
         multiline
@@ -125,7 +132,7 @@ export default function UploadScreen() {
         onChangeText={(description) => { setDescription(description); }}
       />
 
-      <Text style={defaultStyles.text}>Course: {course}</Text>
+      <Text>Course: {course}</Text>
 
       <FlatList
         style={{ paddingVertical: 16 }}
@@ -146,7 +153,7 @@ export default function UploadScreen() {
         horizontal={true}
       />
 
-      <Text style={defaultStyles.text}>Number of Marks: {marks}</Text>
+      <Text>Number of Marks: {marks}</Text>
 
       <Slider
         minimumValue={1}
