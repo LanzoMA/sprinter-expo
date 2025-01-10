@@ -1,6 +1,5 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-import { useTheme } from '@rneui/themed';
+import { Icon, useTheme } from '@rneui/themed';
 
 export default function TabLayout() {
   const { theme } = useTheme();
@@ -13,43 +12,47 @@ export default function TabLayout() {
         tabBarStyle: {
           height: 60,
           backgroundColor: theme.colors.background,
+          alignItems: 'center',
           paddingTop: 4,
-        }
+        },
+        tabBarIconStyle: {
+          marginBottom: 2,
+        },
       }}
     >
       <Tabs.Screen
         name='home'
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='home' color={color} />
+          tabBarIcon: ({ color }) => <Icon size={28} name='home' type='material' color={color} />
         }}
       />
       <Tabs.Screen
         name='search'
         options={{
           title: 'Search',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='search' color={color} />
+          tabBarIcon: ({ color }) => <Icon size={28} name='search' type='material' color={color} />
         }}
       />
       <Tabs.Screen
         name='upload'
         options={{
           title: 'Upload',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='upload' color={color} />
+          tabBarIcon: ({ color }) => <Icon size={28} name='add-circle' type='material' color={color} />
         }}
       />
       <Tabs.Screen
         name='saved'
         options={{
           title: 'Saved',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='folder' color={color} />
+          tabBarIcon: ({ color }) => <Icon size={28} name='folder' type='material' color={color} />
         }}
       />
       <Tabs.Screen
         name='profile'
         options={{
           title: 'Me',
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name='user' color={color} />
+          tabBarIcon: ({ color }) => <Icon size={28} name='account-circle' type='material' color={color} />
         }}
       />
     </Tabs>
