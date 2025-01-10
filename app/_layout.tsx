@@ -2,10 +2,17 @@ import { createTheme, ThemeProvider } from "@rneui/themed";
 import { Stack } from "expo-router";
 
 const theme = createTheme({
+  lightColors: {
+    primary: '#20cfa5',
+    background: '#fff',
+    grey0: '#2a2c30',
+    white: '#000',
+  },
   darkColors: {
     primary: '#20cfa5',
     background: '#130e0e',
-    grey0: '#2a2c30'
+    grey0: '#2a2c30',
+    white: '#fff',
   },
   mode: 'dark',
 });
