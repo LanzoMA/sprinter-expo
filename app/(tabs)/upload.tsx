@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { useEffect, useState } from 'react';
 import { Chip, useTheme, Button, Text, Icon } from '@rneui/themed';
 import Slider from '@react-native-community/slider';
+import { baseUrl } from '@/constants/base-url';
 
 interface Course {
   name: string;
@@ -28,7 +29,7 @@ export default function UploadScreen() {
   useEffect(() => { getCourses() }, []);
 
   async function getCourses() {
-    const response = await fetch('http://192.168.1.160:5000/courses/');
+    const response = await fetch(`${baseUrl}/courses/`);
     const json = await response.json();
 
     setCourses(json);

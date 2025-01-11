@@ -1,5 +1,6 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text, useTheme, useThemeMode, Switch, Icon } from '@rneui/themed';
+import { router } from "expo-router";
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
@@ -47,18 +48,25 @@ export default function SettingsScreen() {
             type="material"
           />
         </View>
-        <View style={styles.listTile}>
-          <Icon
-            name="logout"
-            type="material"
-            size={32}
-          />
-          <Text style={styles.listTileText}>Sign Out</Text>
-          <Icon
-            name="arrow-forward-ios"
-            type="material"
-          />
-        </View>
+        <TouchableOpacity
+          onPress={() => {
+            router.dismissAll();
+            router.replace('/(auth)/login');
+          }}
+        >
+          <View style={styles.listTile}>
+            <Icon
+              name="logout"
+              type="material"
+              size={32}
+            />
+            <Text style={styles.listTileText}>Sign Out</Text>
+            <Icon
+              name="arrow-forward-ios"
+              type="material"
+            />
+          </View>
+        </TouchableOpacity>
         <View style={styles.listTile}>
           <Icon
             name="delete"
