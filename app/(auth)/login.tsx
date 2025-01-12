@@ -1,6 +1,6 @@
 import { Link, router } from "expo-router";
-import { View, TextInput } from "react-native";
-import { Text, useTheme, Button } from '@rneui/themed';
+import { View } from "react-native";
+import { Text, useTheme, Button, Input } from '@rneui/themed';
 import { useEffect, useState } from "react";
 import { Snackbar } from 'react-native-paper';
 import { baseUrl } from "@/constants/base-url";
@@ -84,21 +84,17 @@ export default function LoginScreen() {
       }}
       >Login</Text>
 
-      <TextInput
-        style={{ color: theme.colors.white }}
+      <Input
         autoCapitalize='none'
         inputMode="email"
         placeholder="Email"
-        placeholderTextColor='gray'
         onChangeText={(email) => { setEmail(email.trim()) }}
       />
 
-      <TextInput
-        style={{ color: theme.colors.white }}
+      <Input
         autoCapitalize="none"
         secureTextEntry
         placeholder="Password"
-        placeholderTextColor='gray'
         onChangeText={(password) => { setPassword(password.trim()) }}
       />
 
