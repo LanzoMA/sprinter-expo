@@ -1,6 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text, useTheme, useThemeMode, Switch, Icon } from '@rneui/themed';
 import { router } from "expo-router";
+import { deleteAccessToken } from "@/constants/token-access";
 
 export default function SettingsScreen() {
   const { theme } = useTheme();
@@ -49,9 +50,10 @@ export default function SettingsScreen() {
           />
         </View>
         <TouchableOpacity
-          onPress={() => {
+          onPress={async () => {
+            await deleteAccessToken();
             router.dismissAll();
-            router.replace('/(auth)/login');
+            router.replace('/');
           }}
         >
           <View style={styles.listTile}>

@@ -1,7 +1,19 @@
-import { Redirect } from "expo-router";
+import { router } from "expo-router";
+import { useEffect } from "react";
+import { getAccessToken } from "@/constants/token-access";
 
 export default function Index() {
-  const loggedIn = false;
+  useEffect(() => {
+    getAccessToken().then((accessToken) => {
+      console.log(accessToken);
 
-  return <Redirect href={loggedIn ? '/(tabs)/home' : '/(auth)/login'} />
+      if (accessToken) {
+        router.replace('/(tabs)/home');
+      }
+
+      else {
+        router.replace('/(auth)/login');
+      }
+    })
+  }, []);
 }

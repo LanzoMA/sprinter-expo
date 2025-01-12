@@ -4,6 +4,7 @@ import { Text, useTheme, Button } from '@rneui/themed';
 import { useEffect, useState } from "react";
 import { Snackbar } from 'react-native-paper';
 import { baseUrl } from "@/constants/base-url";
+import { storeAccessToken } from "@/constants/token-access";
 
 export default function LoginScreen() {
   const { theme } = useTheme();
@@ -53,9 +54,17 @@ export default function LoginScreen() {
 
     const json = await response.json();
 
-    // Todo: Securely store JWT Token
+    const accessToken = json.accessToken;
 
-    router.replace('/(tabs)/home');
+    if (!accessToken) {
+      setMessage('Something went wrong: access token not found');
+      setLoading(false);
+      return;
+    }
+
+    await storeAccessToken(accessToken);
+
+    router.replace('/');
   }
 
   return (
@@ -95,6 +104,7 @@ export default function LoginScreen() {
 
       <Button
         title={loading ? '...' : 'LOGIN'}
+        titleStyle={{ fontWeight: 700 }}
         onPress={login}
       />
 
