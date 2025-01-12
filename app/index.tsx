@@ -4,16 +4,12 @@ import { getAccessToken } from "@/constants/token-access";
 
 export default function Index() {
   useEffect(() => {
-    getAccessToken().then((accessToken) => {
-      console.log(accessToken);
-
-      if (accessToken) {
-        router.replace('/(tabs)/home');
+    getAccessToken().then(
+      (accessToken) => {
+        accessToken ?
+          router.replace('/(tabs)/home')
+          : router.replace('/(auth)/login');
       }
-
-      else {
-        router.replace('/(auth)/login');
-      }
-    })
+    )
   }, []);
 }
