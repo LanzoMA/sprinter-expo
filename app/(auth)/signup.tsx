@@ -2,6 +2,8 @@ import { useTheme, Text, Button, Input } from "@rneui/themed";
 import { Link, router } from "expo-router";
 import { View } from "react-native";
 import { useState } from 'react';
+import { baseUrl } from "@/constants/base-url";
+import { storeAccessToken } from "@/constants/token-access";
 
 export default function SignUpScreen() {
   const { theme } = useTheme();
@@ -39,8 +41,10 @@ export default function SignUpScreen() {
     }
 
     if (!passwordRegex.test(password)) {
-      setPasswordError(`Password insecure: password must be 8 or more characters 
-                        and contain numbers and special characters.`);
+      setPasswordError(
+        'Password insecure: password must be 8 or more characters' +
+        ' and contain numbers and special characters.'
+      );
       setLoading(false);
       return;
     }
@@ -51,11 +55,37 @@ export default function SignUpScreen() {
       return;
     }
 
+    const response = await fetch(
+      `${baseUrl}/register/`, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, username, password }),
+    });
+
+    if (response.status !== 201) {
+      setEmailError('Email/username already taken');
+      setLoading(false);
+      return;
+    }
+
+    const json = await response.json();
+
+    const accessToken = json.accessToken;
+
+    if (!accessToken) {
+      setEmailError('Something went wrong: access token not found');
+      setLoading(false);
+      return;
+    }
+
+    await storeAccessToken(accessToken);
+
+    router.replace('/');
+
     setLoading(false);
-
-    // Make request
-
-    // router.replace('/(auth)/login');
   }
 
   return (
