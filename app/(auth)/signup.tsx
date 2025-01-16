@@ -1,12 +1,61 @@
-import { useTheme, Text, Button } from "@rneui/themed";
+import { useTheme, Text, Button, Input } from "@rneui/themed";
 import { Link, router } from "expo-router";
-import { View, TextInput } from "react-native";
+import { View } from "react-native";
+import { useState } from 'react';
 
 export default function SignUpScreen() {
   const { theme } = useTheme();
 
+  const [loading, setLoading] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>('');
+  const [emailError, setEmailError] = useState<string>('');
+  const [username, setUsername] = useState<string>('');
+  const [usernameError, setUsernameError] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+
+  // Check if email contains @ and .
+  const emailRegex = /^.+@.+\.\w+$/;
+  // Check if username is 3 or more characters and only contains letters, numbers, underscores and underscores
+  const usernameRegex = /^[\w\d\._]{3,}$/;
+  // Check if the password is greater than 8 characters, contains a special character and a number
+  const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>_ ])(?=.*\d).{8,}$/;
+
   async function signup() {
-    router.replace('/(auth)/login');
+    setLoading(true);
+
+    if (!emailRegex.test(email)) {
+      setEmailError('Enter a valid email address');
+      setLoading(false);
+      return;
+    }
+
+    if (!usernameRegex.test(username)) {
+      setUsernameError('Enter a valid username');
+      setLoading(false);
+      return;
+    }
+
+    if (!passwordRegex.test(password)) {
+      setPasswordError(`Password insecure: password must be 8 or more characters 
+                        and contain numbers and special characters.`);
+      setLoading(false);
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setConfirmPasswordError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    setLoading(false);
+
+    // Make request
+
+    // router.replace('/(auth)/login');
   }
 
   return (
@@ -19,42 +68,57 @@ export default function SignUpScreen() {
         gap: 32,
       }}
     >
-      <Text>Sign Up</Text>
+      <Text style={{
+        textAlign: 'center',
+        fontSize: 24,
+        fontWeight: 700,
+      }}>Sign Up</Text>
 
-      <TextInput
-        style={{
-          color: theme.colors.white,
-        }}
+      <Input
+        autoCapitalize="none"
+        inputMode="email"
         placeholder="Email"
-        placeholderTextColor='white'
+        onChangeText={(email) => {
+          setEmail(email.trim());
+          setEmailError('');
+        }}
+        errorMessage={emailError}
       />
 
-      <TextInput
-        style={{
-          color: theme.colors.white,
-        }}
+      <Input
+        autoCapitalize="none"
         placeholder="Username"
-        placeholderTextColor='white'
+        onChangeText={(username) => {
+          setUsername(username.trim());
+          setUsernameError('');
+        }}
+        errorMessage={usernameError}
       />
 
-      <TextInput
-        style={{
-          color: theme.colors.white,
-        }}
+      <Input
+        autoCapitalize="none"
+        secureTextEntry
         placeholder="Password"
-        placeholderTextColor='white'
+        onChangeText={(password) => {
+          setPassword(password.trim());
+          setPasswordError('');
+        }}
+        errorMessage={passwordError}
       />
 
-      <TextInput
-        style={{
-          color: theme.colors.white,
-        }}
+      <Input
+        autoCapitalize="none"
+        secureTextEntry
         placeholder="Confirm Password"
-        placeholderTextColor='white'
+        onChangeText={(confirmPassword) => {
+          setConfirmPassword(confirmPassword.trim());
+          setConfirmPasswordError('');
+        }}
+        errorMessage={confirmPasswordError}
       />
 
       <Button
-        title='SIGN UP'
+        title={loading ? '...' : 'SIGN UP'}
         onPress={signup}
       />
 
