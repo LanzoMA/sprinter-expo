@@ -1,5 +1,11 @@
 import { ImageBackground } from 'expo-image';
-import { View, Pressable, StyleSheet, FlatList, ScrollView } from 'react-native';
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  FlatList,
+  ScrollView,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from 'react';
@@ -27,8 +33,12 @@ export default function UploadScreen() {
   const [visible, setVisible] = useState<boolean>(false);
   const [message, setMessage] = useState<string>('');
 
-  useEffect(() => { getCourses() }, []);
-  useEffect(() => { if (message !== '') setVisible(true) }, [message]);
+  useEffect(() => {
+    getCourses();
+  }, []);
+  useEffect(() => {
+    if (message !== '') setVisible(true);
+  }, [message]);
 
   async function getCourses() {
     const response = await fetch(`${baseUrl}/courses/`);
@@ -45,10 +55,9 @@ export default function UploadScreen() {
 
     if (result.canceled) return;
 
-    const imageData = await FileSystem.readAsStringAsync(
-      result.assets[0].uri,
-      { encoding: FileSystem.EncodingType.Base64 },
-    );
+    const imageData = await FileSystem.readAsStringAsync(result.assets[0].uri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
 
     return `data:image/png;base64,${imageData}`;
   }
@@ -84,7 +93,7 @@ export default function UploadScreen() {
     }
 
     if (!title) {
-      setMessage('Title was not given')
+      setMessage('Title was not given');
       return;
     }
 
@@ -121,13 +130,15 @@ export default function UploadScreen() {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(question),
     });
 
     if (response.status !== 201) {
-      setMessage('An error occurred while uploading the question. Please try again later.');
+      setMessage(
+        'An error occurred while uploading the question. Please try again later.'
+      );
       return;
     }
 
@@ -168,16 +179,11 @@ export default function UploadScreen() {
             <ImageBackground
               style={styles.image}
               source={{ uri: questionImage }}
-              contentFit='contain'
+              contentFit="contain"
             >
-              {
-                questionImage ? null : <Icon
-                  name='add'
-                  type='material'
-                  color='black'
-                  size={32}
-                />
-              }
+              {questionImage ? null : (
+                <Icon name="add" type="material" color="black" size={32} />
+              )}
             </ImageBackground>
           </Pressable>
           <Pressable
@@ -191,18 +197,11 @@ export default function UploadScreen() {
             <ImageBackground
               style={styles.image}
               source={{ uri: markSchemeImage }}
-              contentFit='contain'
+              contentFit="contain"
             >
-              {
-                markSchemeImage ?
-                  null :
-                  <Icon
-                    name='add'
-                    type='material'
-                    color='black'
-                    size={32}
-                  />
-              }
+              {markSchemeImage ? null : (
+                <Icon name="add" type="material" color="black" size={32} />
+              )}
             </ImageBackground>
           </Pressable>
         </View>
@@ -210,8 +209,10 @@ export default function UploadScreen() {
         <Text>Title</Text>
 
         <Input
-          placeholder='Title'
-          onChangeText={(title) => { setTitle(title); }}
+          placeholder="Title"
+          onChangeText={(title) => {
+            setTitle(title);
+          }}
         />
 
         <Text>Description</Text>
@@ -219,30 +220,34 @@ export default function UploadScreen() {
         <Input
           style={{ minHeight: 80 }}
           multiline
-          placeholder='Description'
+          placeholder="Description"
           numberOfLines={8}
-          onChangeText={(description) => { setDescription(description); }}
+          onChangeText={(description) => {
+            setDescription(description);
+          }}
         />
 
-        <Text>Course: {course?.qualification} {course?.examBoard} {course?.name}</Text>
+        <Text>
+          Course: {course?.qualification} {course?.examBoard} {course?.name}
+        </Text>
 
         <FlatList
           style={{ paddingVertical: 16 }}
           data={courses}
-          renderItem={
-            (course) => {
-              const { name, qualification, examBoard } = course.item;
-              const title = `${qualification} ${examBoard} ${name}`;
+          renderItem={(course) => {
+            const { name, qualification, examBoard } = course.item;
+            const title = `${qualification} ${examBoard} ${name}`;
 
-              return (
-                <Chip
-                  containerStyle={{ marginRight: 16 }}
-                  title={title}
-                  onPress={() => { setCourse(course.item) }}
-                />
-              )
-            }
-          }
+            return (
+              <Chip
+                containerStyle={{ marginRight: 16 }}
+                title={title}
+                onPress={() => {
+                  setCourse(course.item);
+                }}
+              />
+            );
+          }}
           horizontal
         />
 
@@ -256,20 +261,24 @@ export default function UploadScreen() {
           minimumTrackTintColor={theme.colors.primary}
           maximumTrackTintColor={theme.colors.grey0}
           thumbTintColor={theme.colors.primary}
-          onValueChange={(mark) => { setTotalMarks(mark) }}
+          onValueChange={(mark) => {
+            setTotalMarks(mark);
+          }}
         />
 
-        <Button title='Submit' onPress={submit} />
+        <Button title="Submit" onPress={submit} />
       </ScrollView>
       <Snackbar
         visible={visible}
-        onDismiss={() => { setVisible(false) }}
+        onDismiss={() => {
+          setVisible(false);
+        }}
         duration={3000}
       >
         <Text>{message}</Text>
       </Snackbar>
     </View>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -279,5 +288,5 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
     justifyContent: 'center',
-  }
+  },
 });

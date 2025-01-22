@@ -8,41 +8,28 @@ export default function HomeScreen() {
     <View
       style={{
         backgroundColor: 'white',
-        flex: 1
+        flex: 1,
       }}
     >
       <FlatList
-        data={
-          [
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-            {},
-          ]
-        }
-
-        renderItem={
-          () =>
-            <View style={{ height: height }} >
-              <Image
-                style={{
-                  flex: 1,
-                  width: '100%',
-                }}
-                source={require('@/assets/images/questions/question1.png')}
-                contentFit='contain'
-              />
-            </View>
-        }
-
+        data={[{}, {}, {}, {}, {}, {}, {}]}
+        renderItem={() => (
+          <View style={{ height: height }}>
+            <Image
+              style={{
+                flex: 1,
+                width: '100%',
+              }}
+              source={require('@/assets/images/questions/question1.png')}
+              contentFit="contain"
+            />
+          </View>
+        )}
         snapToInterval={height}
-        decelerationRate={"normal"}
+        decelerationRate={0.99}
         disableIntervalMomentum
         showsVerticalScrollIndicator={false}
       />
     </View>
-  )
+  );
 }
