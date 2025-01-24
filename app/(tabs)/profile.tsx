@@ -57,7 +57,7 @@ export default function ProfileScreen() {
           />
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 16, paddingVertical: 16 }}>
+        <View style={{ flexDirection: 'row', gap: 16, paddingVertical: 4 }}>
           <Image
             style={{
               width: 100,
