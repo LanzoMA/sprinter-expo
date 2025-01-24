@@ -2,23 +2,26 @@ import { Text, Icon } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, View, Dimensions } from 'react-native';
 import { ImageBackground } from 'expo-image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { Question } from '@/constants/models';
+import { baseUrl } from '@/constants/base-url';
 
 export default function QuestionScreen() {
   const { id } = useLocalSearchParams();
   const { width } = Dimensions.get('window');
+  const [question, setQuestion] = useState<Question>();
   const [favorited, setFavorited] = useState<boolean>(false);
 
-  const question = {
-    _id: '1',
-    question: require('@/assets/images/questions/question1.png'),
-    markScheme: require('@/assets/images/questions/question1.png'),
-    title: 'Polar Integration Question 8 Marks',
-    description: '',
-    course: 'A Level Edexcel Further Maths',
-    totalMarks: 8,
-    author: 'daniel brown',
-  };
+  useEffect(() => {
+    getQuestion();
+  }, []);
+
+  async function getQuestion() {
+    const response = await fetch(`${baseUrl}/questions/${id}`);
+    const data = await response.json();
+
+    setQuestion(data);
+  }
 
   return (
     <ScrollView
@@ -34,7 +37,7 @@ export default function QuestionScreen() {
             width: '100%',
             position: 'relative',
           }}
-          source={question.question}
+          source={question?.question}
           contentFit="contain"
         >
           <Text
@@ -47,7 +50,7 @@ export default function QuestionScreen() {
               fontSize: 16,
             }}
           >
-            {question.title}
+            {question?.title}
           </Text>
           <View
             style={{
@@ -79,7 +82,7 @@ export default function QuestionScreen() {
             width: '100%',
             position: 'relative',
           }}
-          source={question.markScheme}
+          source={question?.markScheme}
           contentFit="contain"
         >
           <Text
@@ -92,7 +95,7 @@ export default function QuestionScreen() {
               fontSize: 16,
             }}
           >
-            {question.title}
+            {question?.title}
           </Text>
           <View
             style={{
