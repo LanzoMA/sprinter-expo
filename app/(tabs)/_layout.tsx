@@ -21,40 +21,55 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name='home'
+        name="questions"
         options={{
           title: 'Home',
-          tabBarIcon: ({ color }) => <Icon size={28} name='home' type='material' color={color} />
+          tabBarIcon: ({ color }) => (
+            <Icon size={28} name="home" type="material" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name='search'
+        name="search"
         options={{
           title: 'Search',
-          tabBarIcon: ({ color }) => <Icon size={28} name='search' type='material' color={color} />
+          tabBarIcon: ({ color }) => (
+            <Icon size={28} name="search" type="material" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name='upload'
+        name="upload"
         options={{
           title: 'Upload',
-          tabBarIcon: ({ color }) => <Icon size={28} name='add-circle' type='material' color={color} />
+          tabBarIcon: ({ color }) => (
+            <Icon size={28} name="add-circle" type="material" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name='saved'
+        name="saved"
         options={{
           title: 'Saved',
-          tabBarIcon: ({ color }) => <Icon size={28} name='folder' type='material' color={color} />
+          tabBarIcon: ({ color }) => (
+            <Icon size={28} name="folder" type="material" color={color} />
+          ),
         }}
       />
       <Tabs.Screen
-        name='profile'
+        name="profile"
         options={{
           title: 'Me',
-          tabBarIcon: ({ color }) => <Icon size={28} name='account-circle' type='material' color={color} />
+          tabBarIcon: ({ color }) => (
+            <Icon
+              size={28}
+              name="account-circle"
+              type="material"
+              color={color}
+            />
+          ),
         }}
       />
     </Tabs>
-  )
+  );
 }

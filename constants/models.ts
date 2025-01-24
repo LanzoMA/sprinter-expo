@@ -11,4 +11,16 @@ interface Course {
   examBoard: string;
 }
 
-export { User, Course }
+interface Question {
+  _id: string;
+  question: string;
+  markScheme: string;
+  title: string;
+  description: string;
+  course: string;
+  totalMarks: number;
+  author: string;
+  favorited: boolean;
+}
+
+export { User, Course, Question }
