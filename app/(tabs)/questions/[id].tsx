@@ -1,7 +1,7 @@
 import { Text, Icon } from '@rneui/themed';
 import { useLocalSearchParams } from 'expo-router';
 import { ScrollView, View, Dimensions } from 'react-native';
-import { ImageBackground } from 'expo-image';
+import { Image } from 'expo-image';
 import { useEffect, useState } from 'react';
 import { Question } from '@/constants/models';
 import { baseUrl } from '@/constants/base-url';
@@ -24,102 +24,58 @@ export default function QuestionScreen() {
   }
 
   return (
-    <ScrollView
-      horizontal
-      pagingEnabled
-      showsHorizontalScrollIndicator={false}
-      decelerationRate={'fast'}
-    >
-      <View style={{ backgroundColor: 'white', width }}>
-        <ImageBackground
-          style={{
-            flex: 1,
-            width: '100%',
-            position: 'relative',
-          }}
+    <View style={{ width, flex: 1 }}>
+      <ScrollView
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        decelerationRate={'fast'}
+        style={{ backgroundColor: 'white', position: 'relative' }}
+      >
+        <Image
+          style={{ width }}
           source={question?.question}
           contentFit="contain"
-        >
-          <Text
-            style={{
-              color: 'black',
-              position: 'absolute',
-              bottom: 8,
-              left: 8,
-              fontWeight: 700,
-              fontSize: 16,
-            }}
-          >
-            {question?.title}
-          </Text>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 16,
-              right: 16,
-              gap: 32,
-            }}
-          >
-            <Icon color="black" name="account-circle" size={48} />
-            <Icon
-              color="black"
-              name={favorited ? 'favorite' : 'favorite-outline'}
-              size={48}
-              onPress={() => {
-                setFavorited(!favorited);
-              }}
-            />
-            <Icon color="black" name="comment" size={48} />
-            <Icon color="black" name="download" size={48} />
-            <Icon color="black" name="ios-share" size={48} />
-          </View>
-        </ImageBackground>
-      </View>
-      <View style={{ backgroundColor: 'white', width }}>
-        <ImageBackground
-          style={{
-            flex: 1,
-            width: '100%',
-            position: 'relative',
-          }}
+        />
+        <Image
+          style={{ width }}
           source={question?.markScheme}
           contentFit="contain"
-        >
-          <Text
-            style={{
-              color: 'black',
-              position: 'absolute',
-              bottom: 8,
-              left: 8,
-              fontWeight: 700,
-              fontSize: 16,
-            }}
-          >
-            {question?.title}
-          </Text>
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 16,
-              right: 16,
-              gap: 32,
-            }}
-          >
-            <Icon color="black" name="account-circle" size={48} />
-            <Icon
-              color="black"
-              name={favorited ? 'favorite' : 'favorite-outline'}
-              size={48}
-              onPress={() => {
-                setFavorited(!favorited);
-              }}
-            />
-            <Icon color="black" name="comment" size={48} />
-            <Icon color="black" name="download" size={48} />
-            <Icon color="black" name="ios-share" size={48} />
-          </View>
-        </ImageBackground>
+        />
+      </ScrollView>
+      <Text
+        style={{
+          color: 'black',
+          position: 'absolute',
+          bottom: 8,
+          left: 8,
+          fontWeight: 700,
+          fontSize: 16,
+        }}
+      >
+        {question?.title}
+      </Text>
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 16,
+          right: 16,
+          gap: 32,
+        }}
+      >
+        <Icon color="black" name="account-circle" size={48} />
+        <Icon
+          color={favorited ? 'red' : 'black'}
+          name={favorited ? 'favorite' : 'favorite-outline'}
+          size={48}
+          onPress={() => {
+            setFavorited(!favorited);
+          }}
+        />
+        <Icon color="black" name="comment" size={48} />
+        <Icon color="black" name="download" size={48} />
+        <Icon color="black" name="ios-share" size={48} />
       </View>
-    </ScrollView>
+    </View>
   );
 }
