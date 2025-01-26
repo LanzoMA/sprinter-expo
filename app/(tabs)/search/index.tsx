@@ -26,18 +26,21 @@ export default function SearchScreen() {
         qualification="A Level"
         examBoard="Edexcel"
         color="#E87B16"
+        chipColor="#ED8E1D"
       />
       <SubjectCard
         title="Further Maths"
         qualification="A Level"
         examBoard="Edexcel"
         color="#2FCA22"
+        chipColor="#4FD144"
       />
       <SubjectCard
         title="Physics"
         qualification="A Level"
         examBoard="OCR"
         color="#18A8D6"
+        chipColor="#20B6E5"
       />
     </View>
   );

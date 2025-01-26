@@ -3,17 +3,20 @@ import { Text, useTheme } from '@rneui/themed';
 
 interface ChipProps {
   title: string;
+  color?: string;
   onPress?: () => void;
 }
 
 const Chip = (props: ChipProps) => {
   const { theme } = useTheme();
 
+  const chipColor = props.color ?? theme.colors.grey1;
+
   return (
     <Pressable onPress={props.onPress}>
       <View
         style={{
-          backgroundColor: theme.colors.grey1,
+          backgroundColor: chipColor,
           paddingVertical: 4,
           paddingHorizontal: 8,
           borderRadius: 4,
