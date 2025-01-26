@@ -1,5 +1,6 @@
-import { useTheme, Text, SearchBar } from '@rneui/themed';
 import { View } from 'react-native';
+import { router } from 'expo-router';
+import { useTheme, Text, SearchBar } from '@rneui/themed';
 import SubjectCard from '@/components/SubjectCard';
 
 export default function SearchScreen() {
@@ -14,7 +15,11 @@ export default function SearchScreen() {
         gap: 16,
       }}
     >
-      <SearchBar />
+      <SearchBar
+        onPress={() => {
+          router.push('/(search)/search');
+        }}
+      />
       <Text style={{ fontWeight: 700, fontSize: 22 }}>Your Courses</Text>
       <SubjectCard
         title="Maths"

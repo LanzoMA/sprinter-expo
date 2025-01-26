@@ -9,12 +9,13 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from 'react';
-import { Chip, useTheme, Button, Text, Icon, Input } from '@rneui/themed';
+import { useTheme, Button, Text, Icon, Input } from '@rneui/themed';
 import Slider from '@react-native-community/slider';
 import { baseUrl } from '@/constants/base-url';
 import { Snackbar } from 'react-native-paper';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import { Course } from '@/constants/models';
+import Chip from '@/components/Chip';
 
 export default function UploadScreen() {
   const { theme } = useTheme();
@@ -232,15 +233,15 @@ export default function UploadScreen() {
         </Text>
 
         <FlatList
-          style={{ paddingVertical: 16 }}
+          style={{ paddingVertical: 4 }}
           data={courses}
+          contentContainerStyle={{ gap: 8 }}
           renderItem={(course) => {
             const { name, qualification, examBoard } = course.item;
             const title = `${qualification} ${examBoard} ${name}`;
 
             return (
               <Chip
-                containerStyle={{ marginRight: 16 }}
                 title={title}
                 onPress={() => {
                   setCourse(course.item);
