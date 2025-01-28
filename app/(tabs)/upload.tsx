@@ -37,9 +37,6 @@ export default function UploadScreen() {
   useEffect(() => {
     getCourses();
   }, []);
-  useEffect(() => {
-    if (message !== '') setVisible(true);
-  }, [message]);
 
   async function getCourses() {
     const response = await fetch(`${baseUrl}/courses/`);
@@ -90,21 +87,25 @@ export default function UploadScreen() {
   async function submit() {
     if (!questionImage || !markSchemeImage) {
       setMessage('Missing question and mark scheme images');
+      setVisible(true);
       return;
     }
 
     if (!title) {
       setMessage('Title was not given');
+      setVisible(true);
       return;
     }
 
     if (!course) {
       setMessage('Missing course information');
+      setVisible(true);
       return;
     }
 
     if (!totalMarks) {
       setMessage('Missing total marks information');
+      setVisible(true);
       return;
     }
 
@@ -121,7 +122,7 @@ export default function UploadScreen() {
       markScheme: markSchemeImage,
       title,
       description,
-      course,
+      course: course._id,
       totalMarks,
       author: user.id,
     };
@@ -140,10 +141,12 @@ export default function UploadScreen() {
       setMessage(
         'An error occurred while uploading the question. Please try again later.'
       );
+      setVisible(true);
       return;
     }
 
     setMessage('Successfully uploaded the question!');
+    setVisible(true);
     setQuestionImage('');
     setMarkSchemeImage('');
     setTitle('');
