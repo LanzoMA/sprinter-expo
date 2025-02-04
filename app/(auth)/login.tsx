@@ -34,7 +34,7 @@ export default function LoginScreen() {
       return;
     }
 
-    const response = await fetch(`${baseUrl}/login/`, {
+    const response = await fetch(`${baseUrl}/auth/login/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

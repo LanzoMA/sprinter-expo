@@ -1,9 +1,9 @@
-import { useTheme, Text, Button, Input } from "@rneui/themed";
-import { Link, router } from "expo-router";
-import { View } from "react-native";
+import { useTheme, Text, Button, Input } from '@rneui/themed';
+import { Link, router } from 'expo-router';
+import { View } from 'react-native';
 import { useState } from 'react';
-import { baseUrl } from "@/constants/base-url";
-import { storeAccessToken } from "@/constants/token-access";
+import { baseUrl } from '@/constants/base-url';
+import { storeAccessToken } from '@/constants/token-access';
 
 export default function SignUpScreen() {
   const { theme } = useTheme();
@@ -43,7 +43,7 @@ export default function SignUpScreen() {
     if (!passwordRegex.test(password)) {
       setPasswordError(
         'Password insecure: password must be 8 or more characters' +
-        ' and contain numbers and special characters.'
+          ' and contain numbers and special characters.'
       );
       setLoading(false);
       return;
@@ -55,8 +55,7 @@ export default function SignUpScreen() {
       return;
     }
 
-    const response = await fetch(
-      `${baseUrl}/register/`, {
+    const response = await fetch(`${baseUrl}/auth/register/`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -98,11 +97,15 @@ export default function SignUpScreen() {
         gap: 32,
       }}
     >
-      <Text style={{
-        textAlign: 'center',
-        fontSize: 24,
-        fontWeight: 700,
-      }}>Sign Up</Text>
+      <Text
+        style={{
+          textAlign: 'center',
+          fontSize: 24,
+          fontWeight: 700,
+        }}
+      >
+        Sign Up
+      </Text>
 
       <Input
         autoCapitalize="none"
@@ -147,21 +150,20 @@ export default function SignUpScreen() {
         errorMessage={confirmPasswordError}
       />
 
-      <Button
-        title={loading ? '...' : 'SIGN UP'}
-        onPress={signup}
-      />
+      <Button title={loading ? '...' : 'SIGN UP'} onPress={signup} />
 
       <View
         style={{
           flexDirection: 'row',
           gap: 4,
-          justifyContent: 'center'
+          justifyContent: 'center',
         }}
       >
         <Text>Already have an account?</Text>
-        <Link replace style={{ color: theme.colors.primary }} href='/login' >Login</Link>
+        <Link replace style={{ color: theme.colors.primary }} href="/login">
+          Login
+        </Link>
       </View>
     </View>
-  )
+  );
 }
