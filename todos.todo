@@ -15,7 +15,7 @@ Explore:
 Profile:
     [] Show account posts
     [] Show daily streak
-    [] Show achievements
+    ✔ Show achievements @done(25-02-08 10:42)
     [] Implement edit profile bottom sheet
 
 Account Settings:

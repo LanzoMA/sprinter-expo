@@ -1,4 +1,7 @@
-import { getUserDetails } from '@/constants/token-access';
+import AchievementCard from '@/components/AchievementCard';
+import { baseUrl } from '@/constants/base-url';
+import { Achievement } from '@/constants/models';
+import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import {
   Tab,
   TabView,
@@ -10,7 +13,7 @@ import {
 } from '@rneui/themed';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { View } from 'react-native';
+import { View, FlatList } from 'react-native';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -19,8 +22,11 @@ export default function ProfileScreen() {
 
   const [username, setUsername] = useState<string>('');
 
+  const [achievements, setAchievements] = useState<Array<Achievement>>([]);
+
   useEffect(() => {
     getUsername();
+    getAchievements();
   }, []);
 
   async function getUsername() {
@@ -30,6 +36,28 @@ export default function ProfileScreen() {
 
     setUsername(user.username);
   }
+
+  const getAchievements = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(`${baseUrl}/account/achievements`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      setAchievements(data.achievements);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   function goToSettings() {
     router.push('/settings');
@@ -148,7 +176,22 @@ export default function ProfileScreen() {
             alignItems: 'center',
           }}
         >
-          <Text style={{ textAlign: 'center' }}>No achievements yet.</Text>
+          {achievements.length > 0 ? (
+            <FlatList
+              style={{ width: '100%', padding: 8 }}
+              data={achievements}
+              contentContainerStyle={{ gap: 16 }}
+              renderItem={(achievements) => {
+                const { name, description } = achievements.item.achievement;
+
+                return (
+                  <AchievementCard name={name} description={description} />
+                );
+              }}
+            />
+          ) : (
+            <Text style={{ textAlign: 'center' }}>No achievements yet.</Text>
+          )}
         </TabView.Item>
       </TabView>
     </View>
