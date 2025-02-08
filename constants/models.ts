@@ -23,4 +23,12 @@ interface Question {
   favorited: boolean;
 }
 
-export { User, Course, Question }
+interface Achievement {
+  achievement: {
+    name: string;
+    description: string;
+  };
+  createdAt: Date;
+}
+
+export { User, Course, Question, Achievement };
