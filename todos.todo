@@ -1,0 +1,24 @@
+Home:
+    [] Implement fetching and scrolling of questions on home page
+    [] Show number of favorites on each question
+    [] Implement comments bottom sheet to show comments
+    [] Allow users to create comments on a question
+    [] Allow users to download a question
+    [] Allow users to share a question
+    [] Allow users to tap on the profile to go to that user's profile
+    [] Add rating system to each question
+
+Explore:
+    [] Allow users to edit the courses they are taking
+    [] Allow users to search for questions using filters
+
+Profile:
+    [] Show account posts
+    [] Show daily streak
+    [] Show achievements
+    [] Implement edit profile bottom sheet
+
+Account Settings:
+    [] Implement change email page
+    [] Implement change password page
+    [] Implement delete account page
