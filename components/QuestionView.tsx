@@ -20,6 +20,7 @@ interface QuestionViewProps {
 const QuestionView = (props: QuestionViewProps) => {
   const { theme } = useTheme();
 
+  const iconSize = 40;
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [favorited, setFavorited] = useState<boolean>(false);
 
@@ -95,7 +96,7 @@ const QuestionView = (props: QuestionViewProps) => {
                     gap: 32,
                   }}
                 >
-                  <Icon color="black" name="account-circle" size={36} />
+                  <Icon color="black" name="account-circle" size={iconSize} />
                   <Pressable
                     onPress={() => {
                       setFavorited(!favorited);
@@ -104,12 +105,12 @@ const QuestionView = (props: QuestionViewProps) => {
                     <Icon
                       color={favorited ? 'red' : 'black'}
                       name={favorited ? 'favorite' : 'favorite-outline'}
-                      size={36}
+                      size={iconSize}
                     />
                   </Pressable>
-                  <Icon color="black" name="comment" size={36} />
-                  <Icon color="black" name="download" size={36} />
-                  <Icon color="black" name="ios-share" size={36} />
+                  <Icon color="black" name="comment" size={iconSize} />
+                  <Icon color="black" name="download" size={iconSize} />
+                  <Icon color="black" name="ios-share" size={iconSize} />
                 </View>
               </>
             ) : null}

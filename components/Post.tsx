@@ -15,7 +15,7 @@ const Post = (props: PostProps) => {
   const { width } = Dimensions.get('window');
 
   const title =
-    props.title.length > 28 ? props.title.slice(0, 16) + '...' : props.title;
+    props.title.length > 22 ? props.title.slice(0, 19) + '...' : props.title;
 
   return (
     <Pressable
