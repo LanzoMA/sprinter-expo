@@ -1,10 +1,43 @@
-import { View } from 'react-native';
+import { FlatList, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTheme, Text, SearchBar } from '@rneui/themed';
-import SubjectCard from '@/components/SubjectCard';
+import { getAccessToken } from '@/constants/token-access';
+import { baseUrl } from '@/constants/base-url';
+import { useEffect, useState } from 'react';
+import { Course } from '@/constants/models';
+import courseColors from '@/constants/course-colors';
+import CourseCard from '@/components/CourseCard';
 
 export default function SearchScreen() {
   const { theme } = useTheme();
+
+  const [courses, setCourses] = useState<Array<Course>>();
+
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+  const getCourses = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('No access token found');
+      }
+
+      const response = await fetch(`${baseUrl}/account/courses`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      setCourses(data.courses);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View
@@ -20,27 +53,28 @@ export default function SearchScreen() {
           router.push('/(search)/search');
         }}
       />
+
       <Text style={{ fontWeight: 700, fontSize: 22 }}>Your Courses</Text>
-      <SubjectCard
-        title="Maths"
-        qualification="A Level"
-        examBoard="Edexcel"
-        color="#E87B16"
-        chipColor="#ED8E1D"
-      />
-      <SubjectCard
-        title="Further Maths"
-        qualification="A Level"
-        examBoard="Edexcel"
-        color="#2FCA22"
-        chipColor="#4FD144"
-      />
-      <SubjectCard
-        title="Physics"
-        qualification="A Level"
-        examBoard="OCR"
-        color="#18A8D6"
-        chipColor="#20B6E5"
+
+      <FlatList
+        contentContainerStyle={{ gap: 16 }}
+        data={courses}
+        renderItem={(course) => {
+          const cardColor: string =
+            courseColors[course.item._id]?.color || '#2A2C30';
+          const chipColor: string =
+            courseColors[course.item._id]?.chipColor || '#3B3F46';
+
+          return (
+            <CourseCard
+              title={course.item.name}
+              qualification={course.item.qualification}
+              examBoard={course.item.examBoard}
+              color={cardColor}
+              chipColor={chipColor}
+            />
+          );
+        }}
       />
     </View>
   );

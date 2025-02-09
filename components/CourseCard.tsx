@@ -2,7 +2,7 @@ import { View } from 'react-native';
 import { Icon, ListItem } from '@rneui/themed';
 import Chip from './Chip';
 
-interface SubjectCardProps {
+interface CourseCardProps {
   title: string;
   qualification: string;
   examBoard: string;
@@ -10,7 +10,7 @@ interface SubjectCardProps {
   chipColor: string;
 }
 
-const SubjectCard = (props: SubjectCardProps) => {
+const CourseCard = (props: CourseCardProps) => {
   return (
     <ListItem
       containerStyle={{ backgroundColor: props.color, borderRadius: 8 }}
@@ -30,4 +30,4 @@ const SubjectCard = (props: SubjectCardProps) => {
   );
 };
 
-export default SubjectCard;
+export default CourseCard;
