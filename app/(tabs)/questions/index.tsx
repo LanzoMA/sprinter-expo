@@ -1,4 +1,4 @@
-import { Dimensions, FlatList } from 'react-native';
+import { FlatList, RefreshControl } from 'react-native';
 import { useEffect, useState } from 'react';
 import { baseUrl } from '@/constants/base-url';
 import { getAccessToken } from '@/constants/token-access';
@@ -7,6 +7,7 @@ import { Question } from '@/constants/models';
 
 const HomeScreen = () => {
   const [questions, setQuestions] = useState<Array<Question>>([]);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     getQuestions();
@@ -34,11 +35,22 @@ const HomeScreen = () => {
     }
   };
 
+  const onRefresh = async () => {
+    setRefreshing(true);
+
+    await getQuestions();
+    setRefreshing(false);
+  };
+
   return (
     <FlatList
       data={questions}
       pagingEnabled
       decelerationRate="fast"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      showsVerticalScrollIndicator={false}
       renderItem={(question) => {
         return (
           <QuestionView
