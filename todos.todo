@@ -13,7 +13,7 @@ Explore:
     [] Allow users to search for questions using filters
 
 Profile:
-    [] Show account posts
+    ✔ Show account posts @started(25-02-09 11:04) @done(25-02-09 11:45) @lasted(41m49s)
     ✔ Show daily streak @started(25-02-09 10:23) @done(25-02-09 10:52) @lasted(29m53s)
     ✔ Show achievements @done(25-02-08 10:42)
     [] Implement edit profile bottom sheet

@@ -1,6 +1,7 @@
 import AchievementCard from '@/components/AchievementCard';
+import Post from '@/components/Post';
 import { baseUrl } from '@/constants/base-url';
-import { Achievement } from '@/constants/models';
+import { Achievement, Question } from '@/constants/models';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import {
   Tab,
@@ -19,26 +20,45 @@ import { View, FlatList } from 'react-native';
 export default function ProfileScreen() {
   const { theme } = useTheme();
 
-  const [tabIndex, setTabIndex] = useState(0);
+  const [tabIndex, setTabIndex] = useState<number>(0);
 
   const [username, setUsername] = useState<string>('');
 
+  const [posts, setPosts] = useState<Array<Question>>();
   const [dailyStreak, setDailyStreak] = useState<number>(0);
   const [achievements, setAchievements] = useState<Array<Achievement>>([]);
 
   useEffect(() => {
     getUsername();
+    getPosts();
     getDailyStreak();
     getAchievements();
   }, []);
 
-  async function getUsername() {
+  const getUsername = async () => {
     const user = await getUserDetails();
 
     if (!user) return;
 
     setUsername(user.username);
-  }
+  };
+
+  const getPosts = async () => {
+    try {
+      const user = await getUserDetails();
+
+      if (!user) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(`${baseUrl}/users/${user.id}/questions`);
+      const data = await response.json();
+
+      setPosts(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getDailyStreak = async () => {
     try {
@@ -173,15 +193,20 @@ export default function ProfileScreen() {
       </Tab>
 
       <TabView value={tabIndex} onChange={setTabIndex}>
-        <TabView.Item
-          style={{
-            backgroundColor: theme.colors.background,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ textAlign: 'center' }}>No posts yet.</Text>
+        <TabView.Item style={{ width: '100%', padding: 8 }}>
+          <FlatList
+            data={posts}
+            numColumns={2}
+            renderItem={(post) => {
+              return (
+                <Post
+                  image={post.item.question}
+                  title={post.item.title}
+                  marks={post.item.totalMarks}
+                />
+              );
+            }}
+          />
         </TabView.Item>
 
         <TabView.Item style={{ width: '100%', padding: 8 }}>
