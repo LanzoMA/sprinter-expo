@@ -10,7 +10,7 @@ interface ChipProps {
 const Chip = (props: ChipProps) => {
   const { theme } = useTheme();
 
-  const chipColor = props.color ?? theme.colors.grey1;
+  const chipColor = props.color ?? theme.colors.surfaceBright;
 
   return (
     <Pressable onPress={props.onPress}>

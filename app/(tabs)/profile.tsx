@@ -22,10 +22,12 @@ export default function ProfileScreen() {
 
   const [username, setUsername] = useState<string>('');
 
+  const [dailyStreak, setDailyStreak] = useState<number>(0);
   const [achievements, setAchievements] = useState<Array<Achievement>>([]);
 
   useEffect(() => {
     getUsername();
+    getDailyStreak();
     getAchievements();
   }, []);
 
@@ -36,6 +38,28 @@ export default function ProfileScreen() {
 
     setUsername(user.username);
   }
+
+  const getDailyStreak = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(`${baseUrl}/account/daily-streak`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      setDailyStreak(data.streak);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const getAchievements = async () => {
     try {
@@ -77,7 +101,7 @@ export default function ProfileScreen() {
             name="settings"
             type="material"
             size={24}
-            color={theme.colors.white}
+            color={theme.colors.text}
             style={{
               padding: 8,
             }}
@@ -103,7 +127,7 @@ export default function ProfileScreen() {
             </Text>
             <Button
               buttonStyle={{
-                backgroundColor: theme.colors.grey0,
+                backgroundColor: theme.colors.surface,
               }}
             >
               Edit Profile
@@ -120,7 +144,7 @@ export default function ProfileScreen() {
           backgroundColor: theme.colors.background,
         }}
         indicatorStyle={{
-          backgroundColor: theme.colors.white,
+          backgroundColor: theme.colors.text,
         }}
         variant="primary"
       >
@@ -128,21 +152,21 @@ export default function ProfileScreen() {
           icon={{
             name: 'photo-library',
             type: 'material',
-            color: theme.colors.white,
+            color: theme.colors.text,
           }}
         />
         <Tab.Item
           icon={{
             name: 'bar-chart',
             type: 'material',
-            color: theme.colors.white,
+            color: theme.colors.text,
           }}
         />
         <Tab.Item
           icon={{
             name: 'trophy',
             type: 'ionicon',
-            color: theme.colors.white,
+            color: theme.colors.text,
           }}
         />
       </Tab>
@@ -158,15 +182,10 @@ export default function ProfileScreen() {
         >
           <Text style={{ textAlign: 'center' }}>No posts yet.</Text>
         </TabView.Item>
-        <TabView.Item
-          style={{
-            backgroundColor: theme.colors.background,
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <Text style={{ textAlign: 'center' }}>No data recorded yet.</Text>
+        <TabView.Item>
+          <View>
+            <Text>Daily Streak: {dailyStreak}</Text>
+          </View>
         </TabView.Item>
         <TabView.Item
           style={{

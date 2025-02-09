@@ -11,9 +11,12 @@ const AchievementCard = (props: AchievementCardProps) => {
 
   return (
     <ListItem
-      containerStyle={{ backgroundColor: theme.colors.grey0, borderRadius: 16 }}
+      containerStyle={{
+        backgroundColor: theme.colors.surface,
+        borderRadius: 16,
+      }}
     >
-      <Ionicons name="trophy" size={32} color="#FDE82B" />
+      <Ionicons name="trophy" size={32} color={theme.colors.yellow} />
       <ListItem.Content>
         <ListItem.Title style={{ fontSize: 18, fontWeight: 700 }}>
           {props.name}

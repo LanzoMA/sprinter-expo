@@ -13,7 +13,7 @@ const SubjectCard = (props: SubjectCardProps) => {
   return (
     <View
       style={{
-        backgroundColor: theme.colors.grey0,
+        backgroundColor: theme.colors.surface,
         padding: 8,
         borderRadius: 4,
         gap: 8,
