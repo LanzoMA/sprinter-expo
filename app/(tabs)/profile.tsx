@@ -200,6 +200,7 @@ export default function ProfileScreen() {
             renderItem={(post) => {
               return (
                 <Post
+                  id={post.item._id}
                   image={post.item.question}
                   title={post.item.title}
                   marks={post.item.totalMarks}
