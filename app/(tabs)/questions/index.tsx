@@ -38,12 +38,14 @@ const HomeScreen = () => {
     <FlatList
       data={questions}
       pagingEnabled
+      decelerationRate="fast"
       renderItem={(question) => {
         return (
           <QuestionView
             question={question.item.question}
             markScheme={question.item.markScheme}
             title={question.item.title}
+            totalMarks={question.item.totalMarks}
           />
         );
       }}
