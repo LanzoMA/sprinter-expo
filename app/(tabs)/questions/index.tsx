@@ -42,6 +42,7 @@ const HomeScreen = () => {
       renderItem={(question) => {
         return (
           <QuestionView
+            id={question.item._id}
             question={question.item.question}
             markScheme={question.item.markScheme}
             title={question.item.title}

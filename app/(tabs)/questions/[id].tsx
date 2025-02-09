@@ -31,6 +31,7 @@ export default function QuestionScreen() {
     />
   ) : (
     <QuestionView
+      id={question!._id}
       question={question!.question}
       markScheme={question!.markScheme}
       title={question!.title}

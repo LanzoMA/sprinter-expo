@@ -6,8 +6,11 @@ import PagerView from 'react-native-pager-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Slider from '@react-native-community/slider';
 import Chip from './Chip';
+import { getAccessToken } from '@/constants/token-access';
+import { baseUrl } from '@/constants/base-url';
 
 interface QuestionViewProps {
+  id: string;
   question: string;
   markScheme: string;
   title: string;
@@ -17,14 +20,42 @@ interface QuestionViewProps {
 const QuestionView = (props: QuestionViewProps) => {
   const { theme } = useTheme();
 
-  const [overlayVisible, setOverlayVisible] = useState<boolean>(false);
+  const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [favorited, setFavorited] = useState<boolean>(false);
 
+  const difficulties = ['Easy', 'Okay', 'Medium', 'Hard'];
+
   const [marks, setMarks] = useState<number>(0);
+  const [difficulty, setDifficulty] = useState<number>(0);
+  const [completed, setCompleted] = useState<boolean>(false);
 
   const { height } = Dimensions.get('window');
   const tabBarHeight = useBottomTabBarHeight();
   const visibleHeight = height - tabBarHeight;
+
+  const submitRating = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      await fetch(`${baseUrl}/questions/${props.id}/ratings`, {
+        method: 'POST',
+
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ marks, difficulty }),
+      });
+
+      setCompleted(true);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <View style={{ height: visibleHeight, backgroundColor: 'white' }}>
@@ -93,38 +124,80 @@ const QuestionView = (props: QuestionViewProps) => {
             source={props.markScheme}
             contentFit="contain"
           >
-            <View
-              style={{
-                backgroundColor: theme.colors.surfaceTransparent,
-                display: overlayVisible ? 'flex' : 'none',
-                paddingVertical: 16,
-                gap: 12,
-                borderRadius: 16,
-              }}
-            >
-              <Text style={{ textAlign: 'center' }}>Marks: {marks}</Text>
-              <Slider
-                step={1}
-                thumbTintColor="white"
-                minimumTrackTintColor={theme.colors.primary}
-                onValueChange={(value) => {
-                  setMarks(value);
-                }}
-                minimumValue={0}
-                maximumValue={props.totalMarks}
-              />
+            {completed ? null : (
               <View
                 style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-around',
+                  backgroundColor: theme.colors.surfaceTransparent,
+                  display: overlayVisible ? 'flex' : 'none',
+                  paddingVertical: 8,
+                  gap: 12,
+                  borderRadius: 16,
                 }}
               >
-                <Chip title="Easy" color={theme.colors.blue} />
-                <Chip title="Okay" color={theme.colors.green} />
-                <Chip title="Medium" color={theme.colors.orange} />
-                <Chip title="Hard" color={theme.colors.red} />
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <Text style={{ textAlign: 'center', flex: 1, fontSize: 16 }}>
+                    Marks: {marks}
+                  </Text>
+                  <Text style={{ textAlign: 'center', flex: 1, fontSize: 16 }}>
+                    Difficulty: {difficulties[difficulty]}
+                  </Text>
+
+                  <Icon
+                    style={{ padding: 4 }}
+                    containerStyle={{ marginRight: 16, borderRadius: 1024 }}
+                    name="check"
+                    size={32}
+                    onPress={submitRating}
+                  />
+                </View>
+
+                <Slider
+                  step={1}
+                  thumbTintColor="white"
+                  minimumTrackTintColor={theme.colors.primary}
+                  onValueChange={(value) => {
+                    setMarks(value);
+                  }}
+                  minimumValue={0}
+                  maximumValue={props.totalMarks}
+                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-around',
+                  }}
+                >
+                  <Chip
+                    title="Easy"
+                    color={theme.colors.blue}
+                    onPress={() => {
+                      setDifficulty(0);
+                    }}
+                  />
+                  <Chip
+                    title="Okay"
+                    color={theme.colors.green}
+                    onPress={() => {
+                      setDifficulty(1);
+                    }}
+                  />
+                  <Chip
+                    title="Medium"
+                    color={theme.colors.orange}
+                    onPress={() => {
+                      setDifficulty(2);
+                    }}
+                  />
+                  <Chip
+                    title="Hard"
+                    color={theme.colors.red}
+                    onPress={() => {
+                      setDifficulty(3);
+                    }}
+                  />
+                </View>
               </View>
-            </View>
+            )}
           </ImageBackground>
         </Pressable>
       </PagerView>
