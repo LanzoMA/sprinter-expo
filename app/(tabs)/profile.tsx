@@ -10,6 +10,7 @@ import {
   Button,
   Image,
   Icon,
+  ListItem,
 } from '@rneui/themed';
 import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
@@ -182,11 +183,22 @@ export default function ProfileScreen() {
         >
           <Text style={{ textAlign: 'center' }}>No posts yet.</Text>
         </TabView.Item>
-        <TabView.Item>
-          <View>
-            <Text>Daily Streak: {dailyStreak}</Text>
-          </View>
+
+        <TabView.Item style={{ width: '100%', padding: 8 }}>
+          <ListItem
+            containerStyle={{
+              backgroundColor: theme.colors.surface,
+              borderRadius: 8,
+            }}
+          >
+            <ListItem.Content>
+              <ListItem.Title style={{ fontWeight: 700 }}>
+                Daily Streak: {dailyStreak}
+              </ListItem.Title>
+            </ListItem.Content>
+          </ListItem>
         </TabView.Item>
+
         <TabView.Item
           style={{
             backgroundColor: theme.colors.background,
