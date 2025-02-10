@@ -1,6 +1,6 @@
 Home:
     ✔ Implement fetching and scrolling of questions on home page @started(25-02-09 08:20) @done(25-02-09 09:05) @lasted(45m14s)
-    [] Show number of favorites on each question
+    ✔ Show number of favorites on each question @done(25-02-10 21:16)
     [] Implement comments bottom sheet to show comments
     [] Allow users to create comments on a question
     [] Allow users to download a question
@@ -19,6 +19,7 @@ Profile:
     [] Implement edit profile bottom sheet
 
 Account Settings:
+    [] Create a settings tile component
     [] Implement change email page
     [] Implement change password page
     [] Implement delete account page

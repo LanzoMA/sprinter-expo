@@ -1,5 +1,5 @@
 import { Icon, Text, useTheme } from '@rneui/themed';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, View } from 'react-native';
 import { ImageBackground } from 'expo-image';
 import PagerView from 'react-native-pager-view';
@@ -20,6 +20,8 @@ interface QuestionViewProps {
 const QuestionView = (props: QuestionViewProps) => {
   const { theme } = useTheme();
 
+  const [favorites, setFavorites] = useState<number>(0);
+
   const iconSize = 40;
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [favorited, setFavorited] = useState<boolean>(false);
@@ -33,6 +35,79 @@ const QuestionView = (props: QuestionViewProps) => {
   const { height } = Dimensions.get('window');
   const tabBarHeight = useBottomTabBarHeight();
   const visibleHeight = height - tabBarHeight;
+
+  useEffect(() => {
+    getFavorites();
+  }, []);
+
+  const getFavorites = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(
+        `${baseUrl}/questions/${props.id}/favorites`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+
+      setFavorites(data.count);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const favoriteQuestion = async () => {
+    setFavorited(true);
+    setFavorites(favorites + 1);
+
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      await fetch(`${baseUrl}/questions/${props.id}/favorites`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const unfavoriteQuestion = async () => {
+    setFavorited(false);
+    setFavorites(favorites - 1);
+
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      await fetch(`${baseUrl}/questions/${props.id}/favorites`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const submitRating = async () => {
     try {
@@ -93,21 +168,29 @@ const QuestionView = (props: QuestionViewProps) => {
                     position: 'absolute',
                     bottom: 16,
                     right: 16,
-                    gap: 32,
+                    gap: 20,
                   }}
                 >
                   <Icon color="black" name="account-circle" size={iconSize} />
-                  <Pressable
-                    onPress={() => {
-                      setFavorited(!favorited);
-                    }}
-                  >
-                    <Icon
-                      color={favorited ? 'red' : 'black'}
-                      name={favorited ? 'favorite' : 'favorite-outline'}
-                      size={iconSize}
-                    />
-                  </Pressable>
+                  <View style={{ alignItems: 'center' }}>
+                    <Pressable
+                      onPress={() => {
+                        favorited ? unfavoriteQuestion() : favoriteQuestion();
+                      }}
+                    >
+                      <Icon
+                        color={favorited ? 'red' : 'black'}
+                        name={favorited ? 'favorite' : 'favorite-outline'}
+                        size={iconSize}
+                      />
+                    </Pressable>
+                    <Text
+                      style={{ color: 'black', fontWeight: 700, fontSize: 18 }}
+                    >
+                      {favorites}
+                    </Text>
+                  </View>
+
                   <Icon color="black" name="comment" size={iconSize} />
                   <Icon color="black" name="download" size={iconSize} />
                   <Icon color="black" name="ios-share" size={iconSize} />
