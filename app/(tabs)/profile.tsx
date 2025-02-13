@@ -24,6 +24,7 @@ export default function ProfileScreen() {
 
   const [username, setUsername] = useState<string>('');
 
+  const [loading, setLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Question>>();
   const [dailyStreak, setDailyStreak] = useState<number>(0);
   const [achievements, setAchievements] = useState<Array<Achievement>>([]);
@@ -55,6 +56,7 @@ export default function ProfileScreen() {
       const data = await response.json();
 
       setPosts(data);
+      setLoading(false);
     } catch (error) {
       console.error(error);
     }
@@ -193,21 +195,31 @@ export default function ProfileScreen() {
       </Tab>
 
       <TabView value={tabIndex} onChange={setTabIndex}>
-        <TabView.Item style={{ width: '100%', padding: 8 }}>
-          <FlatList
-            data={posts}
-            numColumns={2}
-            renderItem={(post) => {
-              return (
-                <Post
-                  id={post.item._id}
-                  image={post.item.question}
-                  title={post.item.title}
-                  marks={post.item.totalMarks}
-                />
-              );
-            }}
-          />
+        <TabView.Item
+          style={{
+            width: '100%',
+            padding: 8,
+            justifyContent: 'center',
+          }}
+        >
+          {loading ? (
+            <Text style={{ textAlign: 'center' }}>Loading...</Text>
+          ) : (
+            <FlatList
+              data={posts}
+              numColumns={2}
+              renderItem={(post) => {
+                return (
+                  <Post
+                    id={post.item._id}
+                    image={post.item.question}
+                    title={post.item.title}
+                    marks={post.item.totalMarks}
+                  />
+                );
+              }}
+            />
+          )}
         </TabView.Item>
 
         <TabView.Item style={{ width: '100%', padding: 8 }}>
