@@ -23,6 +23,7 @@ const QuestionView = (props: QuestionViewProps) => {
   const [favorites, setFavorites] = useState<number>(0);
 
   const iconSize = 40;
+  const iconColor = '#000000bb';
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [favorited, setFavorited] = useState<boolean>(false);
 
@@ -152,11 +153,17 @@ const QuestionView = (props: QuestionViewProps) => {
             {overlayVisible ? (
               <>
                 <Text
+                  style={{ color: 'black', position: 'absolute', right: 8 }}
+                >
+                  Swipe &rarr; To View Markscheme
+                </Text>
+                <Text
                   style={{
                     color: 'black',
                     position: 'absolute',
-                    bottom: 8,
-                    left: 8,
+                    top: 48,
+                    textAlign: 'center',
+                    width: '100%',
                     fontWeight: 700,
                     fontSize: 16,
                   }}
@@ -165,21 +172,32 @@ const QuestionView = (props: QuestionViewProps) => {
                 </Text>
                 <View
                   style={{
+                    flexDirection: 'row',
                     position: 'absolute',
                     bottom: 16,
                     right: 16,
                     gap: 20,
                   }}
                 >
-                  <Icon color="black" name="account-circle" size={iconSize} />
-                  <View style={{ alignItems: 'center' }}>
+                  <Icon
+                    color={iconColor}
+                    name="account-circle"
+                    size={iconSize}
+                  />
+                  <View
+                    style={{
+                      alignItems: 'center',
+                      flexDirection: 'row',
+                      gap: 8,
+                    }}
+                  >
                     <Pressable
                       onPress={() => {
                         favorited ? unfavoriteQuestion() : favoriteQuestion();
                       }}
                     >
                       <Icon
-                        color={favorited ? 'red' : 'black'}
+                        color={favorited ? 'red' : iconColor}
                         name={favorited ? 'favorite' : 'favorite-outline'}
                         size={iconSize}
                       />
@@ -191,9 +209,9 @@ const QuestionView = (props: QuestionViewProps) => {
                     </Text>
                   </View>
 
-                  <Icon color="black" name="comment" size={iconSize} />
-                  <Icon color="black" name="download" size={iconSize} />
-                  <Icon color="black" name="ios-share" size={iconSize} />
+                  <Icon color={iconColor} name="comment" size={iconSize} />
+                  <Icon color={iconColor} name="download" size={iconSize} />
+                  <Icon color={iconColor} name="ios-share" size={iconSize} />
                 </View>
               </>
             ) : null}
@@ -215,7 +233,7 @@ const QuestionView = (props: QuestionViewProps) => {
                     backgroundColor: theme.colors.surfaceTransparent,
                     display: overlayVisible ? 'flex' : 'none',
                     paddingVertical: 8,
-                    gap: 12,
+                    gap: 16,
                     borderRadius: 16,
                     alignItems: 'center',
                   }}
@@ -225,6 +243,7 @@ const QuestionView = (props: QuestionViewProps) => {
                   </Text>
 
                   <Slider
+                    style={{ width: '100%' }}
                     step={1}
                     thumbTintColor="white"
                     minimumTrackTintColor={theme.colors.primary}
@@ -276,7 +295,11 @@ const QuestionView = (props: QuestionViewProps) => {
                     />
                   </View>
 
-                  <Button title="Submit" onPress={submitRating} />
+                  <Button
+                    buttonStyle={{ paddingVertical: 4 }}
+                    title="Submit"
+                    onPress={submitRating}
+                  />
                 </View>
               </Pressable>
             )}
