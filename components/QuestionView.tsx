@@ -287,6 +287,7 @@ const QuestionView = (props: QuestionViewProps) => {
               enablePanDownToClose
               ref={commentSheetRef}
               enableDynamicSizing={false}
+              index={-1}
             >
               <Pressable>
                 <BottomSheetView>
