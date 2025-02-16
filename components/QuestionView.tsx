@@ -39,6 +39,7 @@ const QuestionView = (props: QuestionViewProps) => {
 
   useEffect(() => {
     getFavorites();
+    getIsFavorited();
   }, []);
 
   const getFavorites = async () => {
@@ -61,6 +62,30 @@ const QuestionView = (props: QuestionViewProps) => {
       const data = await response.json();
 
       setFavorites(data.count);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getIsFavorited = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(
+        `${baseUrl}/questions/${props.id}/favorited`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const data = await response.json();
+      setFavorited(data.isFavorited);
     } catch (error) {
       console.error(error);
     }
