@@ -1,10 +1,14 @@
 import { Icon, Text, useTheme, Button } from '@rneui/themed';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Dimensions, Pressable, View } from 'react-native';
 import { ImageBackground } from 'expo-image';
 import PagerView from 'react-native-pager-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Slider from '@react-native-community/slider';
+import BottomSheet, {
+  BottomSheetFlatList,
+  BottomSheetView,
+} from '@gorhom/bottom-sheet';
 import Chip from './Chip';
 import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
@@ -26,6 +30,24 @@ const QuestionView = (props: QuestionViewProps) => {
   const iconColor = '#000000bb';
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [favorited, setFavorited] = useState<boolean>(false);
+
+  const commentSheetRef = useRef<BottomSheet>(null);
+  const [isCommentSheetOpen, setIsCommentSheetOpen] = useState<boolean>(false);
+
+  const comments = [
+    {
+      username: 'lanzo',
+      comment: 'comment text',
+    },
+    {
+      username: 'johndoe',
+      comment: 'comment text',
+    },
+    {
+      username: 'charles smith',
+      comment: 'comment text',
+    },
+  ];
 
   const difficulties = ['Easy', 'Okay', 'Medium', 'Hard'];
 
@@ -168,7 +190,15 @@ const QuestionView = (props: QuestionViewProps) => {
       >
         <Pressable
           style={{ flex: 1 }}
-          onPress={() => setOverlayVisible(!overlayVisible)}
+          onPress={() => {
+            if (isCommentSheetOpen) {
+              commentSheetRef.current?.close();
+              setIsCommentSheetOpen(false);
+              return;
+            }
+
+            setOverlayVisible(!overlayVisible);
+          }}
         >
           <ImageBackground
             style={{ flex: 1, position: 'relative' }}
@@ -234,12 +264,50 @@ const QuestionView = (props: QuestionViewProps) => {
                     </Text>
                   </View>
 
-                  <Icon color={iconColor} name="comment" size={iconSize} />
+                  <Pressable
+                    onPress={() => {
+                      if (commentSheetRef.current) {
+                        commentSheetRef.current.expand();
+                        setIsCommentSheetOpen(true);
+                      }
+                    }}
+                  >
+                    <Icon color={iconColor} name="comment" size={iconSize} />
+                  </Pressable>
+
                   <Icon color={iconColor} name="download" size={iconSize} />
                   <Icon color={iconColor} name="ios-share" size={iconSize} />
                 </View>
               </>
             ) : null}
+            <BottomSheet
+              backgroundStyle={{ backgroundColor: theme.colors.background }}
+              handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
+              snapPoints={['66%']}
+              enablePanDownToClose
+              ref={commentSheetRef}
+              enableDynamicSizing={false}
+            >
+              <Pressable>
+                <BottomSheetView>
+                  <BottomSheetFlatList
+                    style={{
+                      padding: 8,
+                      height: '100%',
+                    }}
+                    data={comments}
+                    renderItem={({ item }) => {
+                      return (
+                        <View>
+                          <Text>{item.username}</Text>
+                          <Text>{item.comment}</Text>
+                        </View>
+                      );
+                    }}
+                  />
+                </BottomSheetView>
+              </Pressable>
+            </BottomSheet>
           </ImageBackground>
         </Pressable>
         <Pressable
