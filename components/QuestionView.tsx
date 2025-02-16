@@ -12,6 +12,8 @@ import BottomSheet, {
 import Chip from './Chip';
 import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
+import { UserComment } from '@/constants/models';
+import CommentCard from './CommentCard';
 
 interface QuestionViewProps {
   id: string;
@@ -34,17 +36,20 @@ const QuestionView = (props: QuestionViewProps) => {
   const commentSheetRef = useRef<BottomSheet>(null);
   const [isCommentSheetOpen, setIsCommentSheetOpen] = useState<boolean>(false);
 
-  const comments = [
+  const comments: Array<UserComment> = [
     {
       username: 'lanzo',
+      profilePicture: 'https://avatar.iran.liara.run/public/45',
       comment: 'comment text',
     },
     {
       username: 'johndoe',
+      profilePicture: 'https://avatar.iran.liara.run/public/29',
       comment: 'comment text',
     },
     {
       username: 'charles smith',
+      profilePicture: 'https://avatar.iran.liara.run/public/40',
       comment: 'comment text',
     },
   ];
@@ -293,16 +298,16 @@ const QuestionView = (props: QuestionViewProps) => {
                 <BottomSheetView>
                   <BottomSheetFlatList
                     style={{
-                      padding: 8,
                       height: '100%',
                     }}
                     data={comments}
                     renderItem={({ item }) => {
                       return (
-                        <View>
-                          <Text>{item.username}</Text>
-                          <Text>{item.comment}</Text>
-                        </View>
+                        <CommentCard
+                          username={item.username}
+                          profilePicture={item.profilePicture}
+                          comment={item.comment}
+                        />
                       );
                     }}
                   />

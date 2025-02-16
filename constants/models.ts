@@ -23,6 +23,12 @@ interface Question {
   favorited: boolean;
 }
 
+interface UserComment {
+  username: string;
+  profilePicture: string;
+  comment: string;
+}
+
 interface Achievement {
   achievement: {
     name: string;
@@ -31,4 +37,4 @@ interface Achievement {
   createdAt: Date;
 }
 
-export { User, Course, Question, Achievement };
+export { User, Course, Question, Achievement, UserComment };
