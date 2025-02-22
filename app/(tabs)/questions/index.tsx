@@ -1,5 +1,5 @@
 import { FlatList, RefreshControl } from 'react-native';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { baseUrl } from '@/constants/base-url';
 import { getAccessToken } from '@/constants/token-access';
 import QuestionView from '@/components/QuestionView';
@@ -35,12 +35,11 @@ const HomeScreen = () => {
     }
   };
 
-  const onRefresh = async () => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
-
     await getQuestions();
     setRefreshing(false);
-  };
+  }, []);
 
   return (
     <FlatList
