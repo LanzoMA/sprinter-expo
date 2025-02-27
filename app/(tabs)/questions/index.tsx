@@ -10,10 +10,10 @@ export default function HomeScreen() {
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
-    getQuestions();
+    getNewQuestions();
   }, []);
 
-  const getQuestions = async () => {
+  const getNewQuestions = async () => {
     try {
       const accessToken = await getAccessToken();
 
@@ -35,11 +35,36 @@ export default function HomeScreen() {
     }
   };
 
-  const onRefresh = useCallback(async () => {
+  async function getMoreQuestions() {
     setRefreshing(true);
-    await getQuestions();
+
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) {
+        throw new Error('Access token not found');
+      }
+
+      const response = await fetch(`${baseUrl}/questions`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      setQuestions([...questions, ...data]);
+      setRefreshing(false);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getNewQuestions();
     setRefreshing(false);
-  }, []);
+  };
 
   return (
     <FlatList
@@ -50,6 +75,8 @@ export default function HomeScreen() {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       showsVerticalScrollIndicator={false}
+      onEndReached={() => getMoreQuestions()}
+      onEndReachedThreshold={7}
       renderItem={({ item }) => {
         return (
           <QuestionView
