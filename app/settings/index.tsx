@@ -87,7 +87,7 @@ export default function SettingsScreen() {
         </ListItem>
       </View>
 
-      <Text style={styles.heading}>App</Text>
+      {/* <Text style={styles.heading}>App</Text>
 
       <View
         style={{
@@ -110,7 +110,7 @@ export default function SettingsScreen() {
           <Text style={styles.listTileText}>Timer</Text>
           <Switch />
         </View>
-      </View>
+      </View> */}
     </View>
   );
 }
