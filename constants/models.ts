@@ -24,8 +24,12 @@ interface Question {
 }
 
 interface UserComment {
-  username: string;
-  profilePicture: string;
+  _id: string;
+  user: {
+    _id: string;
+    username: string;
+    profilePicture: string;
+  };
   comment: string;
 }
 
