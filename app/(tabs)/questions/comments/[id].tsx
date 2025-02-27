@@ -1,6 +1,5 @@
 import CommentCard from '@/components/CommentCard';
 import { UserComment } from '@/constants/models';
-import { View } from 'react-native';
 import { FlatList } from 'react-native-gesture-handler';
 
 export default function CommentScreen() {
@@ -53,19 +52,17 @@ export default function CommentScreen() {
   ];
 
   return (
-    <View>
-      <FlatList
-        data={comments}
-        renderItem={({ item }) => {
-          return (
-            <CommentCard
-              username={item.username}
-              profilePicture={item.profilePicture}
-              comment={item.comment}
-            />
-          );
-        }}
-      />
-    </View>
+    <FlatList
+      data={comments}
+      renderItem={({ item }) => {
+        return (
+          <CommentCard
+            username={item.username}
+            profilePicture={item.profilePicture}
+            comment={item.comment}
+          />
+        );
+      }}
+    />
   );
 }
