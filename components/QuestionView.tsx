@@ -5,15 +5,10 @@ import { ImageBackground } from 'expo-image';
 import PagerView from 'react-native-pager-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Slider from '@react-native-community/slider';
-import BottomSheet, {
-  BottomSheetFlatList,
-  BottomSheetView,
-} from '@gorhom/bottom-sheet';
 import Chip from './Chip';
 import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
-import { UserComment } from '@/constants/models';
-import CommentCard from './CommentCard';
+import { router } from 'expo-router';
 
 interface QuestionViewProps {
   id: string;
@@ -23,7 +18,7 @@ interface QuestionViewProps {
   totalMarks: number;
 }
 
-const QuestionView = (props: QuestionViewProps) => {
+export default function QuestionView(props: QuestionViewProps) {
   const { theme } = useTheme();
 
   const [favorites, setFavorites] = useState<number>(0);
@@ -32,27 +27,6 @@ const QuestionView = (props: QuestionViewProps) => {
   const iconColor = '#000000bb';
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
   const [favorited, setFavorited] = useState<boolean>(false);
-
-  const commentSheetRef = useRef<BottomSheet>(null);
-  const [isCommentSheetOpen, setIsCommentSheetOpen] = useState<boolean>(false);
-
-  const comments: Array<UserComment> = [
-    {
-      username: 'lanzo',
-      profilePicture: 'https://avatar.iran.liara.run/public/45',
-      comment: 'comment text',
-    },
-    {
-      username: 'johndoe',
-      profilePicture: 'https://avatar.iran.liara.run/public/29',
-      comment: 'comment text',
-    },
-    {
-      username: 'charles smith',
-      profilePicture: 'https://avatar.iran.liara.run/public/40',
-      comment: 'comment text',
-    },
-  ];
 
   const difficulties = ['Easy', 'Okay', 'Medium', 'Hard'];
 
@@ -196,12 +170,6 @@ const QuestionView = (props: QuestionViewProps) => {
         <Pressable
           style={{ flex: 1 }}
           onPress={() => {
-            if (isCommentSheetOpen) {
-              commentSheetRef.current?.close();
-              setIsCommentSheetOpen(false);
-              return;
-            }
-
             setOverlayVisible(!overlayVisible);
           }}
         >
@@ -271,10 +239,7 @@ const QuestionView = (props: QuestionViewProps) => {
 
                   <Pressable
                     onPress={() => {
-                      if (commentSheetRef.current) {
-                        commentSheetRef.current.expand();
-                        setIsCommentSheetOpen(true);
-                      }
+                      router.push('/(tabs)/questions/comments/asadfsadf');
                     }}
                   >
                     <Icon color={iconColor} name="comment" size={iconSize} />
@@ -285,35 +250,6 @@ const QuestionView = (props: QuestionViewProps) => {
                 </View>
               </>
             ) : null}
-            <BottomSheet
-              backgroundStyle={{ backgroundColor: theme.colors.background }}
-              handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-              snapPoints={['66%']}
-              enablePanDownToClose
-              ref={commentSheetRef}
-              enableDynamicSizing={false}
-              index={-1}
-            >
-              <Pressable>
-                <BottomSheetView>
-                  <BottomSheetFlatList
-                    style={{
-                      height: '100%',
-                    }}
-                    data={comments}
-                    renderItem={({ item }) => {
-                      return (
-                        <CommentCard
-                          username={item.username}
-                          profilePicture={item.profilePicture}
-                          comment={item.comment}
-                        />
-                      );
-                    }}
-                  />
-                </BottomSheetView>
-              </Pressable>
-            </BottomSheet>
           </ImageBackground>
         </Pressable>
         <Pressable
@@ -407,6 +343,4 @@ const QuestionView = (props: QuestionViewProps) => {
       </PagerView>
     </View>
   );
-};
-
-export default QuestionView;
+}

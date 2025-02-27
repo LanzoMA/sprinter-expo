@@ -5,7 +5,7 @@ import { getAccessToken } from '@/constants/token-access';
 import QuestionView from '@/components/QuestionView';
 import { Question } from '@/constants/models';
 
-const HomeScreen = () => {
+export default function HomeScreen() {
   const [questions, setQuestions] = useState<Array<Question>>([]);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -50,19 +50,17 @@ const HomeScreen = () => {
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       showsVerticalScrollIndicator={false}
-      renderItem={(question) => {
+      renderItem={({ item }) => {
         return (
           <QuestionView
-            id={question.item._id}
-            question={question.item.question}
-            markScheme={question.item.markScheme}
-            title={question.item.title}
-            totalMarks={question.item.totalMarks}
+            id={item._id}
+            question={item.question}
+            markScheme={item.markScheme}
+            title={item.title}
+            totalMarks={item.totalMarks}
           />
         );
       }}
     />
   );
-};
-
-export default HomeScreen;
+}
