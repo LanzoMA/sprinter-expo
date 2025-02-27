@@ -1,9 +1,6 @@
-import AchievementCard from '@/components/AchievementCard';
-import Post from '@/components/Post';
-import { baseUrl } from '@/constants/base-url';
-import { Achievement, Question } from '@/constants/models';
-import { getAccessToken, getUserDetails } from '@/constants/token-access';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { View, FlatList, Pressable, RefreshControl } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { router } from 'expo-router';
 import {
   Tab,
   TabView,
@@ -15,9 +12,13 @@ import {
   ListItem,
   Input,
 } from '@rneui/themed';
-import { router } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
-import { View, FlatList, Pressable } from 'react-native';
+import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import AchievementCard from '@/components/AchievementCard';
+import Post from '@/components/Post';
+import { baseUrl } from '@/constants/base-url';
+import { Achievement, Question } from '@/constants/models';
+import { getAccessToken, getUserDetails } from '@/constants/token-access';
+import EditProfileButton from '@/components/EditProfileButton';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -35,6 +36,8 @@ export default function ProfileScreen() {
 
   const [usernameInput, setUsernameInput] = useState<string>('');
   const [userDescriptionInput, setUserDescription] = useState<string>('');
+
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
     getUsername();
@@ -67,6 +70,12 @@ export default function ProfileScreen() {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await getPosts();
+    setRefreshing(false);
   };
 
   const getDailyStreak = async () => {
@@ -167,20 +176,17 @@ export default function ProfileScreen() {
             }}
           />
 
-          <View style={{ flex: 1, gap: 8, justifyContent: 'center' }}>
-            <Text style={{ paddingVertical: 8, fontWeight: 700 }}>
-              @{username}
+          <View style={{ flex: 1, gap: 12, justifyContent: 'center' }}>
+            <Text style={{ fontWeight: 700, fontSize: 16 }}>@{username}</Text>
+            <Text style={{ fontSize: 12 }}>
+              Hi, I'm currently a year 13 student studying Maths, Further Maths
+              and Computer Science
             </Text>
-            <Button
-              buttonStyle={{
-                backgroundColor: theme.colors.surface,
-              }}
+            <EditProfileButton
               onPress={() => {
                 bottomSheetRef.current?.expand();
               }}
-            >
-              Edit Profile
-            </Button>
+            />
           </View>
         </View>
       </View>
@@ -234,6 +240,9 @@ export default function ProfileScreen() {
             <FlatList
               data={posts}
               numColumns={2}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
               renderItem={(post) => {
                 return (
                   <Post
