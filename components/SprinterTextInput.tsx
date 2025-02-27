@@ -3,10 +3,12 @@ import { useTheme } from '@rneui/themed';
 
 interface SprinterTextInputProps {
   placeholder?: string;
+  secureTextEntry?: boolean;
 }
 
 export default function SprinterTextInput({
   placeholder,
+  secureTextEntry,
 }: SprinterTextInputProps) {
   const { theme } = useTheme();
 
@@ -21,6 +23,7 @@ export default function SprinterTextInput({
       cursorColor={theme.colors.primary}
       placeholderTextColor={theme.colors.text}
       placeholder={placeholder}
+      secureTextEntry={secureTextEntry}
     />
   );
 }

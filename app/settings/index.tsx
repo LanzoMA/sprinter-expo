@@ -45,7 +45,12 @@ export default function SettingsScreen() {
           <ListItem.Chevron size={32} />
         </ListItem>
 
-        <ListItem containerStyle={{ backgroundColor: 'transparent' }}>
+        <ListItem
+          containerStyle={{ backgroundColor: 'transparent' }}
+          onPress={() => {
+            router.push('/settings/password');
+          }}
+        >
           <Icon name="password" type="material" size={32} />
           <ListItem.Content>
             <ListItem.Title>Change Password</ListItem.Title>
