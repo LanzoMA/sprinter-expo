@@ -239,7 +239,7 @@ export default function QuestionView(props: QuestionViewProps) {
 
                   <Pressable
                     onPress={() => {
-                      router.push(`/(tabs)/questions/comments/${props.id}`);
+                      router.push(`/(tabs)/questions/${props.id}/comments`);
                     }}
                   >
                     <Icon color={iconColor} name="comment" size={iconSize} />
