@@ -73,7 +73,12 @@ export default function SettingsScreen() {
           <ListItem.Chevron size={32} />
         </ListItem>
 
-        <ListItem containerStyle={{ backgroundColor: 'transparent' }}>
+        <ListItem
+          containerStyle={{ backgroundColor: 'transparent' }}
+          onPress={() => {
+            router.push('/settings/delete');
+          }}
+        >
           <Icon name="delete" type="material" size={32} />
           <ListItem.Content>
             <ListItem.Title>Delete Account</ListItem.Title>
