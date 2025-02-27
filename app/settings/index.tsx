@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import {
   Text,
   useTheme,
@@ -32,7 +32,12 @@ export default function SettingsScreen() {
           marginBottom: 32,
         }}
       >
-        <ListItem containerStyle={{ backgroundColor: 'transparent' }}>
+        <ListItem
+          containerStyle={{ backgroundColor: 'transparent' }}
+          onPress={() => {
+            router.push('/settings/email');
+          }}
+        >
           <Icon name="email" type="material" size={32} />
           <ListItem.Content>
             <ListItem.Title>Change Email</ListItem.Title>
