@@ -1,12 +1,13 @@
-import { FlatList, View } from 'react-native';
+import { FlatList, Pressable, View } from 'react-native';
+import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import { useTheme, Text, SearchBar } from '@rneui/themed';
 import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
-import { useEffect, useState } from 'react';
 import { Course } from '@/constants/models';
 import courseColors from '@/constants/course-colors';
 import CourseCard from '@/components/CourseCard';
+import SprinterSearchBar from '@/components/SprinterSearchBar';
 
 export default function SearchScreen() {
   const { theme } = useTheme();
@@ -48,11 +49,9 @@ export default function SearchScreen() {
         gap: 16,
       }}
     >
-      <SearchBar
-        onPress={() => {
-          router.push('/(search)/search');
-        }}
-      />
+      <Pressable onPress={() => router.push('/(search)/search')}>
+        <SprinterSearchBar editable={false} placeholder="Search Questions" />
+      </Pressable>
 
       <Text style={{ fontWeight: 700, fontSize: 22 }}>Your Courses</Text>
 
