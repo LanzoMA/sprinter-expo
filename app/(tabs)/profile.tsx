@@ -19,6 +19,7 @@ import { baseUrl } from '@/constants/base-url';
 import { Achievement, Question } from '@/constants/models';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import EditProfileButton from '@/components/EditProfileButton';
+import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -33,9 +34,6 @@ export default function ProfileScreen() {
   const [achievements, setAchievements] = useState<Array<Achievement>>([]);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
-
-  const [usernameInput, setUsernameInput] = useState<string>('');
-  const [userDescriptionInput, setUserDescription] = useState<string>('');
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
@@ -124,22 +122,6 @@ export default function ProfileScreen() {
 
   function goToSettings() {
     router.push('/settings');
-  }
-
-  async function updateProfile() {
-    try {
-      const accessToken = await getAccessToken();
-
-      if (!accessToken) {
-        throw new Error('No access token found');
-      }
-
-      // TODO: Send request
-
-      getUsername();
-    } catch (error) {
-      console.error(error);
-    }
   }
 
   return (
@@ -298,70 +280,11 @@ export default function ProfileScreen() {
           )}
         </TabView.Item>
       </TabView>
-      <BottomSheet
-        backgroundStyle={{ backgroundColor: theme.colors.background }}
-        handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
-        enablePanDownToClose
-        index={-1}
-        ref={bottomSheetRef}
-      >
-        <BottomSheetView style={{ alignItems: 'center', gap: 16 }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-              padding: 8,
-            }}
-          >
-            <Pressable
-              style={{ padding: 16 }}
-              onPress={() => {
-                bottomSheetRef.current?.close();
-              }}
-            >
-              <Text>Cancel</Text>
-            </Pressable>
 
-            <Pressable
-              style={{ padding: 16 }}
-              onPress={() => {
-                updateProfile();
-                bottomSheetRef.current?.close();
-              }}
-            >
-              <Text>Save</Text>
-            </Pressable>
-          </View>
-          <Image
-            style={{
-              width: 160,
-              height: 160,
-              borderRadius: 1024,
-              paddingVertical: 64,
-            }}
-            source={{
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
-            }}
-          />
-          <Input
-            style={{ backgroundColor: theme.colors.surface, borderRadius: 8 }}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            label="Username"
-            placeholder={username}
-            onChangeText={(text) => setUsernameInput(text)}
-          />
-          <Input
-            style={{
-              backgroundColor: theme.colors.surface,
-              borderRadius: 8,
-            }}
-            inputContainerStyle={{ borderBottomWidth: 0 }}
-            label="User Description"
-            onChangeText={(text) => setUserDescription(text)}
-          />
-        </BottomSheetView>
-      </BottomSheet>
+      <EditProfileBottomSheet
+        bottomSheetRef={bottomSheetRef}
+        username={username}
+      />
     </View>
   );
 }

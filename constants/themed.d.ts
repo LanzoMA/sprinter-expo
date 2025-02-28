@@ -5,6 +5,7 @@ declare module '@rneui/themed' {
     surface: string;
     surfaceBright: string;
     surfaceTransparent: string;
+    surfaceDark: string;
     text: string;
     blue: string;
     green: string;

@@ -3,13 +3,15 @@ import { useTheme, Text } from '@rneui/themed';
 
 interface SprinterTextInputProps extends TextInputProps {
   errorMessage?: string;
+  label?: string;
 }
 
 export default function SprinterTextInput(props: SprinterTextInputProps) {
   const { theme } = useTheme();
 
   return (
-    <View style={{ gap: 4 }}>
+    <View style={{ gap: 4, width: '100%' }}>
+      {props.label && <Text>{props.label}</Text>}
       <TextInput
         style={{
           backgroundColor: theme.colors.surface,
