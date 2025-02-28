@@ -1,15 +1,7 @@
-import { TextInput } from 'react-native';
+import { TextInput, TextInputProps } from 'react-native';
 import { useTheme } from '@rneui/themed';
 
-interface SprinterTextInputProps {
-  placeholder?: string;
-  secureTextEntry?: boolean;
-}
-
-export default function SprinterTextInput({
-  placeholder,
-  secureTextEntry,
-}: SprinterTextInputProps) {
+export default function SprinterTextInput(props: TextInputProps) {
   const { theme } = useTheme();
 
   return (
@@ -22,8 +14,7 @@ export default function SprinterTextInput({
       }}
       cursorColor={theme.colors.primary}
       placeholderTextColor={theme.colors.text}
-      placeholder={placeholder}
-      secureTextEntry={secureTextEntry}
+      {...props}
     />
   );
 }

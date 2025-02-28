@@ -1,10 +1,12 @@
-import { Link, router } from 'expo-router';
 import { View } from 'react-native';
-import { Text, useTheme, Button, Input } from '@rneui/themed';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+import { Link, router } from 'expo-router';
 import { Snackbar } from 'react-native-paper';
+import { Text, useTheme } from '@rneui/themed';
 import { baseUrl } from '@/constants/base-url';
 import { storeAccessToken } from '@/constants/token-access';
+import SprinterButton from '@/components/SprinterButton';
+import SprinterTextInput from '@/components/SprinterTextInput';
 
 export default function LoginScreen() {
   const { theme } = useTheme();
@@ -83,10 +85,10 @@ export default function LoginScreen() {
           fontWeight: 700,
         }}
       >
-        Login
+        Login To Sprinter
       </Text>
 
-      <Input
+      <SprinterTextInput
         autoCapitalize="none"
         inputMode="email"
         placeholder="Email"
@@ -95,7 +97,7 @@ export default function LoginScreen() {
         }}
       />
 
-      <Input
+      <SprinterTextInput
         autoCapitalize="none"
         secureTextEntry
         placeholder="Password"
@@ -104,11 +106,7 @@ export default function LoginScreen() {
         }}
       />
 
-      <Button
-        title={loading ? '...' : 'LOGIN'}
-        titleStyle={{ fontWeight: 700 }}
-        onPress={login}
-      />
+      <SprinterButton title={loading ? '...' : 'LOGIN'} onPress={login} />
 
       <View
         style={{

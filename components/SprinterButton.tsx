@@ -3,21 +3,25 @@ import { useTheme } from '@rneui/themed';
 
 interface SprinterButtonProps {
   title: string;
+  onPress?: () => void;
 }
 
-export default function SprinterButton({ title }: SprinterButtonProps) {
+export default function SprinterButton({
+  title,
+  onPress,
+}: SprinterButtonProps) {
   const { theme } = useTheme();
 
   return (
     <TouchableOpacity
       style={{
         backgroundColor: theme.colors.primary,
-        height: 60,
+        height: 48,
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
       }}
-      onPress={() => {}}
+      onPress={onPress}
     >
       <Text style={{ color: theme.colors.text, fontWeight: 700, fontSize: 20 }}>
         {title}
