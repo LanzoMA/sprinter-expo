@@ -1,20 +1,31 @@
-import { TextInput, TextInputProps } from 'react-native';
-import { useTheme } from '@rneui/themed';
+import { TextInput, TextInputProps, View } from 'react-native';
+import { useTheme, Text } from '@rneui/themed';
 
-export default function SprinterTextInput(props: TextInputProps) {
+interface SprinterTextInputProps extends TextInputProps {
+  errorMessage: string;
+}
+
+export default function SprinterTextInput(props: SprinterTextInputProps) {
   const { theme } = useTheme();
 
   return (
-    <TextInput
-      style={{
-        backgroundColor: theme.colors.surface,
-        color: theme.colors.text,
-        borderRadius: 8,
-        padding: 16,
-      }}
-      cursorColor={theme.colors.primary}
-      placeholderTextColor={theme.colors.text}
-      {...props}
-    />
+    <View style={{ gap: 4 }}>
+      <TextInput
+        style={{
+          backgroundColor: theme.colors.surface,
+          color: theme.colors.text,
+          borderRadius: 8,
+          padding: 16,
+        }}
+        cursorColor={theme.colors.primary}
+        placeholderTextColor={theme.colors.text}
+        {...props}
+      />
+      {props.errorMessage && (
+        <Text style={{ fontSize: 12, color: theme.colors.error }}>
+          {props.errorMessage}
+        </Text>
+      )}
+    </View>
   );
 }

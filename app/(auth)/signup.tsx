@@ -1,9 +1,11 @@
-import { useTheme, Text, Button, Input } from '@rneui/themed';
-import { Link, router } from 'expo-router';
 import { View } from 'react-native';
 import { useState } from 'react';
+import { Link, router } from 'expo-router';
+import { useTheme, Text } from '@rneui/themed';
 import { baseUrl } from '@/constants/base-url';
 import { storeAccessToken } from '@/constants/token-access';
+import SprinterButton from '@/components/SprinterButton';
+import SprinterTextInput from '@/components/SprinterTextInput';
 
 export default function SignUpScreen() {
   const { theme } = useTheme();
@@ -23,7 +25,7 @@ export default function SignUpScreen() {
   // Check if username is 3 or more characters and only contains letters, numbers, underscores and underscores
   const usernameRegex = /^[\w\d\._]{3,}$/;
   // Check if the password is greater than 8 characters, contains a special character and a number
-  const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>_ ])(?=.*\d).{8,}$/;
+  const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>_£ ])(?=.*\d).{8,}$/;
 
   async function signup() {
     setLoading(true);
@@ -107,7 +109,7 @@ export default function SignUpScreen() {
         Sign Up
       </Text>
 
-      <Input
+      <SprinterTextInput
         autoCapitalize="none"
         inputMode="email"
         placeholder="Email"
@@ -118,7 +120,7 @@ export default function SignUpScreen() {
         errorMessage={emailError}
       />
 
-      <Input
+      <SprinterTextInput
         autoCapitalize="none"
         placeholder="Username"
         onChangeText={(username) => {
@@ -128,7 +130,7 @@ export default function SignUpScreen() {
         errorMessage={usernameError}
       />
 
-      <Input
+      <SprinterTextInput
         autoCapitalize="none"
         secureTextEntry
         placeholder="Password"
@@ -139,7 +141,7 @@ export default function SignUpScreen() {
         errorMessage={passwordError}
       />
 
-      <Input
+      <SprinterTextInput
         autoCapitalize="none"
         secureTextEntry
         placeholder="Confirm Password"
@@ -150,7 +152,7 @@ export default function SignUpScreen() {
         errorMessage={confirmPasswordError}
       />
 
-      <Button title={loading ? '...' : 'SIGN UP'} onPress={signup} />
+      <SprinterButton title={loading ? '...' : 'SIGN UP'} onPress={signup} />
 
       <View
         style={{
