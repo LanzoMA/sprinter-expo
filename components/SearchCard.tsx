@@ -15,11 +15,11 @@ const SubjectCard = (props: SubjectCardProps) => {
       style={{
         backgroundColor: theme.colors.surface,
         padding: 8,
-        borderRadius: 4,
-        gap: 8,
+        borderRadius: 8,
+        gap: 16,
       }}
     >
-      <Text>{props.title}</Text>
+      <Text style={{ fontWeight: 700 }}>{props.title}</Text>
       {props.children}
     </View>
   );
