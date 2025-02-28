@@ -2,7 +2,7 @@ import { TextInput, TextInputProps, View } from 'react-native';
 import { useTheme, Text } from '@rneui/themed';
 
 interface SprinterTextInputProps extends TextInputProps {
-  errorMessage: string;
+  errorMessage?: string;
 }
 
 export default function SprinterTextInput(props: SprinterTextInputProps) {
