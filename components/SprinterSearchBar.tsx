@@ -5,11 +5,13 @@ import { useTheme } from '@rneui/themed';
 interface SprinterSearchBarProps {
   editable?: boolean;
   placeholder?: string;
+  autoFocus?: boolean;
 }
 
 export default function SprinterSearchBar({
   editable,
   placeholder,
+  autoFocus,
 }: SprinterSearchBarProps) {
   const { theme } = useTheme();
 
@@ -24,10 +26,11 @@ export default function SprinterSearchBar({
       }}
     >
       <TextInput
-        style={{ flex: 1 }}
+        style={{ flex: 1, color: 'white' }}
         editable={editable}
         placeholder={placeholder}
         placeholderTextColor="white"
+        autoFocus={autoFocus}
       />
       <MaterialIcons name="search" size={20} color="white" />
     </View>
