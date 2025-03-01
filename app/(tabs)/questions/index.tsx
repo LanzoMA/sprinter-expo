@@ -1,5 +1,10 @@
-import { FlatList, RefreshControl } from 'react-native';
-import { useCallback, useEffect, useState } from 'react';
+import {
+  ActivityIndicator,
+  FlatList,
+  RefreshControl,
+  View,
+} from 'react-native';
+import { useEffect, useState } from 'react';
 import { baseUrl } from '@/constants/base-url';
 import { getAccessToken } from '@/constants/token-access';
 import QuestionView from '@/components/QuestionView';
@@ -13,7 +18,7 @@ export default function HomeScreen() {
     getNewQuestions();
   }, []);
 
-  const getNewQuestions = async () => {
+  async function getNewQuestions() {
     try {
       const accessToken = await getAccessToken();
 
@@ -33,7 +38,7 @@ export default function HomeScreen() {
     } catch (error) {
       console.log(error);
     }
-  };
+  }
 
   async function getMoreQuestions() {
     setRefreshing(true);
@@ -68,14 +73,25 @@ export default function HomeScreen() {
 
   return (
     <FlatList
+      contentContainerStyle={{ flex: questions.length === 0 ? 1 : undefined }}
       data={questions}
       pagingEnabled
       decelerationRate="fast"
+      ListEmptyComponent={
+        <View style={{ flex: 1, justifyContent: 'center' }}>
+          <ActivityIndicator
+            style={{ transform: [{ scale: 1.5 }] }}
+            size="large"
+          />
+        </View>
+      }
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
       }
       showsVerticalScrollIndicator={false}
-      onEndReached={() => getMoreQuestions()}
+      onEndReached={() => {
+        if (questions.length !== 0) getMoreQuestions();
+      }}
       onEndReachedThreshold={7}
       renderItem={({ item }) => {
         return (
