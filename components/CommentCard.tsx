@@ -11,9 +11,11 @@ const CommentCard = (props: CommentCardProps) => {
   return (
     <ListItem>
       <Image
-        style={{ width: 48, height: 48 }}
+        style={{ width: 48, height: 48, borderRadius: 1024 }}
         source={{
-          uri: props.profilePicture,
+          uri:
+            props.profilePicture ||
+            'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
         }}
       />
       <ListItem.Content

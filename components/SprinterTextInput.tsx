@@ -1,5 +1,6 @@
-import { TextInput, TextInputProps, View } from 'react-native';
+import { TextInput, TextInputProps, useColorScheme, View } from 'react-native';
 import { useTheme, Text } from '@rneui/themed';
+import baseTheme from '@/constants/base-theme';
 
 interface SprinterTextInputProps extends TextInputProps {
   errorMessage?: string;
@@ -8,6 +9,7 @@ interface SprinterTextInputProps extends TextInputProps {
 
 export default function SprinterTextInput(props: SprinterTextInputProps) {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   return (
     <View style={{ gap: 4, width: '100%' }}>
@@ -20,7 +22,11 @@ export default function SprinterTextInput(props: SprinterTextInputProps) {
           padding: 16,
         }}
         cursorColor={theme.colors.primary}
-        placeholderTextColor={theme.colors.text}
+        placeholderTextColor={
+          colorScheme === 'light'
+            ? baseTheme.light.subtleText
+            : baseTheme.dark.subtleText
+        }
         {...props}
       />
       {props.errorMessage && (
