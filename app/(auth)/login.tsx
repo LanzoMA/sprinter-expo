@@ -1,16 +1,14 @@
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
-import { Text, useTheme } from '@rneui/themed';
 import Toast from 'react-native-toast-message';
 import { baseUrl } from '@/constants/base-url';
 import { storeAccessToken } from '@/constants/token-access';
 import SprinterButton from '@/components/SprinterButton';
 import SprinterTextInput from '@/components/SprinterTextInput';
+import baseTheme from '@/constants/base-theme';
 
 export default function LoginScreen() {
-  const { theme } = useTheme();
-
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
@@ -75,7 +73,7 @@ export default function LoginScreen() {
   return (
     <View
       style={{
-        backgroundColor: theme.colors.background,
+        backgroundColor: baseTheme.dark.background,
         flex: 1,
         padding: 16,
         justifyContent: 'center',
@@ -84,6 +82,7 @@ export default function LoginScreen() {
     >
       <Text
         style={{
+          color: baseTheme.dark.text,
           textAlign: 'center',
           fontSize: 24,
           fontWeight: 700,
@@ -119,11 +118,11 @@ export default function LoginScreen() {
           justifyContent: 'center',
         }}
       >
-        <Text>No account?</Text>
+        <Text style={{ color: baseTheme.dark.text }}>No account?</Text>
         <Link
           href="/signup"
           style={{
-            color: theme.colors.primary,
+            color: baseTheme.common.primary,
             fontWeight: 700,
           }}
         >

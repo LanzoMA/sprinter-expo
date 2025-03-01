@@ -1,16 +1,16 @@
 import { BaseToast, BaseToastProps } from 'react-native-toast-message';
-import colors from './colors';
+import baseTheme from './base-theme';
 
 const toastConfig = {
   error: (props: BaseToastProps) => (
     <BaseToast
       {...props}
       style={{
-        borderLeftColor: colors.error,
-        backgroundColor: colors.surfaceDark,
+        borderLeftColor: baseTheme.common.error,
+        backgroundColor: baseTheme.dark.surfaceDark,
       }}
       text1Style={{
-        color: colors.text,
+        color: baseTheme.dark.text,
       }}
     />
   ),
