@@ -174,14 +174,19 @@ export default function QuestionView(props: QuestionViewProps) {
           }}
         >
           <ImageBackground
-            style={{ flex: 1, position: 'relative' }}
+            style={{ flex: 1, position: 'relative', alignItems: 'center' }}
             source={props.question}
             contentFit="contain"
           >
-            {overlayVisible ? (
+            <Text
+              style={{ color: 'black', position: 'absolute', top: 8, left: 8 }}
+            >
+              {overlayVisible ? 'Tap to Hide Details' : 'Tap to Show Details'}
+            </Text>
+            {overlayVisible && (
               <>
                 <Text
-                  style={{ color: 'black', position: 'absolute', right: 8 }}
+                  style={{ color: 'black', position: 'absolute', bottom: 160 }}
                 >
                   Swipe &rarr; To View Markscheme
                 </Text>
@@ -249,7 +254,7 @@ export default function QuestionView(props: QuestionViewProps) {
                   <Icon color={iconColor} name="ios-share" size={iconSize} />
                 </View>
               </>
-            ) : null}
+            )}
           </ImageBackground>
         </Pressable>
         <Pressable
@@ -261,82 +266,96 @@ export default function QuestionView(props: QuestionViewProps) {
             source={props.markScheme}
             contentFit="contain"
           >
-            {completed ? null : (
-              <Pressable>
-                <View
+            {completed || (
+              <>
+                <Text
                   style={{
-                    backgroundColor: theme.colors.surfaceTransparent,
-                    display: overlayVisible ? 'flex' : 'none',
-                    paddingVertical: 8,
-                    gap: 16,
-                    borderRadius: 16,
-                    alignItems: 'center',
+                    color: 'black',
+                    position: 'absolute',
+                    top: 8,
+                    left: 8,
                   }}
                 >
-                  <Text style={{ fontSize: 16 }}>
-                    How many marks did you get? {marks}
-                  </Text>
-
-                  <Slider
-                    style={{ width: '100%' }}
-                    step={1}
-                    thumbTintColor="white"
-                    minimumTrackTintColor={theme.colors.primary}
-                    onValueChange={(value) => {
-                      setMarks(value);
-                    }}
-                    minimumValue={0}
-                    maximumValue={props.totalMarks}
-                  />
-
-                  <Text style={{ fontSize: 16 }}>
-                    Select Question Difficulty: {difficulties[difficulty]}
-                  </Text>
-
+                  {overlayVisible
+                    ? 'Tap to Hide Details'
+                    : 'Tap to Show Details'}
+                </Text>
+                <Pressable>
                   <View
                     style={{
-                      flexDirection: 'row',
-                      justifyContent: 'space-around',
-                      width: '100%',
+                      backgroundColor: theme.colors.surfaceTransparent,
+                      display: overlayVisible ? 'flex' : 'none',
+                      paddingVertical: 8,
+                      gap: 16,
+                      borderRadius: 16,
+                      alignItems: 'center',
                     }}
                   >
-                    <Chip
-                      title="Easy"
-                      color={theme.colors.blue}
-                      onPress={() => {
-                        setDifficulty(0);
+                    <Text style={{ fontSize: 16 }}>
+                      How many marks did you get? {marks}
+                    </Text>
+
+                    <Slider
+                      style={{ width: '100%' }}
+                      step={1}
+                      thumbTintColor="white"
+                      minimumTrackTintColor={theme.colors.primary}
+                      onValueChange={(value) => {
+                        setMarks(value);
                       }}
+                      minimumValue={0}
+                      maximumValue={props.totalMarks}
                     />
-                    <Chip
-                      title="Okay"
-                      color={theme.colors.green}
-                      onPress={() => {
-                        setDifficulty(1);
+
+                    <Text style={{ fontSize: 16 }}>
+                      Select Question Difficulty: {difficulties[difficulty]}
+                    </Text>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-around',
+                        width: '100%',
                       }}
-                    />
-                    <Chip
-                      title="Medium"
-                      color={theme.colors.orange}
-                      onPress={() => {
-                        setDifficulty(2);
-                      }}
-                    />
-                    <Chip
-                      title="Hard"
-                      color={theme.colors.red}
-                      onPress={() => {
-                        setDifficulty(3);
-                      }}
+                    >
+                      <Chip
+                        title="Easy"
+                        color={theme.colors.blue}
+                        onPress={() => {
+                          setDifficulty(0);
+                        }}
+                      />
+                      <Chip
+                        title="Okay"
+                        color={theme.colors.green}
+                        onPress={() => {
+                          setDifficulty(1);
+                        }}
+                      />
+                      <Chip
+                        title="Medium"
+                        color={theme.colors.orange}
+                        onPress={() => {
+                          setDifficulty(2);
+                        }}
+                      />
+                      <Chip
+                        title="Hard"
+                        color={theme.colors.red}
+                        onPress={() => {
+                          setDifficulty(3);
+                        }}
+                      />
+                    </View>
+
+                    <Button
+                      buttonStyle={{ paddingVertical: 4 }}
+                      title="Submit"
+                      onPress={submitRating}
                     />
                   </View>
-
-                  <Button
-                    buttonStyle={{ paddingVertical: 4 }}
-                    title="Submit"
-                    onPress={submitRating}
-                  />
-                </View>
-              </Pressable>
+                </Pressable>
+              </>
             )}
           </ImageBackground>
         </Pressable>
