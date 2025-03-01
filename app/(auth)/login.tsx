@@ -1,8 +1,8 @@
 import { View } from 'react-native';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
-import { Snackbar } from 'react-native-paper';
 import { Text, useTheme } from '@rneui/themed';
+import Toast from 'react-native-toast-message';
 import { baseUrl } from '@/constants/base-url';
 import { storeAccessToken } from '@/constants/token-access';
 import SprinterButton from '@/components/SprinterButton';
@@ -16,22 +16,25 @@ export default function LoginScreen() {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [message, setMessage] = useState<string>('');
-  const [visible, setVisible] = useState<boolean>(false);
-
   async function login() {
     setLoading(true);
 
     if (email === '') {
-      setMessage('Email is not provided');
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'No email provided',
+      });
       setLoading(false);
       return;
     }
 
     if (password === '') {
-      setMessage('Password is not provided');
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'No password provided',
+      });
       setLoading(false);
       return;
     }
@@ -46,8 +49,11 @@ export default function LoginScreen() {
     });
 
     if (response.status !== 200) {
-      setMessage('Incorrect email/password');
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Login failed',
+        text2: 'Incorrect email/password',
+      });
       setLoading(false);
       return;
     }
@@ -57,8 +63,6 @@ export default function LoginScreen() {
     const accessToken = json.accessToken;
 
     if (!accessToken) {
-      setMessage('Something went wrong: access token not found');
-      setVisible(true);
       setLoading(false);
       return;
     }
@@ -126,15 +130,6 @@ export default function LoginScreen() {
           Sign Up
         </Link>
       </View>
-
-      <Snackbar
-        visible={visible}
-        onDismiss={() => {
-          setVisible(false);
-        }}
-      >
-        <Text>{message}</Text>
-      </Snackbar>
     </View>
   );
 }
