@@ -206,10 +206,11 @@ export default function ProfileScreen() {
         >
           <FlatList
             contentContainerStyle={
-              loading
+              loading || posts!.length === 0
                 ? {
                     flex: 1,
                     justifyContent: 'center',
+                    alignItems: 'center',
                   }
                 : {}
             }
@@ -218,7 +219,9 @@ export default function ProfileScreen() {
             refreshControl={
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
-            ListEmptyComponent={<Spinner scale={2.5} />}
+            ListEmptyComponent={
+              loading ? <Spinner scale={2.5} /> : <Text>No posts found</Text>
+            }
             renderItem={(post) => {
               return (
                 <Post
