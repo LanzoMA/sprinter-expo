@@ -1,6 +1,6 @@
 import { Icon, Text, useTheme, Button } from '@rneui/themed';
 import { useEffect, useRef, useState } from 'react';
-import { Dimensions, Pressable, View } from 'react-native';
+import { Dimensions, Pressable, View, StyleSheet } from 'react-native';
 import { ImageBackground } from 'expo-image';
 import PagerView from 'react-native-pager-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
@@ -16,6 +16,7 @@ interface QuestionViewProps {
   markScheme: string;
   title: string;
   totalMarks: number;
+  withBottomBar?: boolean;
 }
 
 export default function QuestionView(props: QuestionViewProps) {
@@ -34,9 +35,13 @@ export default function QuestionView(props: QuestionViewProps) {
   const [difficulty, setDifficulty] = useState<number>(0);
   const [completed, setCompleted] = useState<boolean>(false);
 
-  const { height } = Dimensions.get('window');
-  const tabBarHeight = useBottomTabBarHeight();
-  const visibleHeight = height - tabBarHeight;
+  let visibleHeight;
+
+  if (props.withBottomBar) {
+    const { height } = Dimensions.get('window');
+    const tabBarHeight = useBottomTabBarHeight();
+    visibleHeight = height - tabBarHeight;
+  }
 
   useEffect(() => {
     getFavorites();
@@ -160,8 +165,12 @@ export default function QuestionView(props: QuestionViewProps) {
     }
   };
 
+  const styles = StyleSheet.create({
+    container: { height: visibleHeight || '100%', backgroundColor: 'white' },
+  });
+
   return (
-    <View style={{ height: visibleHeight, backgroundColor: 'white' }}>
+    <View style={styles.container}>
       <PagerView
         style={{
           flex: 1,
@@ -244,7 +253,7 @@ export default function QuestionView(props: QuestionViewProps) {
 
                   <Pressable
                     onPress={() => {
-                      router.push(`/(tabs)/questions/${props.id}/comments`);
+                      router.push(`/questions/${props.id}/comments`);
                     }}
                   >
                     <Icon color={iconColor} name="comment" size={iconSize} />

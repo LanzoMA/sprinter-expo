@@ -20,7 +20,7 @@ const Post = (props: PostProps) => {
   return (
     <Pressable
       onPress={() => {
-        router.push(`/(tabs)/questions/${props.id}`);
+        router.push(`/questions/${props.id}`);
       }}
     >
       <View

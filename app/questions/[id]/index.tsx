@@ -1,9 +1,10 @@
-import { Skeleton } from '@rneui/themed';
+import { View } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Question } from '@/constants/models';
 import { baseUrl } from '@/constants/base-url';
 import QuestionView from '@/components/QuestionView';
+import Spinner from '@/components/Spinner';
 
 export default function QuestionScreen() {
   const { id } = useLocalSearchParams();
@@ -23,12 +24,9 @@ export default function QuestionScreen() {
   }
 
   return loading ? (
-    <Skeleton
-      style={{ width: '100%', flex: 1 }}
-      animation="wave"
-      width={80}
-      height={40}
-    />
+    <View style={{ flex: 1, justifyContent: 'center' }}>
+      <Spinner color="#000" scale={2.5} />
+    </View>
   ) : (
     <QuestionView
       id={question!._id}

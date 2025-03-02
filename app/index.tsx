@@ -9,7 +9,7 @@ export default function Index() {
       // to the home screen as they have already logged in
       (accessToken) => {
         accessToken
-          ? router.replace('/(tabs)/questions')
+          ? router.replace('/(tabs)/home')
           : router.replace('/(auth)/login');
       }
     );

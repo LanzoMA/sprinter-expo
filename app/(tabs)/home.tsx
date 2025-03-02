@@ -74,7 +74,9 @@ export default function HomeScreen() {
 
   return (
     <FlatList
-      contentContainerStyle={{ flex: questions.length === 0 ? 1 : undefined }}
+      contentContainerStyle={{
+        flex: questions.length > 0 ? 0 : 1,
+      }}
       data={questions}
       pagingEnabled
       decelerationRate="fast"
@@ -99,6 +101,7 @@ export default function HomeScreen() {
             markScheme={item.markScheme}
             title={item.title}
             totalMarks={item.totalMarks}
+            withBottomBar
           />
         );
       }}

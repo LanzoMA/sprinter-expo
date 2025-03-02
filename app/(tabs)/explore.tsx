@@ -9,7 +9,7 @@ import courseColors from '@/constants/course-colors';
 import CourseCard from '@/components/CourseCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
 
-export default function SearchScreen() {
+export default function ExploreScreen() {
   const { theme } = useTheme();
 
   const [courses, setCourses] = useState<Array<Course>>();

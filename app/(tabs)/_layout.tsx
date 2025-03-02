@@ -21,7 +21,7 @@ export default function TabLayout() {
       }}
     >
       <Tabs.Screen
-        name="questions"
+        name="home"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => (
@@ -30,11 +30,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="search/index"
+        name="explore"
         options={{
-          title: 'Search',
+          title: 'Explore',
           tabBarIcon: ({ color }) => (
-            <Icon size={28} name="search" type="material" color={color} />
+            <Icon size={28} name="explore" type="material" color={color} />
           ),
         }}
       />
