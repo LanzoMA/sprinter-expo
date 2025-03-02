@@ -2,10 +2,12 @@ import { View } from 'react-native';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
 import { useTheme, Text } from '@rneui/themed';
+import Toast from 'react-native-toast-message';
 import { baseUrl } from '@/constants/base-url';
 import { storeAccessToken } from '@/constants/token-access';
 import SprinterButton from '@/components/SprinterButton';
 import SprinterTextInput from '@/components/SprinterTextInput';
+import Spinner from '@/components/Spinner';
 
 export default function SignUpScreen() {
   const { theme } = useTheme();
@@ -57,7 +59,7 @@ export default function SignUpScreen() {
       return;
     }
 
-    const response = await fetch(`${baseUrl}/auth/register/`, {
+    const response = await fetch(`${baseUrl}/auth/register`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
@@ -66,8 +68,28 @@ export default function SignUpScreen() {
       body: JSON.stringify({ email, username, password }),
     });
 
+    console.log(JSON.stringify(response, null, 4));
+
+    if (response.status === 400) {
+      const data = await response.json();
+
+      Toast.show({
+        type: 'error',
+        text1: 'Account Creation Failed',
+        text2: data.error,
+      });
+
+      setLoading(false);
+
+      return;
+    }
+
     if (response.status !== 201) {
-      setEmailError('Email/username already taken');
+      Toast.show({
+        type: 'error',
+        text1: 'Account Creation Failed',
+        text2: 'Something went wrong. Please try again later.',
+      });
       setLoading(false);
       return;
     }
@@ -77,7 +99,6 @@ export default function SignUpScreen() {
     const accessToken = json.accessToken;
 
     if (!accessToken) {
-      setEmailError('Something went wrong: access token not found');
       setLoading(false);
       return;
     }
@@ -152,7 +173,9 @@ export default function SignUpScreen() {
         errorMessage={confirmPasswordError}
       />
 
-      <SprinterButton title={loading ? '...' : 'SIGN UP'} onPress={signup} />
+      <SprinterButton title="SIGN UP" onPress={signup} />
+
+      {loading && <Spinner />}
 
       <View
         style={{
