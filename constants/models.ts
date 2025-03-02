@@ -1,17 +1,23 @@
-interface User {
+export interface User {
   id: string;
   username: string;
   email: string;
 }
 
-interface Course {
+export interface Profile {
+  username: string;
+  description: string;
+  profilePicture: string;
+}
+
+export interface Course {
   _id: string;
   name: string;
   qualification: string;
   examBoard: string;
 }
 
-interface Question {
+export interface Question {
   _id: string;
   question: string;
   markScheme: string;
@@ -23,7 +29,7 @@ interface Question {
   favorited: boolean;
 }
 
-interface UserComment {
+export interface UserComment {
   _id: string;
   user: {
     _id: string;
@@ -33,12 +39,10 @@ interface UserComment {
   comment: string;
 }
 
-interface Achievement {
+export interface Achievement {
   achievement: {
     name: string;
     description: string;
   };
   createdAt: Date;
 }
-
-export { User, Course, Question, Achievement, UserComment };

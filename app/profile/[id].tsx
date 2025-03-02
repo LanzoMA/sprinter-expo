@@ -1,18 +1,27 @@
-import { View, useColorScheme, StyleSheet } from 'react-native';
+import {
+  View,
+  useColorScheme,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+} from 'react-native';
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import baseTheme from '@/constants/base-theme';
 import ProfileHeader from '@/components/ProfileHeader';
-import { Question } from '@/constants/models';
+import { Profile, Question } from '@/constants/models';
 import { baseUrl } from '@/constants/base-url';
+import Post from '@/components/Post';
+import Spinner from '@/components/Spinner';
 
 export default function ProfileScreen() {
   const { id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
-  const [username, setUsername] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const [profilePicture, setProfilePicture] = useState<string>('');
+  const [profile, setProfile] = useState<Profile>();
+  const [profileLoading, setProfileLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Question>>();
+  const [postsLoading, setPostsLoading] = useState<boolean>(true);
+  const [refreshing, setRefreshing] = useState<boolean>(false);
 
   const styles = StyleSheet.create({
     container: {
@@ -21,29 +30,73 @@ export default function ProfileScreen() {
         colorScheme === 'light'
           ? baseTheme.light.background
           : baseTheme.dark.background,
-      padding: 16,
+      padding: 8,
+      gap: 8,
     },
   });
 
   useEffect(() => {
     getProfile();
+    getPosts();
   }, []);
 
   async function getProfile() {
     const response = await fetch(`${baseUrl}/users/${id}`);
     const data = await response.json();
+    setProfile(data);
+    setProfileLoading(false);
+  }
 
-    setUsername(data.username);
-    setDescription(data.description);
-    setProfilePicture(data.profilePicture);
+  async function getPosts() {
+    const response = await fetch(`${baseUrl}/users/${id}/questions`);
+    const data = await response.json();
+    setPosts(data);
+    setPostsLoading(false);
+  }
+
+  async function onRefresh() {
+    setRefreshing(true);
+    await getPosts();
+    setRefreshing(false);
   }
 
   return (
     <View style={styles.container}>
-      <ProfileHeader
-        username={username}
-        description={description}
-        profilePicture={profilePicture}
+      {profileLoading || (
+        <View style={{ padding: 8 }}>
+          <ProfileHeader
+            username={profile!.username}
+            description={profile!.description}
+            profilePicture={profile!.profilePicture}
+          />
+        </View>
+      )}
+      <FlatList
+        contentContainerStyle={
+          postsLoading
+            ? {
+                flex: 1,
+                justifyContent: 'center',
+              }
+            : {}
+        }
+        data={posts}
+        numColumns={2}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ListEmptyComponent={<Spinner scale={2.5} />}
+        showsVerticalScrollIndicator={false}
+        renderItem={(post) => {
+          return (
+            <Post
+              id={post.item._id}
+              image={post.item.question}
+              title={post.item.title}
+              marks={post.item.totalMarks}
+            />
+          );
+        }}
       />
     </View>
   );
