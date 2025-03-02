@@ -9,6 +9,7 @@ import { baseUrl } from '@/constants/base-url';
 import { getAccessToken } from '@/constants/token-access';
 import QuestionView from '@/components/QuestionView';
 import { Question } from '@/constants/models';
+import Spinner from '@/components/Spinner';
 
 export default function HomeScreen() {
   const [questions, setQuestions] = useState<Array<Question>>([]);
@@ -79,10 +80,7 @@ export default function HomeScreen() {
       decelerationRate="fast"
       ListEmptyComponent={
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <ActivityIndicator
-            style={{ transform: [{ scale: 1.5 }] }}
-            size="large"
-          />
+          <Spinner color="#000" scale={3} />
         </View>
       }
       refreshControl={

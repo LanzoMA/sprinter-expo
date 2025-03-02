@@ -1,10 +1,4 @@
-import {
-  View,
-  Text,
-  useColorScheme,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
+import { View, Text, useColorScheme, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
 import Toast from 'react-native-toast-message';
@@ -13,6 +7,7 @@ import { storeAccessToken } from '@/constants/token-access';
 import SprinterButton from '@/components/SprinterButton';
 import SprinterTextInput from '@/components/SprinterTextInput';
 import baseTheme from '@/constants/base-theme';
+import Spinner from '@/components/Spinner';
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme();
@@ -129,7 +124,7 @@ export default function LoginScreen() {
 
       <SprinterButton title="LOGIN" onPress={login} />
 
-      {loading && <ActivityIndicator size="large" />}
+      {loading && <Spinner />}
 
       <View style={styles.footer}>
         <Text style={styles.text}>No account?</Text>

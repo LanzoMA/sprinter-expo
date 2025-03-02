@@ -20,6 +20,7 @@ import { Achievement, Question } from '@/constants/models';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import EditProfileButton from '@/components/EditProfileButton';
 import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
+import Spinner from '@/components/Spinner';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -216,27 +217,32 @@ export default function ProfileScreen() {
             justifyContent: 'center',
           }}
         >
-          {loading ? (
-            <Text style={{ textAlign: 'center' }}>Loading...</Text>
-          ) : (
-            <FlatList
-              data={posts}
-              numColumns={2}
-              refreshControl={
-                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-              }
-              renderItem={(post) => {
-                return (
-                  <Post
-                    id={post.item._id}
-                    image={post.item.question}
-                    title={post.item.title}
-                    marks={post.item.totalMarks}
-                  />
-                );
-              }}
-            />
-          )}
+          <FlatList
+            contentContainerStyle={
+              loading
+                ? {
+                    flex: 1,
+                    justifyContent: 'center',
+                  }
+                : {}
+            }
+            data={posts}
+            numColumns={2}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            }
+            ListEmptyComponent={<Spinner scale={2.5} />}
+            renderItem={(post) => {
+              return (
+                <Post
+                  id={post.item._id}
+                  image={post.item.question}
+                  title={post.item.title}
+                  marks={post.item.totalMarks}
+                />
+              );
+            }}
+          />
         </TabView.Item>
 
         <TabView.Item style={{ width: '100%', padding: 8 }}>
