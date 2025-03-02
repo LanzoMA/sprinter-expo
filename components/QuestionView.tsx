@@ -16,6 +16,7 @@ interface QuestionViewProps {
   markScheme: string;
   title: string;
   totalMarks: number;
+  author: string;
   withBottomBar?: boolean;
 }
 
@@ -167,6 +168,13 @@ export default function QuestionView(props: QuestionViewProps) {
 
   const styles = StyleSheet.create({
     container: { height: visibleHeight || '100%', backgroundColor: 'white' },
+    interactions: {
+      flexDirection: 'row',
+      position: 'absolute',
+      bottom: 16,
+      right: 16,
+      gap: 20,
+    },
   });
 
   return (
@@ -212,20 +220,17 @@ export default function QuestionView(props: QuestionViewProps) {
                 >
                   {props.title}
                 </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    position: 'absolute',
-                    bottom: 16,
-                    right: 16,
-                    gap: 20,
-                  }}
-                >
-                  <Icon
-                    color={iconColor}
-                    name="account-circle"
-                    size={iconSize}
-                  />
+                <View style={styles.interactions}>
+                  <Pressable
+                    onPress={() => router.push(`/profile/${props.author}`)}
+                  >
+                    <Icon
+                      color={iconColor}
+                      name="account-circle"
+                      size={iconSize}
+                    />
+                  </Pressable>
+
                   <View
                     style={{
                       alignItems: 'center',

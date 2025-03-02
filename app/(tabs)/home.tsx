@@ -101,6 +101,7 @@ export default function HomeScreen() {
             markScheme={item.markScheme}
             title={item.title}
             totalMarks={item.totalMarks}
+            author={item.author}
             withBottomBar
           />
         );

@@ -34,6 +34,7 @@ export default function QuestionScreen() {
       markScheme={question!.markScheme}
       title={question!.title}
       totalMarks={question!.totalMarks}
+      author={question!.author}
     />
   );
 }

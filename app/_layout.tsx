@@ -6,7 +6,7 @@ import Toast from 'react-native-toast-message';
 import theme from '@/constants/theme';
 import toastConfig from '@/constants/toast-config';
 
-const App = () => {
+export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <SafeAreaProvider>
@@ -17,7 +17,7 @@ const App = () => {
       </SafeAreaProvider>
     </ThemeProvider>
   );
-};
+}
 
 export function RootNavigation() {
   return (
@@ -29,5 +29,3 @@ export function RootNavigation() {
     />
   );
 }
-
-export default App;

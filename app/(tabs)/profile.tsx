@@ -21,6 +21,7 @@ import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import EditProfileButton from '@/components/EditProfileButton';
 import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
 import Spinner from '@/components/Spinner';
+import ProfileHeader from '@/components/ProfileHeader';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -147,31 +148,17 @@ export default function ProfileScreen() {
           />
         </View>
 
-        <View style={{ flexDirection: 'row', gap: 16, paddingVertical: 4 }}>
-          <Image
-            style={{
-              width: 100,
-              height: 100,
-              borderRadius: 1024,
-            }}
-            source={{
-              uri: 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+        <ProfileHeader
+          username={username}
+          description=" Hi, I'm currently a year 13 student studying Maths, Further Maths and
+                  Computer Science"
+        >
+          <EditProfileButton
+            onPress={() => {
+              bottomSheetRef.current?.expand();
             }}
           />
-
-          <View style={{ flex: 1, gap: 12, justifyContent: 'center' }}>
-            <Text style={{ fontWeight: 700, fontSize: 16 }}>@{username}</Text>
-            <Text style={{ fontSize: 12 }}>
-              Hi, I'm currently a year 13 student studying Maths, Further Maths
-              and Computer Science
-            </Text>
-            <EditProfileButton
-              onPress={() => {
-                bottomSheetRef.current?.expand();
-              }}
-            />
-          </View>
-        </View>
+        </ProfileHeader>
       </View>
 
       <Tab
