@@ -2,6 +2,7 @@ const baseTheme = {
   common: {
     primary: '#20cfa5',
     error: '#d81f1f',
+    success: '#4fd144',
   },
   light: {
     text: '#000',
