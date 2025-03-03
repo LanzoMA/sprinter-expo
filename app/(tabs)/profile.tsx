@@ -1,18 +1,8 @@
-import { View, FlatList, Pressable, RefreshControl } from 'react-native';
+import { View, FlatList, RefreshControl } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
-import {
-  Tab,
-  TabView,
-  useTheme,
-  Text,
-  Button,
-  Image,
-  Icon,
-  ListItem,
-  Input,
-} from '@rneui/themed';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import { Tab, TabView, useTheme, Text, Icon } from '@rneui/themed';
+import BottomSheet from '@gorhom/bottom-sheet';
 import AchievementCard from '@/components/AchievementCard';
 import Post from '@/components/Post';
 import { baseUrl } from '@/constants/base-url';
@@ -22,6 +12,8 @@ import EditProfileButton from '@/components/EditProfileButton';
 import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
 import Spinner from '@/components/Spinner';
 import ProfileHeader from '@/components/ProfileHeader';
+import CourseStatisticCard from '@/components/CourseStatisticCard';
+import baseTheme from '@/constants/base-theme';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -33,6 +25,7 @@ export default function ProfileScreen() {
   const [loading, setLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Question>>();
   const [dailyStreak, setDailyStreak] = useState<number>(0);
+  const [statistics, setStatistics] = useState<Record<string, number>>({});
   const [achievements, setAchievements] = useState<Array<Achievement>>([]);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -43,6 +36,7 @@ export default function ProfileScreen() {
     getUsername();
     getPosts();
     getDailyStreak();
+    getStatistics();
     getAchievements();
   }, []);
 
@@ -95,6 +89,26 @@ export default function ProfileScreen() {
       const data = await response.json();
 
       setDailyStreak(data.streak);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const getStatistics = async () => {
+    try {
+      const accessToken = await getAccessToken();
+
+      if (!accessToken) throw new Error('Access token not found');
+
+      const response = await fetch(`${baseUrl}/account/statistics`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      setStatistics(data);
     } catch (error) {
       console.error(error);
     }
@@ -232,18 +246,27 @@ export default function ProfileScreen() {
         </TabView.Item>
 
         <TabView.Item style={{ width: '100%', padding: 8 }}>
-          <ListItem
-            containerStyle={{
-              backgroundColor: theme.colors.surface,
-              borderRadius: 8,
-            }}
-          >
-            <ListItem.Content>
-              <ListItem.Title style={{ fontWeight: 700 }}>
-                Daily Streak: {dailyStreak}
-              </ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
+          <View style={{ gap: 16 }}>
+            <View
+              style={{
+                backgroundColor: baseTheme.dark.surface,
+                padding: 16,
+                borderRadius: 8,
+              }}
+            >
+              <Text style={{ fontWeight: 700, fontSize: 16 }}>
+                Daily Streak: {dailyStreak} 🔥
+              </Text>
+            </View>
+
+            <FlatList
+              contentContainerStyle={{ gap: 16 }}
+              data={Object.entries(statistics)}
+              renderItem={({ item }) => (
+                <CourseStatisticCard course={item[0]} percentage={item[1]} />
+              )}
+            />
+          </View>
         </TabView.Item>
 
         <TabView.Item
