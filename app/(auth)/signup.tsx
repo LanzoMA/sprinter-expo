@@ -24,9 +24,9 @@ export default function SignUpScreen() {
 
   // Check if email contains @ and .
   const emailRegex = /^.+@.+\.\w+$/;
-  // Check if username is 3 or more characters and only contains letters, numbers, underscores and underscores
-  const usernameRegex = /^[\w\d\._]{3,}$/;
-  // Check if the password is greater than 8 characters, contains a special character and a number
+  // Check if username is 3 or more characters and only contains letters and numbers
+  const usernameRegex = /^[\w\d\.]{3,}$/;
+  // Check if the password is greater than 8 characters and contains a number
   const passwordRegex = /^(?=.*\d).{8,}$/;
 
   async function signup() {
@@ -46,8 +46,7 @@ export default function SignUpScreen() {
 
     if (!passwordRegex.test(password)) {
       setPasswordError(
-        'Password insecure: password must be 8 or more characters' +
-          ' and contain numbers and special characters.'
+        'Invalid password. Password must be 8 or more characters and contain numbers.'
       );
       setLoading(false);
       return;
@@ -67,8 +66,6 @@ export default function SignUpScreen() {
       },
       body: JSON.stringify({ email, username, password }),
     });
-
-    console.log(JSON.stringify(response, null, 4));
 
     if (response.status === 400) {
       const data = await response.json();
