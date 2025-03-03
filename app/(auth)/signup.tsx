@@ -27,7 +27,7 @@ export default function SignUpScreen() {
   // Check if username is 3 or more characters and only contains letters, numbers, underscores and underscores
   const usernameRegex = /^[\w\d\._]{3,}$/;
   // Check if the password is greater than 8 characters, contains a special character and a number
-  const passwordRegex = /^(?=.*[!@#$%^&*(),.?":{}|<>_£ ])(?=.*\d).{8,}$/;
+  const passwordRegex = /^(?=.*\d).{8,}$/;
 
   async function signup() {
     setLoading(true);
