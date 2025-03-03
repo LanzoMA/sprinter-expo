@@ -153,11 +153,7 @@ export default function ProfileScreen() {
           description=" Hi, I'm currently a year 13 student studying Maths, Further Maths and
                   Computer Science"
         >
-          <EditProfileButton
-            onPress={() => {
-              bottomSheetRef.current?.expand();
-            }}
-          />
+          <EditProfileButton onPress={() => bottomSheetRef.current?.expand()} />
         </ProfileHeader>
       </View>
 
@@ -280,6 +276,8 @@ export default function ProfileScreen() {
       <EditProfileBottomSheet
         bottomSheetRef={bottomSheetRef}
         username={username}
+        description=""
+        profilePicture=""
       />
     </View>
   );
