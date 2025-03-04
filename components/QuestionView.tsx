@@ -5,10 +5,12 @@ import { ImageBackground } from 'expo-image';
 import PagerView from 'react-native-pager-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Slider from '@react-native-community/slider';
+import Toast from 'react-native-toast-message';
 import Chip from './Chip';
 import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
 import { router } from 'expo-router';
+import { storeQuestion } from '@/constants/download';
 
 interface QuestionViewProps {
   id: string;
@@ -142,6 +144,25 @@ export default function QuestionView(props: QuestionViewProps) {
     }
   };
 
+  async function download() {
+    await storeQuestion({
+      _id: props.id,
+      question: props.question,
+      markScheme: props.markScheme,
+      title: props.title,
+      description: '',
+      course: '',
+      totalMarks: props.totalMarks,
+      author: props.author,
+      favorited: false,
+    });
+    Toast.show({
+      type: 'success',
+      text1: 'Success',
+      text2: 'Successfully saved question',
+    });
+  }
+
   const submitRating = async () => {
     try {
       const accessToken = await getAccessToken();
@@ -257,14 +278,16 @@ export default function QuestionView(props: QuestionViewProps) {
                   </View>
 
                   <Pressable
-                    onPress={() => {
-                      router.push(`/questions/${props.id}/comments`);
-                    }}
+                    onPress={() =>
+                      router.push(`/questions/${props.id}/comments`)
+                    }
                   >
                     <Icon color={iconColor} name="comment" size={iconSize} />
                   </Pressable>
 
-                  <Icon color={iconColor} name="download" size={iconSize} />
+                  <Pressable onPress={download}>
+                    <Icon color={iconColor} name="download" size={iconSize} />
+                  </Pressable>
                   <Icon color={iconColor} name="ios-share" size={iconSize} />
                 </View>
               </>
