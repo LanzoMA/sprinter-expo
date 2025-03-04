@@ -35,11 +35,15 @@ export default function SprinterTextInput(props: SprinterTextInputProps) {
       fontSize: 12,
       color: baseTheme.common.error,
     },
+    text: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+    },
   });
 
   return (
     <View style={styles.container}>
-      {props.label && <Text>{props.label}</Text>}
+      {props.label && <Text style={styles.text}>{props.label}</Text>}
       <TextInput
         style={styles.textInput}
         cursorColor={baseTheme.common.primary}
