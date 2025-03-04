@@ -1,7 +1,9 @@
 import { Icon, Text, useTheme, Button } from '@rneui/themed';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Dimensions, Pressable, View, StyleSheet } from 'react-native';
 import { ImageBackground } from 'expo-image';
+import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system';
 import PagerView from 'react-native-pager-view';
 import { useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
 import Slider from '@react-native-community/slider';
@@ -163,6 +165,30 @@ export default function QuestionView(props: QuestionViewProps) {
     });
   }
 
+  async function share() {
+    const questionFileUri = FileSystem.documentDirectory + 'question.png';
+    const markSchemeFileUri = FileSystem.documentDirectory + 'mark-scheme.png';
+
+    await FileSystem.writeAsStringAsync(
+      questionFileUri,
+      props.question.split(',')[1],
+      {
+        encoding: FileSystem.EncodingType.Base64,
+      }
+    );
+
+    await FileSystem.writeAsStringAsync(
+      markSchemeFileUri,
+      props.markScheme.split(',')[1],
+      {
+        encoding: FileSystem.EncodingType.Base64,
+      }
+    );
+
+    await Sharing.shareAsync(questionFileUri);
+    await Sharing.shareAsync(markSchemeFileUri);
+  }
+
   const submitRating = async () => {
     try {
       const accessToken = await getAccessToken();
@@ -288,7 +314,10 @@ export default function QuestionView(props: QuestionViewProps) {
                   <Pressable onPress={download}>
                     <Icon color={iconColor} name="download" size={iconSize} />
                   </Pressable>
-                  <Icon color={iconColor} name="ios-share" size={iconSize} />
+
+                  <Pressable onPress={share}>
+                    <Icon color={iconColor} name="ios-share" size={iconSize} />
+                  </Pressable>
                 </View>
               </>
             )}
