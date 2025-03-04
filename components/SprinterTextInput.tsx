@@ -1,5 +1,11 @@
-import { TextInput, TextInputProps, useColorScheme, View } from 'react-native';
-import { useTheme, Text } from '@rneui/themed';
+import {
+  View,
+  Text,
+  TextInput,
+  TextInputProps,
+  useColorScheme,
+  StyleSheet,
+} from 'react-native';
 import baseTheme from '@/constants/base-theme';
 
 interface SprinterTextInputProps extends TextInputProps {
@@ -8,20 +14,35 @@ interface SprinterTextInputProps extends TextInputProps {
 }
 
 export default function SprinterTextInput(props: SprinterTextInputProps) {
-  const { theme } = useTheme();
   const colorScheme = useColorScheme();
 
+  const styles = StyleSheet.create({
+    container: {
+      gap: 4,
+      width: '100%',
+    },
+    textInput: {
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.surface
+          : baseTheme.dark.surface,
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+      borderRadius: 8,
+      padding: 16,
+    },
+    error: {
+      fontSize: 12,
+      color: baseTheme.common.error,
+    },
+  });
+
   return (
-    <View style={{ gap: 4, width: '100%' }}>
+    <View style={styles.container}>
       {props.label && <Text>{props.label}</Text>}
       <TextInput
-        style={{
-          backgroundColor: theme.colors.surface,
-          color: theme.colors.text,
-          borderRadius: 8,
-          padding: 16,
-        }}
-        cursorColor={theme.colors.primary}
+        style={styles.textInput}
+        cursorColor={baseTheme.common.primary}
         placeholderTextColor={
           colorScheme === 'light'
             ? baseTheme.light.subtleText
@@ -30,9 +51,7 @@ export default function SprinterTextInput(props: SprinterTextInputProps) {
         {...props}
       />
       {props.errorMessage && (
-        <Text style={{ fontSize: 12, color: theme.colors.error }}>
-          {props.errorMessage}
-        </Text>
+        <Text style={styles.error}>{props.errorMessage}</Text>
       )}
     </View>
   );
