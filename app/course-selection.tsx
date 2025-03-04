@@ -6,11 +6,13 @@ import baseTheme from '@/constants/base-theme';
 import { router } from 'expo-router';
 import { Course } from '@/constants/models';
 import { baseUrl } from '@/constants/base-url';
+import { getAccessToken } from '@/constants/token-access';
 
 export default function CourseSelectionScreen() {
   const colorScheme = useColorScheme();
 
   const [courses, setCourses] = useState<Array<Course>>([]);
+  const [courseSelection, setCourseSelection] = useState<Array<string>>([]);
 
   const styles = StyleSheet.create({
     container: {
@@ -39,6 +41,24 @@ export default function CourseSelectionScreen() {
     setCourses(data);
   }
 
+  async function handleContinue() {
+    const accessToken = await getAccessToken();
+
+    if (!accessToken) return;
+
+    await fetch(`${baseUrl}/account/courses`, {
+      method: 'PUT',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ courses: courseSelection }),
+    });
+
+    router.replace('/');
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Select the courses you are studying</Text>
@@ -58,12 +78,19 @@ export default function CourseSelectionScreen() {
                 borderWidth: 1,
                 borderColor: baseTheme.common.primary,
               }}
+              onPress={(checked) => {
+                checked
+                  ? setCourseSelection([...courseSelection, course._id])
+                  : setCourseSelection(
+                      courseSelection.filter((item) => item !== course._id)
+                    );
+              }}
             />
           );
         })}
       </View>
 
-      <SprinterButton title="Continue" onPress={() => router.replace('/')} />
+      <SprinterButton title="Continue" onPress={handleContinue} />
     </View>
   );
 }
