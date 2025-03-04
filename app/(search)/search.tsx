@@ -100,7 +100,9 @@ const SearchScreen = () => {
         }
       />
 
-      <SearchCard title="Difficulty">
+      <Text style={{ fontSize: 20, fontWeight: 700 }}>Filters</Text>
+
+      {/* <SearchCard title="Difficulty">
         <View style={{ gap: 16, paddingBottom: 8 }}>
           <View style={{ flexDirection: 'row' }}>
             <BouncyCheckbox
@@ -135,7 +137,7 @@ const SearchScreen = () => {
             <Text>Hard</Text>
           </View>
         </View>
-      </SearchCard>
+      </SearchCard> */}
 
       <SearchCard title="Marks">
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -172,13 +174,13 @@ const SearchScreen = () => {
         </View>
       </SearchCard>
 
-      <SearchCard title="Sort By">
-        <BouncyCheckboxGroup
-          data={sorts}
-          onChange={() => {}}
-          style={{ flexDirection: 'column', gap: 8 }}
-        />
-      </SearchCard>
+      {/* <SearchCard title="Sort By">
+          <BouncyCheckboxGroup
+            data={sorts}
+            onChange={() => {}}
+            style={{ flexDirection: 'column', gap: 8 }}
+          />
+        </SearchCard> */}
     </ScrollView>
   );
 };
