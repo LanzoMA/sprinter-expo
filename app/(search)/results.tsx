@@ -24,6 +24,9 @@ export default function SearchResultScreen() {
           : baseTheme.dark.background,
       flex: 1,
     },
+    header: {
+      padding: 8,
+    },
   });
 
   useEffect(() => {
@@ -39,7 +42,9 @@ export default function SearchResultScreen() {
 
   return (
     <View style={styles.container}>
-      <SprinterSearchBar />
+      <View style={styles.header}>
+        <SprinterSearchBar />
+      </View>
       <FlatList
         data={results}
         numColumns={2}
