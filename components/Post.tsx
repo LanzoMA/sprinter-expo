@@ -8,6 +8,7 @@ interface PostProps {
   image: string;
   title: string;
   marks: number;
+  onPress: () => void;
 }
 
 const Post = (props: PostProps) => {
@@ -18,11 +19,7 @@ const Post = (props: PostProps) => {
     props.title.length > 22 ? props.title.slice(0, 19) + '...' : props.title;
 
   return (
-    <Pressable
-      onPress={() => {
-        router.push(`/questions/${props.id}`);
-      }}
-    >
+    <Pressable onPress={props.onPress}>
       <View
         style={{
           backgroundColor: theme.colors.surface,

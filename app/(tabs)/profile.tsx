@@ -239,6 +239,7 @@ export default function ProfileScreen() {
                   image={post.item.question}
                   title={post.item.title}
                   marks={post.item.totalMarks}
+                  onPress={() => router.push(`/questions/${post.item._id}`)}
                 />
               );
             }}

@@ -6,7 +6,7 @@ import {
   RefreshControl,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import baseTheme from '@/constants/base-theme';
 import ProfileHeader from '@/components/ProfileHeader';
 import { Profile, Question } from '@/constants/models';
@@ -94,6 +94,7 @@ export default function ProfileScreen() {
               image={post.item.question}
               title={post.item.title}
               marks={post.item.totalMarks}
+              onPress={() => router.push(`/questions/${post.item._id}`)}
             />
           );
         }}

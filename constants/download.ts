@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Question } from './models';
 
-export async function storeQuestion(question: Question) {
+export async function storeQuestion(question: Question): Promise<void> {
   const questions = await getQuestions();
   questions.push(question);
 
@@ -15,4 +15,16 @@ export async function getQuestions(): Promise<Array<Question>> {
   if (!data) return [];
 
   return JSON.parse(data);
+}
+
+export async function getQuestionById(id: string): Promise<Question> {
+  const questions = await getQuestions();
+
+  if (!questions) throw new Error('No questions found');
+
+  const question = questions.find((question) => question._id === id);
+
+  if (!question) throw new Error('Question not found');
+
+  return question;
 }
