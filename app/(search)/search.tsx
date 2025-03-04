@@ -7,6 +7,7 @@ import BouncyCheckboxGroup, {
 } from 'react-native-bouncy-checkbox-group';
 import SearchCard from '@/components/SearchCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
+import { router } from 'expo-router';
 
 const SearchScreen = () => {
   const { theme } = useTheme();
@@ -15,6 +16,9 @@ const SearchScreen = () => {
   const [okayChecked, setOkayChecked] = useState<boolean>(false);
   const [mediumChecked, setMediumChecked] = useState<boolean>(false);
   const [hardChecked, setHardChecked] = useState<boolean>(false);
+
+  const [minMarks, setMinMarks] = useState<string>('1');
+  const [maxMarks, setMaxMarks] = useState<string>('20');
 
   const sorts: CheckboxButton[] = [
     {
@@ -87,7 +91,14 @@ const SearchScreen = () => {
       }}
       contentContainerStyle={{ gap: 16 }}
     >
-      <SprinterSearchBar autoFocus />
+      <SprinterSearchBar
+        autoFocus
+        onSubmitEditing={() =>
+          router.push(
+            `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}`
+          )
+        }
+      />
 
       <SearchCard title="Difficulty">
         <View style={{ gap: 16, paddingBottom: 8 }}>
@@ -139,7 +150,8 @@ const SearchScreen = () => {
             }}
             keyboardType="numeric"
             maxLength={2}
-            defaultValue="1"
+            value={minMarks}
+            onChangeText={(text) => setMinMarks(text)}
           />
         </View>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -154,7 +166,8 @@ const SearchScreen = () => {
             }}
             keyboardType="numeric"
             maxLength={2}
-            defaultValue="20"
+            value={maxMarks}
+            onChangeText={(text) => setMaxMarks(text)}
           />
         </View>
       </SearchCard>

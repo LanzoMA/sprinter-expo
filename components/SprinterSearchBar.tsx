@@ -6,12 +6,14 @@ interface SprinterSearchBarProps {
   editable?: boolean;
   placeholder?: string;
   autoFocus?: boolean;
+  onSubmitEditing?: () => void;
 }
 
 export default function SprinterSearchBar({
   editable,
   placeholder,
   autoFocus,
+  onSubmitEditing,
 }: SprinterSearchBarProps) {
   const { theme } = useTheme();
 
@@ -31,6 +33,7 @@ export default function SprinterSearchBar({
         placeholder={placeholder}
         placeholderTextColor="white"
         autoFocus={autoFocus}
+        onSubmitEditing={onSubmitEditing}
       />
       <MaterialIcons name="search" size={20} color="white" />
     </View>
