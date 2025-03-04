@@ -1,19 +1,36 @@
-import { FlatList, Pressable, View } from 'react-native';
+import { FlatList, Pressable, View, StyleSheet } from 'react-native';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
-import { useTheme, Text, SearchBar } from '@rneui/themed';
+import { useTheme, Text } from '@rneui/themed';
 import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
 import { Course } from '@/constants/models';
-import courseColors from '@/constants/course-colors';
 import CourseCard from '@/components/CourseCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
-import SprinterButton from '@/components/SprinterButton';
+import EditCoursesButton from '@/components/EditCoursesButton';
 
 export default function ExploreScreen() {
   const { theme } = useTheme();
 
   const [courses, setCourses] = useState<Array<Course>>();
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: theme.colors.background,
+      flex: 1,
+      padding: 16,
+      gap: 16,
+    },
+    header: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 8,
+    },
+    title: {
+      fontWeight: 700,
+      fontSize: 22,
+    },
+  });
 
   useEffect(() => {
     getCourses();
@@ -42,41 +59,27 @@ export default function ExploreScreen() {
   };
 
   return (
-    <View
-      style={{
-        backgroundColor: theme.colors.background,
-        flex: 1,
-        padding: 16,
-        gap: 16,
-      }}
-    >
+    <View style={styles.container}>
       <Pressable onPress={() => router.push('/(search)/search')}>
         <SprinterSearchBar editable={false} placeholder="Search Questions" />
       </Pressable>
 
-      <Text style={{ fontWeight: 700, fontSize: 22 }}>Your Courses</Text>
-
-      <SprinterButton
-        title="Edit"
-        onPress={() => router.push('/course-selection')}
-      />
+      <View style={styles.header}>
+        <Text style={styles.title}>Your Courses</Text>
+        <EditCoursesButton onPress={() => router.push('/course-selection')} />
+      </View>
 
       <FlatList
         contentContainerStyle={{ gap: 16 }}
         data={courses}
         renderItem={(course) => {
-          const cardColor: string =
-            courseColors[course.item._id]?.color || '#2A2C30';
-          const chipColor: string =
-            courseColors[course.item._id]?.chipColor || '#3B3F46';
-
           return (
             <CourseCard
               title={course.item.name}
               qualification={course.item.qualification}
               examBoard={course.item.examBoard}
-              color={cardColor}
-              chipColor={chipColor}
+              color={'#2A2C30'}
+              chipColor={'#3B3F46'}
             />
           );
         }}

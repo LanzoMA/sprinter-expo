@@ -20,6 +20,7 @@ export default function SprinterButton({
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 8,
+        padding: 8,
       }}
       onPress={onPress}
     >
