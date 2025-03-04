@@ -7,14 +7,16 @@ import {
   ScrollView,
 } from 'react-native';
 import { useEffect, useState } from 'react';
-import { useTheme, Button, Text, Icon, Input } from '@rneui/themed';
+import { useTheme, Text, Icon } from '@rneui/themed';
 import Slider from '@react-native-community/slider';
 import { baseUrl } from '@/constants/base-url';
-import { Snackbar } from 'react-native-paper';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import { Course } from '@/constants/models';
 import Chip from '@/components/Chip';
 import { getImage } from '@/helpers/image';
+import SprinterButton from '@/components/SprinterButton';
+import SprinterTextInput from '@/components/SprinterTextInput';
+import Toast from 'react-native-toast-message';
 
 export default function UploadScreen() {
   const { theme } = useTheme();
@@ -30,8 +32,42 @@ export default function UploadScreen() {
   const [course, setCourse] = useState<Course>();
   const [totalMarks, setTotalMarks] = useState<number>(1);
 
-  const [visible, setVisible] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
+  const styles = StyleSheet.create({
+    container: {
+      gap: 32,
+      padding: 16,
+      backgroundColor: theme.colors.background,
+    },
+    imageSelectorContainer: {
+      flexDirection: 'row',
+      height: 240,
+      gap: 16,
+    },
+    imageSelector: {
+      flex: 1,
+      borderWidth: 2,
+      borderRadius: 16,
+      alignItems: 'center',
+      gap: 8,
+    },
+    imageSelectorText: {
+      textAlign: 'center',
+    },
+    imageSelectorLabel: {
+      justifyContent: 'center',
+      height: 40,
+    },
+    image: {
+      borderRadius: 16,
+      backgroundColor: 'white',
+      flex: 1,
+      width: '100%',
+      justifyContent: 'center',
+    },
+    section: {
+      gap: 8,
+    },
+  });
 
   useEffect(() => {
     getCourses();
@@ -40,56 +76,46 @@ export default function UploadScreen() {
   async function getCourses() {
     const response = await fetch(`${baseUrl}/courses/`);
     const json = await response.json();
-
     setCourses(json);
   }
 
   async function pickQuestionImage() {
     const image = await getImage();
-
-    if (!image) {
-      setMessage('Image not found');
-      setVisible(true);
-      return;
-    }
-
+    if (!image) return;
     setQuestionImage(image);
   }
 
   async function pickMarkschemeImage() {
     const image = await getImage();
-
-    if (!image) {
-      setMessage('Image not found');
-      setVisible(true);
-      return;
-    }
-
+    if (!image) return;
     setMarkSchemeImage(image);
   }
 
   async function submit() {
     if (!questionImage || !markSchemeImage) {
-      setMessage('Missing question and mark scheme images');
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Question and mark scheme images not provided',
+      });
       return;
     }
 
     if (!title) {
-      setMessage('Title was not given');
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Title not given',
+      });
       return;
     }
 
     if (!course) {
-      setMessage('Missing course information');
-      setVisible(true);
-      return;
-    }
-
-    if (!totalMarks) {
-      setMessage('Missing total marks information');
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Course information not given',
+      });
       return;
     }
 
@@ -122,15 +148,19 @@ export default function UploadScreen() {
     });
 
     if (response.status !== 201) {
-      setMessage(
-        'An error occurred while uploading the question. Please try again later.'
-      );
-      setVisible(true);
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Something went wrong. Please try again later',
+      });
       return;
     }
 
-    setMessage('Successfully uploaded the question!');
-    setVisible(true);
+    Toast.show({
+      type: 'success',
+      text1: 'Success',
+      text2: 'Successfully uploaded question',
+    });
     setQuestionImage('');
     setMarkSchemeImage('');
     setTitle('');
@@ -140,81 +170,58 @@ export default function UploadScreen() {
   }
 
   return (
-    <View>
-      <ScrollView
-        contentContainerStyle={{
-          gap: 8,
-          padding: 16,
-          backgroundColor: theme.colors.background,
-        }}
-      >
-        <View
-          style={{
-            flexDirection: 'row',
-            height: 380,
-            gap: 16,
-            paddingVertical: 16,
-          }}
-        >
-          <Pressable
-            style={{
-              flex: 1,
-              borderWidth: 2,
-              borderRadius: 16,
-            }}
-            onPress={pickQuestionImage}
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.imageSelectorContainer}>
+        <Pressable style={styles.imageSelector} onPress={pickQuestionImage}>
+          <View style={styles.imageSelectorLabel}>
+            <Text style={styles.imageSelectorText}>Select Question Image</Text>
+          </View>
+
+          <ImageBackground
+            style={styles.image}
+            source={{ uri: questionImage }}
+            contentFit="contain"
           >
-            <ImageBackground
-              style={styles.image}
-              source={{ uri: questionImage }}
-              contentFit="contain"
-            >
-              {questionImage ? null : (
-                <Icon name="add" type="material" color="black" size={32} />
-              )}
-            </ImageBackground>
-          </Pressable>
-          <Pressable
-            style={{
-              flex: 1,
-              borderWidth: 2,
-              borderRadius: 16,
-            }}
-            onPress={pickMarkschemeImage}
+            {questionImage || (
+              <Icon name="add" type="material" color="black" size={32} />
+            )}
+          </ImageBackground>
+        </Pressable>
+
+        <Pressable style={styles.imageSelector} onPress={pickMarkschemeImage}>
+          <View style={styles.imageSelectorLabel}>
+            <Text style={styles.imageSelectorText}>
+              Select Mark Scheme Image
+            </Text>
+          </View>
+
+          <ImageBackground
+            style={styles.image}
+            source={{ uri: markSchemeImage }}
+            contentFit="contain"
           >
-            <ImageBackground
-              style={styles.image}
-              source={{ uri: markSchemeImage }}
-              contentFit="contain"
-            >
-              {markSchemeImage ? null : (
-                <Icon name="add" type="material" color="black" size={32} />
-              )}
-            </ImageBackground>
-          </Pressable>
-        </View>
-
-        <Text>Title</Text>
-
-        <Input
-          placeholder="Title"
-          onChangeText={(title) => {
-            setTitle(title);
-          }}
-        />
-
-        <Text>Description</Text>
-
-        <Input
-          style={{ minHeight: 80 }}
-          multiline
-          placeholder="Description"
-          numberOfLines={8}
-          onChangeText={(description) => {
-            setDescription(description);
-          }}
-        />
-
+            {markSchemeImage || (
+              <Icon name="add" type="material" color="black" size={32} />
+            )}
+          </ImageBackground>
+        </Pressable>
+      </View>
+      <SprinterTextInput
+        label="Title"
+        placeholder="Title"
+        value={title}
+        onChangeText={(text) => setTitle(text)}
+      />
+      <SprinterTextInput
+        label="Description"
+        multiline
+        placeholder="Description"
+        numberOfLines={8}
+        value={description}
+        onChangeText={(text) => setDescription(text)}
+      />
+      // Todo: Fix this section
+      <View style={styles.section}>
         <Text>
           Course: {course?.qualification} {course?.examBoard} {course?.name}
         </Text>
@@ -222,7 +229,7 @@ export default function UploadScreen() {
         <FlatList
           style={{ paddingVertical: 4 }}
           data={courses}
-          contentContainerStyle={{ gap: 8 }}
+          contentContainerStyle={styles.section}
           renderItem={(course) => {
             const { name, qualification, examBoard } = course.item;
             const title = `${qualification} ${examBoard} ${name}`;
@@ -236,11 +243,10 @@ export default function UploadScreen() {
               />
             );
           }}
-          horizontal
         />
-
+      </View>
+      <View style={styles.section}>
         <Text>Number of Marks: {totalMarks}</Text>
-
         <Slider
           style={{ height: 40 }}
           minimumValue={1}
@@ -249,32 +255,10 @@ export default function UploadScreen() {
           minimumTrackTintColor={theme.colors.primary}
           maximumTrackTintColor={theme.colors.grey0}
           thumbTintColor={theme.colors.primary}
-          onValueChange={(mark) => {
-            setTotalMarks(mark);
-          }}
+          onValueChange={(mark) => setTotalMarks(mark)}
         />
-
-        <Button title="Submit" onPress={submit} />
-      </ScrollView>
-      <Snackbar
-        visible={visible}
-        onDismiss={() => {
-          setVisible(false);
-        }}
-        duration={3000}
-      >
-        <Text>{message}</Text>
-      </Snackbar>
-    </View>
+      </View>
+      <SprinterButton title="Submit" onPress={submit} />
+    </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  image: {
-    borderRadius: 16,
-    backgroundColor: 'white',
-    height: '100%',
-    width: '100%',
-    justifyContent: 'center',
-  },
-});
