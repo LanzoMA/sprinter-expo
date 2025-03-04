@@ -8,6 +8,7 @@ import { Course } from '@/constants/models';
 import courseColors from '@/constants/course-colors';
 import CourseCard from '@/components/CourseCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
+import SprinterButton from '@/components/SprinterButton';
 
 export default function ExploreScreen() {
   const { theme } = useTheme();
@@ -54,6 +55,11 @@ export default function ExploreScreen() {
       </Pressable>
 
       <Text style={{ fontWeight: 700, fontSize: 22 }}>Your Courses</Text>
+
+      <SprinterButton
+        title="Edit"
+        onPress={() => router.push('/course-selection')}
+      />
 
       <FlatList
         contentContainerStyle={{ gap: 16 }}

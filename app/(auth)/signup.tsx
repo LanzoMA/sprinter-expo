@@ -102,7 +102,7 @@ export default function SignUpScreen() {
 
     await storeAccessToken(accessToken);
 
-    router.replace('/');
+    router.replace('/course-selection');
 
     setLoading(false);
   }
