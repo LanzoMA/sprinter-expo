@@ -6,8 +6,6 @@ import {
   FlatList,
   ScrollView,
 } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 import { useEffect, useState } from 'react';
 import { useTheme, Button, Text, Icon, Input } from '@rneui/themed';
 import Slider from '@react-native-community/slider';
@@ -16,6 +14,7 @@ import { Snackbar } from 'react-native-paper';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import { Course } from '@/constants/models';
 import Chip from '@/components/Chip';
+import { getImage } from '@/helpers/image';
 
 export default function UploadScreen() {
   const { theme } = useTheme();
@@ -43,21 +42,6 @@ export default function UploadScreen() {
     const json = await response.json();
 
     setCourses(json);
-  }
-
-  async function getImage(): Promise<string | undefined> {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ['images'],
-      allowsEditing: true,
-    });
-
-    if (result.canceled) return;
-
-    const imageData = await FileSystem.readAsStringAsync(result.assets[0].uri, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
-    return `data:image/png;base64,${imageData}`;
   }
 
   async function pickQuestionImage() {

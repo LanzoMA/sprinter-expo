@@ -20,7 +20,9 @@ export default function ProfileScreen() {
 
   const [tabIndex, setTabIndex] = useState<number>(0);
 
+  const [profilePicture, setProfilePicture] = useState<string>('');
   const [username, setUsername] = useState<string>('');
+  const [description, setDescription] = useState<string>('');
 
   const [loading, setLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Question>>();
@@ -33,19 +35,37 @@ export default function ProfileScreen() {
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
-    getUsername();
+    getProfile();
     getPosts();
     getDailyStreak();
     getStatistics();
     getAchievements();
   }, []);
 
-  const getUsername = async () => {
+  const getProfile = async () => {
     const user = await getUserDetails();
 
     if (!user) return;
 
-    setUsername(user.username);
+    const accessToken = await getAccessToken();
+
+    if (!accessToken) return;
+
+    try {
+      const response = await fetch(`${baseUrl}/users/${user.id}`, {
+        headers: {
+          Auhorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const data = await response.json();
+
+      setProfilePicture(data.profilePicture);
+      setUsername(data.username);
+      setDescription(data.description);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getPosts = async () => {
@@ -164,8 +184,8 @@ export default function ProfileScreen() {
 
         <ProfileHeader
           username={username}
-          description=" Hi, I'm currently a year 13 student studying Maths, Further Maths and
-                  Computer Science"
+          description={description}
+          profilePicture={profilePicture}
         >
           <EditProfileButton onPress={() => bottomSheetRef.current?.expand()} />
         </ProfileHeader>
@@ -300,8 +320,8 @@ export default function ProfileScreen() {
       <EditProfileBottomSheet
         bottomSheetRef={bottomSheetRef}
         username={username}
-        description=""
-        profilePicture=""
+        description={description}
+        profilePicture={profilePicture}
       />
     </View>
   );

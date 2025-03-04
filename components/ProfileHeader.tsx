@@ -53,13 +53,13 @@ export default function ProfileHeader({
       <Image
         style={styles.image}
         source={{
-          uri: baseProfilePicture,
+          uri: profilePicture || baseProfilePicture,
         }}
       />
 
       <View style={styles.details}>
         <Text style={styles.username}>@{username}</Text>
-        <Text style={styles.description}>{description}</Text>
+        <Text style={styles.description}>{description || 'No bio yet'}</Text>
         {children}
       </View>
     </View>

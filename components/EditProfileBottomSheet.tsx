@@ -1,5 +1,5 @@
 import { View, Pressable, StyleSheet } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Image } from 'expo-image';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
 import { BottomSheetMethods } from '@gorhom/bottom-sheet/lib/typescript/types';
@@ -12,6 +12,7 @@ import {
   getUserDetails,
   storeAccessToken,
 } from '@/constants/token-access';
+import { getImage } from '@/helpers/image';
 
 interface EditProfileBottomSheetProps {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
@@ -49,6 +50,19 @@ export default function EditProfileBottomSheet({
       fontWeight: 700,
     },
   });
+
+  useEffect(() => {
+    setUsernameInput(username);
+    setDescriptionInput(description);
+  }, []);
+
+  async function handleProfilePicture() {
+    const image = await getImage();
+
+    if (!image) return;
+
+    setProfilePictureInput(image);
+  }
 
   function handleCancel() {
     bottomSheetRef.current?.close();
@@ -111,15 +125,19 @@ export default function EditProfileBottomSheet({
           </Pressable>
         </View>
 
-        <Image
-          style={styles.image}
-          source={{ uri: profilePicture || baseProfilePicture }}
-        />
+        <Pressable onPress={handleProfilePicture}>
+          <Image
+            style={styles.image}
+            source={{
+              uri: profilePictureInput || profilePicture || baseProfilePicture,
+            }}
+          />
+        </Pressable>
 
         <SprinterTextInput
           label="Username"
           defaultValue={username}
-          value={usernameInput}
+          // value={usernameInput}
           onChangeText={(text) => setUsernameInput(text)}
         />
 
