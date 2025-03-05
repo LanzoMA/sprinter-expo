@@ -33,11 +33,11 @@ export default function QuestionView(props: QuestionViewProps) {
   const { theme } = useTheme();
 
   const [favorites, setFavorites] = useState<number>(0);
+  const [favorited, setFavorited] = useState<boolean>(false);
 
   const iconSize = 40;
   const iconColor = '#000000bb';
   const [overlayVisible, setOverlayVisible] = useState<boolean>(true);
-  const [favorited, setFavorited] = useState<boolean>(false);
 
   const difficulties = ['Easy', 'Okay', 'Medium', 'Hard'];
 
