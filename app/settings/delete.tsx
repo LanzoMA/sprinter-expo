@@ -60,8 +60,7 @@ export default function DeleteAccountScreen() {
 
       await deleteAccessToken();
 
-      router.dismissAll();
-      router.replace('/(auth)/login');
+      router.dismissTo('/(auth)/login');
     } catch (error) {
       Toast.show({
         type: 'error',
