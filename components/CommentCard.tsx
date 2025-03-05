@@ -1,5 +1,7 @@
+import { StyleSheet } from 'react-native';
 import { Image } from 'expo-image';
 import { ListItem, Text } from '@rneui/themed';
+import { baseProfilePicture } from '@/constants/base-profile-picture';
 
 interface CommentCardProps {
   username: string;
@@ -7,28 +9,35 @@ interface CommentCardProps {
   comment: string;
 }
 
-const CommentCard = (props: CommentCardProps) => {
+export default function CommentCard(props: CommentCardProps) {
+  const styles = StyleSheet.create({
+    image: {
+      width: 48,
+      height: 48,
+      borderRadius: 1024,
+    },
+    details: {
+      justifyContent: 'flex-start',
+      height: '100%',
+    },
+    text: {
+      fontWeight: 700,
+      fontSize: 12,
+    },
+  });
+
   return (
     <ListItem>
       <Image
-        style={{ width: 48, height: 48, borderRadius: 1024 }}
+        style={styles.image}
         source={{
-          uri:
-            props.profilePicture ||
-            'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png',
+          uri: props.profilePicture || baseProfilePicture,
         }}
       />
-      <ListItem.Content
-        style={{
-          justifyContent: 'flex-start',
-          height: '100%',
-        }}
-      >
-        <Text style={{ fontWeight: 700, fontSize: 12 }}>@{props.username}</Text>
+      <ListItem.Content style={styles.details}>
+        <Text style={styles.text}>@{props.username}</Text>
         <Text>{props.comment}</Text>
       </ListItem.Content>
     </ListItem>
   );
-};
-
-export default CommentCard;
+}
