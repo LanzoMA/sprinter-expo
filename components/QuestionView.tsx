@@ -13,6 +13,11 @@ import { getAccessToken } from '@/constants/token-access';
 import { baseUrl } from '@/constants/base-url';
 import { router } from 'expo-router';
 import { storeQuestion } from '@/constants/download';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+} from 'react-native-reanimated';
+import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 
 interface QuestionViewProps {
   id: string;
@@ -47,6 +52,21 @@ export default function QuestionView(props: QuestionViewProps) {
     const tabBarHeight = useBottomTabBarHeight();
     visibleHeight = height - tabBarHeight;
   }
+
+  const scale = useSharedValue(1);
+  const savedScale = useSharedValue(1);
+
+  const pinchHandler = Gesture.Pinch()
+    .onUpdate((e) => {
+      scale.value = Math.max(1, savedScale.value * e.scale);
+    })
+    .onEnd((e) => {
+      savedScale.value = scale.value;
+    });
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
 
   useEffect(() => {
     getFavorites();
@@ -231,98 +251,131 @@ export default function QuestionView(props: QuestionViewProps) {
           flex: 1,
         }}
       >
-        <Pressable
-          style={{ flex: 1 }}
-          onPress={() => {
-            setOverlayVisible(!overlayVisible);
-          }}
-        >
-          <ImageBackground
-            style={{ flex: 1, position: 'relative', alignItems: 'center' }}
-            source={props.question}
-            contentFit="contain"
-          >
-            <Text
-              style={{ color: 'black', position: 'absolute', top: 8, left: 8 }}
+        <GestureDetector gesture={pinchHandler}>
+          <Animated.View style={[{ flex: 1 }, animatedStyle]}>
+            <Pressable
+              style={{ flex: 1 }}
+              onPress={() => {
+                setOverlayVisible(!overlayVisible);
+              }}
             >
-              {overlayVisible ? 'Tap to Hide Details' : 'Tap to Show Details'}
-            </Text>
-            {overlayVisible && (
-              <>
-                <Text
-                  style={{ color: 'black', position: 'absolute', bottom: 160 }}
-                >
-                  Swipe &rarr; To View Markscheme
-                </Text>
+              <ImageBackground
+                style={{ flex: 1, position: 'relative', alignItems: 'center' }}
+                source={props.question}
+                contentFit="contain"
+              >
                 <Text
                   style={{
                     color: 'black',
                     position: 'absolute',
-                    top: 48,
-                    textAlign: 'center',
-                    width: '100%',
-                    fontWeight: 700,
-                    fontSize: 16,
+                    top: 8,
+                    left: 8,
                   }}
                 >
-                  {props.title}
+                  {overlayVisible
+                    ? 'Tap to Hide Details'
+                    : 'Tap to Show Details'}
                 </Text>
-                <View style={styles.interactions}>
-                  <Pressable
-                    onPress={() => router.push(`/profile/${props.author}`)}
-                  >
-                    <Icon
-                      color={iconColor}
-                      name="account-circle"
-                      size={iconSize}
-                    />
-                  </Pressable>
-
-                  <View
-                    style={{
-                      alignItems: 'center',
-                      flexDirection: 'row',
-                      gap: 8,
-                    }}
-                  >
-                    <Pressable
-                      onPress={() => {
-                        favorited ? unfavoriteQuestion() : favoriteQuestion();
+                {overlayVisible && (
+                  <>
+                    <Text
+                      style={{
+                        color: 'black',
+                        position: 'absolute',
+                        bottom: 160,
                       }}
                     >
-                      <Icon
-                        color={favorited ? 'red' : iconColor}
-                        name={favorited ? 'favorite' : 'favorite-outline'}
-                        size={iconSize}
-                      />
-                    </Pressable>
-                    <Text
-                      style={{ color: 'black', fontWeight: 700, fontSize: 18 }}
-                    >
-                      {favorites}
+                      Swipe &rarr; To View Markscheme
                     </Text>
-                  </View>
+                    <Text
+                      style={{
+                        color: 'black',
+                        position: 'absolute',
+                        top: 48,
+                        textAlign: 'center',
+                        width: '100%',
+                        fontWeight: 700,
+                        fontSize: 16,
+                      }}
+                    >
+                      {props.title}
+                    </Text>
+                    <View style={styles.interactions}>
+                      <Pressable
+                        onPress={() => router.push(`/profile/${props.author}`)}
+                      >
+                        <Icon
+                          color={iconColor}
+                          name="account-circle"
+                          size={iconSize}
+                        />
+                      </Pressable>
 
-                  <Pressable
-                    onPress={() =>
-                      router.push(`/questions/${props.id}/comments`)
-                    }
-                  >
-                    <Icon color={iconColor} name="comment" size={iconSize} />
-                  </Pressable>
+                      <View
+                        style={{
+                          alignItems: 'center',
+                          flexDirection: 'row',
+                          gap: 8,
+                        }}
+                      >
+                        <Pressable
+                          onPress={() => {
+                            favorited
+                              ? unfavoriteQuestion()
+                              : favoriteQuestion();
+                          }}
+                        >
+                          <Icon
+                            color={favorited ? 'red' : iconColor}
+                            name={favorited ? 'favorite' : 'favorite-outline'}
+                            size={iconSize}
+                          />
+                        </Pressable>
+                        <Text
+                          style={{
+                            color: 'black',
+                            fontWeight: 700,
+                            fontSize: 18,
+                          }}
+                        >
+                          {favorites}
+                        </Text>
+                      </View>
 
-                  <Pressable onPress={download}>
-                    <Icon color={iconColor} name="download" size={iconSize} />
-                  </Pressable>
+                      <Pressable
+                        onPress={() =>
+                          router.push(`/questions/${props.id}/comments`)
+                        }
+                      >
+                        <Icon
+                          color={iconColor}
+                          name="comment"
+                          size={iconSize}
+                        />
+                      </Pressable>
 
-                  <Pressable onPress={share}>
-                    <Icon color={iconColor} name="ios-share" size={iconSize} />
-                  </Pressable>
-                </View>
-              </>
-            )}
-          </ImageBackground>
-        </Pressable>
+                      <Pressable onPress={download}>
+                        <Icon
+                          color={iconColor}
+                          name="download"
+                          size={iconSize}
+                        />
+                      </Pressable>
+
+                      <Pressable onPress={share}>
+                        <Icon
+                          color={iconColor}
+                          name="ios-share"
+                          size={iconSize}
+                        />
+                      </Pressable>
+                    </View>
+                  </>
+                )}
+              </ImageBackground>
+            </Pressable>
+          </Animated.View>
+        </GestureDetector>
         <Pressable
           style={{ flex: 1 }}
           onPress={() => setOverlayVisible(!overlayVisible)}
