@@ -230,6 +230,7 @@ export default function UploadScreen() {
           style={{ paddingVertical: 4 }}
           data={courses}
           contentContainerStyle={styles.section}
+          horizontal
           renderItem={(course) => {
             const { name, qualification, examBoard } = course.item;
             const title = `${qualification} ${examBoard} ${name}`;
