@@ -1,16 +1,16 @@
-import { View } from 'react-native';
+import { View, Text, useColorScheme, StyleSheet } from 'react-native';
 import { useState } from 'react';
 import { Link, router } from 'expo-router';
-import { useTheme, Text } from '@rneui/themed';
 import Toast from 'react-native-toast-message';
 import { baseUrl } from '@/constants/base-url';
 import { storeAccessToken } from '@/constants/token-access';
 import SprinterButton from '@/components/SprinterButton';
 import SprinterTextInput from '@/components/SprinterTextInput';
 import Spinner from '@/components/Spinner';
+import baseTheme from '@/constants/base-theme';
 
 export default function SignUpScreen() {
-  const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [loading, setLoading] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
@@ -28,6 +28,39 @@ export default function SignUpScreen() {
   const usernameRegex = /^[\w\d\.]{3,}$/;
   // Check if the password is greater than 8 characters and contains a number
   const passwordRegex = /^(?=.*\d).{8,}$/;
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.background
+          : baseTheme.dark.background,
+      flex: 1,
+      padding: 16,
+      justifyContent: 'center',
+      gap: 32,
+    },
+    title: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+      textAlign: 'center',
+      fontSize: 24,
+      fontWeight: 700,
+    },
+    text: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+    },
+    footer: {
+      flexDirection: 'row',
+      gap: 4,
+      justifyContent: 'center',
+    },
+    link: {
+      color: baseTheme.common.primary,
+      fontWeight: 700,
+    },
+  });
 
   async function signup() {
     setLoading(true);
@@ -108,24 +141,8 @@ export default function SignUpScreen() {
   }
 
   return (
-    <View
-      style={{
-        backgroundColor: theme.colors.background,
-        flex: 1,
-        padding: 16,
-        justifyContent: 'center',
-        gap: 32,
-      }}
-    >
-      <Text
-        style={{
-          textAlign: 'center',
-          fontSize: 24,
-          fontWeight: 700,
-        }}
-      >
-        Sign Up
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Sign Up</Text>
 
       <SprinterTextInput
         autoCapitalize="none"
@@ -174,15 +191,9 @@ export default function SignUpScreen() {
 
       {loading && <Spinner />}
 
-      <View
-        style={{
-          flexDirection: 'row',
-          gap: 4,
-          justifyContent: 'center',
-        }}
-      >
-        <Text>Already have an account?</Text>
-        <Link replace style={{ color: theme.colors.primary }} href="/login">
+      <View style={styles.footer}>
+        <Text style={styles.text}>Already have an account?</Text>
+        <Link replace style={styles.link} href="/login">
           Login
         </Link>
       </View>
