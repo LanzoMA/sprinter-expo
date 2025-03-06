@@ -137,7 +137,7 @@ export default function EditProfileBottomSheet({
         <SprinterTextInput
           label="Username"
           defaultValue={username}
-          // value={usernameInput}
+          value={usernameInput}
           onChangeText={(text) => setUsernameInput(text)}
         />
 
