@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
-import { getQuestions } from '@/constants/download';
+import { deleteQuestionById, getQuestions } from '@/constants/download';
 import { Question } from '@/constants/models';
 import baseTheme from '@/constants/base-theme';
 import Post from '@/components/Post';
@@ -76,6 +76,10 @@ export default function SavedScreen() {
           title={item.title}
           marks={item.totalMarks}
           onPress={() => router.push(`/saved/${item._id}`)}
+          onLongPress={async () => {
+            await deleteQuestionById(item._id);
+            await getSavedQuestions();
+          }}
         />
       )}
     />

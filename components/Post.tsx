@@ -9,6 +9,7 @@ interface PostProps {
   title: string;
   marks: number;
   onPress: () => void;
+  onLongPress?: () => void;
 }
 
 const Post = (props: PostProps) => {
@@ -19,7 +20,7 @@ const Post = (props: PostProps) => {
     props.title.length > 22 ? props.title.slice(0, 19) + '...' : props.title;
 
   return (
-    <Pressable onPress={props.onPress}>
+    <Pressable onPress={props.onPress} onLongPress={props.onLongPress}>
       <View
         style={{
           backgroundColor: theme.colors.surface,

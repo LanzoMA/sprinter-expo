@@ -28,3 +28,15 @@ export async function getQuestionById(id: string): Promise<Question> {
 
   return question;
 }
+
+export async function deleteQuestionById(id: string): Promise<void> {
+  const questions = await getQuestions();
+
+  if (!questions) throw new Error('No questions found');
+
+  const updatedQuestions = questions.filter((question) => question._id !== id);
+
+  const data = JSON.stringify(updatedQuestions);
+
+  await AsyncStorage.setItem('saved-questions', data);
+}
