@@ -1,7 +1,12 @@
-import { useTheme, Text } from '@rneui/themed';
+import {
+  Dimensions,
+  Pressable,
+  View,
+  useColorScheme,
+  Text,
+} from 'react-native';
 import { Image } from 'expo-image';
-import { router } from 'expo-router';
-import { Dimensions, Pressable, View } from 'react-native';
+import baseTheme from '@/constants/base-theme';
 
 interface PostProps {
   id: string;
@@ -13,7 +18,7 @@ interface PostProps {
 }
 
 const Post = (props: PostProps) => {
-  const { theme } = useTheme();
+  const colorScheme = useColorScheme();
   const { width } = Dimensions.get('window');
 
   const title =
@@ -23,7 +28,10 @@ const Post = (props: PostProps) => {
     <Pressable onPress={props.onPress} onLongPress={props.onLongPress}>
       <View
         style={{
-          backgroundColor: theme.colors.surface,
+          backgroundColor:
+            colorScheme === 'light'
+              ? baseTheme.light.surface
+              : baseTheme.dark.surface,
           padding: 4,
           borderRadius: 4,
           gap: 4,
@@ -41,7 +49,18 @@ const Post = (props: PostProps) => {
         </View>
 
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ fontWeight: 700, flex: 1 }}>{title}</Text>
+          <Text
+            style={{
+              fontWeight: 700,
+              flex: 1,
+              color:
+                colorScheme === 'light'
+                  ? baseTheme.light.text
+                  : baseTheme.dark.text,
+            }}
+          >
+            {title}
+          </Text>
           <Text>{props.marks}</Text>
         </View>
       </View>
