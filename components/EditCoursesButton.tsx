@@ -23,8 +23,7 @@ export default function EditCoursesButton({ onPress }: EditCoursesButtonProps) {
       borderRadius: 8,
     },
     text: {
-      color:
-        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+      color: 'white',
       fontSize: 16,
       fontWeight: 700,
     },

@@ -1,4 +1,4 @@
-import { ScrollView, TextInput, View } from 'react-native';
+import { ScrollView, TextInput, View, useColorScheme } from 'react-native';
 import { useState } from 'react';
 import { useTheme, Text } from '@rneui/themed';
 import BouncyCheckbox from 'react-native-bouncy-checkbox';
@@ -8,9 +8,11 @@ import BouncyCheckboxGroup, {
 import SearchCard from '@/components/SearchCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
 import { router } from 'expo-router';
+import baseTheme from '@/constants/base-theme';
 
 const SearchScreen = () => {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [easyChecked, setEasyChecked] = useState<boolean>(false);
   const [okayChecked, setOkayChecked] = useState<boolean>(false);
@@ -86,7 +88,10 @@ const SearchScreen = () => {
   return (
     <ScrollView
       style={{
-        backgroundColor: theme.colors.background,
+        backgroundColor:
+          colorScheme === 'light'
+            ? baseTheme.light.background
+            : baseTheme.dark.background,
         padding: 8,
       }}
       contentContainerStyle={{ gap: 16 }}
@@ -100,7 +105,18 @@ const SearchScreen = () => {
         }
       />
 
-      <Text style={{ fontSize: 20, fontWeight: 700 }}>Filters</Text>
+      <Text
+        style={{
+          color:
+            colorScheme === 'light'
+              ? baseTheme.light.text
+              : baseTheme.dark.text,
+          fontSize: 20,
+          fontWeight: 700,
+        }}
+      >
+        Filters
+      </Text>
 
       {/* <SearchCard title="Difficulty">
         <View style={{ gap: 16, paddingBottom: 8 }}>

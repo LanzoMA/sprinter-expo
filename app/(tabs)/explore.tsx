@@ -1,4 +1,10 @@
-import { FlatList, Pressable, View, StyleSheet } from 'react-native';
+import {
+  FlatList,
+  Pressable,
+  View,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import { useTheme, Text } from '@rneui/themed';
@@ -8,15 +14,20 @@ import { Course } from '@/constants/models';
 import CourseCard from '@/components/CourseCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
 import EditCoursesButton from '@/components/EditCoursesButton';
+import baseTheme from '@/constants/base-theme';
 
 export default function ExploreScreen() {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [courses, setCourses] = useState<Array<Course>>();
 
   const styles = StyleSheet.create({
     container: {
-      backgroundColor: theme.colors.background,
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.background
+          : baseTheme.dark.background,
       flex: 1,
       padding: 16,
       gap: 16,
@@ -27,6 +38,8 @@ export default function ExploreScreen() {
       gap: 8,
     },
     title: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
       fontWeight: 700,
       fontSize: 22,
     },
