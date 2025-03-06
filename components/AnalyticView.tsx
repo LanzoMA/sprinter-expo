@@ -20,7 +20,10 @@ export default function AnalyticView() {
 
   const styles = StyleSheet.create({
     dailyStreakContainer: {
-      backgroundColor: baseTheme.dark.surface,
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.surface
+          : baseTheme.dark.surface,
       padding: 16,
       borderRadius: 8,
     },
