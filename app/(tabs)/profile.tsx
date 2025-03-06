@@ -1,4 +1,10 @@
-import { View, FlatList, RefreshControl } from 'react-native';
+import {
+  View,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  useColorScheme,
+} from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { Tab, TabView, useTheme, Text, Icon } from '@rneui/themed';
@@ -13,9 +19,11 @@ import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
 import Spinner from '@/components/Spinner';
 import ProfileHeader from '@/components/ProfileHeader';
 import AnalyticView from '@/components/AnalyticView';
+import baseTheme from '@/constants/base-theme';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [tabIndex, setTabIndex] = useState<number>(0);
 
@@ -30,6 +38,16 @@ export default function ProfileScreen() {
   const bottomSheetRef = useRef<BottomSheet>(null);
 
   const [refreshing, setRefreshing] = useState<boolean>(false);
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.background
+          : baseTheme.light.background,
+      flex: 1,
+    },
+  });
 
   useEffect(() => {
     getProfile();
@@ -114,12 +132,7 @@ export default function ProfileScreen() {
   }
 
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-      }}
-    >
+    <View style={styles.container}>
       <View style={{ padding: 8 }}>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }} />
@@ -149,10 +162,16 @@ export default function ProfileScreen() {
         onChange={(tabIndex) => setTabIndex(tabIndex)}
         buttonStyle={{
           height: 60,
-          backgroundColor: theme.colors.background,
+          backgroundColor:
+            colorScheme === 'light'
+              ? baseTheme.light.background
+              : baseTheme.dark.background,
         }}
         indicatorStyle={{
-          backgroundColor: theme.colors.text,
+          backgroundColor:
+            colorScheme === 'light'
+              ? baseTheme.light.text
+              : baseTheme.dark.text,
         }}
         variant="primary"
       >
@@ -160,21 +179,30 @@ export default function ProfileScreen() {
           icon={{
             name: 'photo-library',
             type: 'material',
-            color: theme.colors.text,
+            color:
+              colorScheme === 'light'
+                ? baseTheme.light.text
+                : baseTheme.dark.text,
           }}
         />
         <Tab.Item
           icon={{
             name: 'bar-chart',
             type: 'material',
-            color: theme.colors.text,
+            color:
+              colorScheme === 'light'
+                ? baseTheme.light.text
+                : baseTheme.dark.text,
           }}
         />
         <Tab.Item
           icon={{
             name: 'trophy',
             type: 'ionicon',
-            color: theme.colors.text,
+            color:
+              colorScheme === 'light'
+                ? baseTheme.light.text
+                : baseTheme.dark.text,
           }}
         />
       </Tab>
@@ -225,7 +253,6 @@ export default function ProfileScreen() {
 
         <TabView.Item
           style={{
-            backgroundColor: theme.colors.background,
             width: '100%',
             justifyContent: 'center',
             alignItems: 'center',
