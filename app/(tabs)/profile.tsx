@@ -12,8 +12,7 @@ import EditProfileButton from '@/components/EditProfileButton';
 import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
 import Spinner from '@/components/Spinner';
 import ProfileHeader from '@/components/ProfileHeader';
-import CourseStatisticCard from '@/components/CourseStatisticCard';
-import baseTheme from '@/constants/base-theme';
+import AnalyticView from '@/components/AnalyticView';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -26,8 +25,6 @@ export default function ProfileScreen() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Question>>();
-  const [dailyStreak, setDailyStreak] = useState<number>(0);
-  const [statistics, setStatistics] = useState<Record<string, number>>({});
   const [achievements, setAchievements] = useState<Array<Achievement>>([]);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -37,8 +34,6 @@ export default function ProfileScreen() {
   useEffect(() => {
     getProfile();
     getPosts();
-    getDailyStreak();
-    getStatistics();
     getAchievements();
   }, []);
 
@@ -90,48 +85,6 @@ export default function ProfileScreen() {
     setRefreshing(true);
     await getPosts();
     setRefreshing(false);
-  };
-
-  const getDailyStreak = async () => {
-    try {
-      const accessToken = await getAccessToken();
-
-      if (!accessToken) {
-        throw new Error('Access token not found');
-      }
-
-      const response = await fetch(`${baseUrl}/account/daily-streak`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const data = await response.json();
-
-      setDailyStreak(data.streak);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const getStatistics = async () => {
-    try {
-      const accessToken = await getAccessToken();
-
-      if (!accessToken) throw new Error('Access token not found');
-
-      const response = await fetch(`${baseUrl}/account/statistics`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const data = await response.json();
-
-      setStatistics(data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   const getAchievements = async () => {
@@ -267,27 +220,7 @@ export default function ProfileScreen() {
         </TabView.Item>
 
         <TabView.Item style={{ width: '100%', padding: 8 }}>
-          <View style={{ gap: 16 }}>
-            <View
-              style={{
-                backgroundColor: baseTheme.dark.surface,
-                padding: 16,
-                borderRadius: 8,
-              }}
-            >
-              <Text style={{ fontWeight: 700, fontSize: 16 }}>
-                Daily Streak: {dailyStreak} 🔥
-              </Text>
-            </View>
-
-            <FlatList
-              contentContainerStyle={{ gap: 16 }}
-              data={Object.entries(statistics)}
-              renderItem={({ item }) => (
-                <CourseStatisticCard course={item[0]} percentage={item[1]} />
-              )}
-            />
-          </View>
+          <AnalyticView />
         </TabView.Item>
 
         <TabView.Item
