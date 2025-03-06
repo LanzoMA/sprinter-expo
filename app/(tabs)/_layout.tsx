@@ -1,7 +1,10 @@
+import { useColorScheme } from 'react-native';
 import { Tabs } from 'expo-router';
 import { Icon, useTheme } from '@rneui/themed';
+import baseTheme from '@/constants/base-theme';
 
 export default function TabLayout() {
+  const colorScheme = useColorScheme();
   const { theme } = useTheme();
 
   return (
@@ -11,7 +14,10 @@ export default function TabLayout() {
         tabBarActiveTintColor: theme.colors.primary,
         tabBarStyle: {
           height: 60,
-          backgroundColor: theme.colors.background,
+          backgroundColor:
+            colorScheme === 'light'
+              ? baseTheme.light.background
+              : baseTheme.dark.background,
           alignItems: 'center',
           paddingTop: 4,
         },
