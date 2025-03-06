@@ -44,7 +44,7 @@ export default function ProfileScreen() {
       backgroundColor:
         colorScheme === 'light'
           ? baseTheme.light.background
-          : baseTheme.light.background,
+          : baseTheme.dark.background,
       flex: 1,
     },
   });
