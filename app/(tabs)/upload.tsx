@@ -1,12 +1,13 @@
-import { ImageBackground } from 'expo-image';
 import {
   View,
   Pressable,
   StyleSheet,
   FlatList,
   ScrollView,
+  useColorScheme,
 } from 'react-native';
 import { useEffect, useState } from 'react';
+import { ImageBackground } from 'expo-image';
 import { useTheme, Text, Icon } from '@rneui/themed';
 import Slider from '@react-native-community/slider';
 import { baseUrl } from '@/constants/base-url';
@@ -17,9 +18,11 @@ import { getImage } from '@/helpers/image';
 import SprinterButton from '@/components/SprinterButton';
 import SprinterTextInput from '@/components/SprinterTextInput';
 import Toast from 'react-native-toast-message';
+import baseTheme from '@/constants/base-theme';
 
 export default function UploadScreen() {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [questionImage, setQuestionImage] = useState<string>('');
   const [markSchemeImage, setMarkSchemeImage] = useState<string>('');
@@ -36,7 +39,10 @@ export default function UploadScreen() {
     container: {
       gap: 32,
       padding: 16,
-      backgroundColor: theme.colors.background,
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.background
+          : baseTheme.dark.background,
     },
     imageSelectorContainer: {
       flexDirection: 'row',
@@ -45,13 +51,14 @@ export default function UploadScreen() {
     },
     imageSelector: {
       flex: 1,
-      borderWidth: 2,
       borderRadius: 16,
       alignItems: 'center',
       gap: 8,
     },
     imageSelectorText: {
       textAlign: 'center',
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
     },
     imageSelectorLabel: {
       justifyContent: 'center',
@@ -66,6 +73,10 @@ export default function UploadScreen() {
     },
     section: {
       gap: 8,
+    },
+    text: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
     },
   });
 
@@ -220,10 +231,10 @@ export default function UploadScreen() {
         value={description}
         onChangeText={(text) => setDescription(text)}
       />
-      // Todo: Fix this section
       <View style={styles.section}>
-        <Text>
-          Course: {course?.qualification} {course?.examBoard} {course?.name}
+        <Text style={styles.text}>
+          Course: {course?.qualification || ''} {course?.examBoard || ''}{' '}
+          {course?.name || ''}
         </Text>
 
         <FlatList
@@ -247,7 +258,7 @@ export default function UploadScreen() {
         />
       </View>
       <View style={styles.section}>
-        <Text>Number of Marks: {totalMarks}</Text>
+        <Text style={styles.text}>Number of Marks: {totalMarks}</Text>
         <Slider
           style={{ height: 40 }}
           minimumValue={1}
