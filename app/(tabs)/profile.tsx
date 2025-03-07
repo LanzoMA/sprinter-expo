@@ -9,10 +9,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { Tab, TabView, useTheme, Text, Icon } from '@rneui/themed';
 import BottomSheet from '@gorhom/bottom-sheet';
-import AchievementCard from '@/components/AchievementCard';
 import Post from '@/components/Post';
 import { baseUrl } from '@/constants/base-url';
-import { Achievement, Question } from '@/constants/models';
+import { Question } from '@/constants/models';
 import { getAccessToken, getUserDetails } from '@/constants/token-access';
 import EditProfileButton from '@/components/EditProfileButton';
 import EditProfileBottomSheet from '@/components/EditProfileBottomSheet';
@@ -20,6 +19,7 @@ import Spinner from '@/components/Spinner';
 import ProfileHeader from '@/components/ProfileHeader';
 import AnalyticView from '@/components/AnalyticView';
 import baseTheme from '@/constants/base-theme';
+import AchievementList from '@/components/AchievementList';
 
 export default function ProfileScreen() {
   const { theme } = useTheme();
@@ -33,7 +33,6 @@ export default function ProfileScreen() {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [posts, setPosts] = useState<Array<Question>>();
-  const [achievements, setAchievements] = useState<Array<Achievement>>([]);
 
   const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -47,12 +46,15 @@ export default function ProfileScreen() {
           : baseTheme.dark.background,
       flex: 1,
     },
+    tabView: {
+      width: '100%',
+      padding: 8,
+    },
   });
 
   useEffect(() => {
     getProfile();
     getPosts();
-    getAchievements();
   }, []);
 
   const getProfile = async () => {
@@ -77,7 +79,7 @@ export default function ProfileScreen() {
       setUsername(data.username);
       setDescription(data.description);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
@@ -103,28 +105,6 @@ export default function ProfileScreen() {
     setRefreshing(true);
     await getPosts();
     setRefreshing(false);
-  };
-
-  const getAchievements = async () => {
-    try {
-      const accessToken = await getAccessToken();
-
-      if (!accessToken) {
-        throw new Error('Access token not found');
-      }
-
-      const response = await fetch(`${baseUrl}/account/achievements`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      const data = await response.json();
-
-      setAchievements(data.achievements);
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   function goToSettings() {
@@ -208,13 +188,7 @@ export default function ProfileScreen() {
       </Tab>
 
       <TabView value={tabIndex} onChange={setTabIndex}>
-        <TabView.Item
-          style={{
-            width: '100%',
-            padding: 8,
-            justifyContent: 'center',
-          }}
-        >
+        <TabView.Item style={styles.tabView}>
           <FlatList
             contentContainerStyle={
               loading || posts!.length === 0
@@ -251,29 +225,8 @@ export default function ProfileScreen() {
           <AnalyticView />
         </TabView.Item>
 
-        <TabView.Item
-          style={{
-            width: '100%',
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          {achievements.length > 0 ? (
-            <FlatList
-              style={{ width: '100%', padding: 8 }}
-              data={achievements}
-              contentContainerStyle={{ gap: 16 }}
-              renderItem={(achievements) => {
-                const { name, description } = achievements.item.achievement;
-
-                return (
-                  <AchievementCard name={name} description={description} />
-                );
-              }}
-            />
-          ) : (
-            <Text style={{ textAlign: 'center' }}>No achievements yet.</Text>
-          )}
+        <TabView.Item style={styles.tabView}>
+          <AchievementList />
         </TabView.Item>
       </TabView>
 

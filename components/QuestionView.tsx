@@ -18,6 +18,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
+import { Achievement } from '@/constants/models';
 
 interface QuestionViewProps {
   id: string;
@@ -217,7 +218,7 @@ export default function QuestionView(props: QuestionViewProps) {
         throw new Error('Access token not found');
       }
 
-      await fetch(`${baseUrl}/questions/${props.id}/ratings`, {
+      const response = await fetch(`${baseUrl}/questions/${props.id}/ratings`, {
         method: 'POST',
 
         headers: {
@@ -228,6 +229,16 @@ export default function QuestionView(props: QuestionViewProps) {
       });
 
       setCompleted(true);
+
+      if (response.status === 200) {
+        const data: Achievement = await response.json();
+
+        Toast.show({
+          type: 'success',
+          text1: `Achievement Unlocked: ${data.achievement.name}`,
+          text2: data.achievement.description,
+        });
+      }
     } catch (error) {
       console.error(error);
     }
