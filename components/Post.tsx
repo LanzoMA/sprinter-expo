@@ -4,6 +4,7 @@ import {
   View,
   useColorScheme,
   Text,
+  StyleSheet,
 } from 'react-native';
 import { Image } from 'expo-image';
 import baseTheme from '@/constants/base-theme';
@@ -24,22 +25,32 @@ const Post = (props: PostProps) => {
   const title =
     props.title.length > 22 ? props.title.slice(0, 19) + '...' : props.title;
 
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor:
+        colorScheme === 'light'
+          ? baseTheme.light.surface
+          : baseTheme.dark.surface,
+      padding: 4,
+      borderRadius: 4,
+      gap: 4,
+      width: width / 2 - 16,
+      height: 160,
+      margin: 4,
+    },
+    title: {
+      fontWeight: 700,
+      flex: 1,
+    },
+    text: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+    },
+  });
+
   return (
     <Pressable onPress={props.onPress} onLongPress={props.onLongPress}>
-      <View
-        style={{
-          backgroundColor:
-            colorScheme === 'light'
-              ? baseTheme.light.surface
-              : baseTheme.dark.surface,
-          padding: 4,
-          borderRadius: 4,
-          gap: 4,
-          width: width / 2 - 16,
-          height: 160,
-          margin: 4,
-        }}
-      >
+      <View style={styles.container}>
         <View style={{ backgroundColor: 'white', borderRadius: 4, flex: 1 }}>
           <Image
             style={{ flex: 1 }}
@@ -49,19 +60,8 @@ const Post = (props: PostProps) => {
         </View>
 
         <View style={{ flexDirection: 'row' }}>
-          <Text
-            style={{
-              fontWeight: 700,
-              flex: 1,
-              color:
-                colorScheme === 'light'
-                  ? baseTheme.light.text
-                  : baseTheme.dark.text,
-            }}
-          >
-            {title}
-          </Text>
-          <Text>{props.marks}</Text>
+          <Text style={[styles.title, styles.text]}>{title}</Text>
+          <Text style={styles.text}>{props.marks}</Text>
         </View>
       </View>
     </Pressable>
