@@ -32,6 +32,7 @@ export default function QuestionScreen() {
       id={question!._id}
       question={question!.question}
       markScheme={question!.markScheme}
+      description={question!.description}
       title={question!.title}
       totalMarks={question!.totalMarks}
       author={question!.author}

@@ -1,6 +1,13 @@
-import { Icon, Text, useTheme, Button } from '@rneui/themed';
+import { Icon, useTheme, Button } from '@rneui/themed';
 import { useEffect, useState } from 'react';
-import { Dimensions, Pressable, View, StyleSheet } from 'react-native';
+import {
+  Dimensions,
+  Pressable,
+  View,
+  StyleSheet,
+  Text,
+  useColorScheme,
+} from 'react-native';
 import { ImageBackground } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import * as FileSystem from 'expo-file-system';
@@ -19,12 +26,14 @@ import Animated, {
 } from 'react-native-reanimated';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { Achievement } from '@/constants/models';
+import baseTheme from '@/constants/base-theme';
 
 interface QuestionViewProps {
   id: string;
   question: string;
   markScheme: string;
   title: string;
+  description: string;
   totalMarks: number;
   author: string;
   withBottomBar?: boolean;
@@ -32,6 +41,7 @@ interface QuestionViewProps {
 
 export default function QuestionView(props: QuestionViewProps) {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [favorites, setFavorites] = useState<number>(0);
   const [favorited, setFavorited] = useState<boolean>(false);
@@ -253,15 +263,16 @@ export default function QuestionView(props: QuestionViewProps) {
       right: 16,
       gap: 20,
     },
+    text: {
+      fontSize: 16,
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+    },
   });
 
   return (
     <View style={styles.container}>
-      <PagerView
-        style={{
-          flex: 1,
-        }}
-      >
+      <PagerView style={{ flex: 1 }}>
         <GestureDetector gesture={pinchHandler}>
           <Animated.View style={[{ flex: 1 }, animatedStyle]}>
             <Pressable
@@ -289,28 +300,26 @@ export default function QuestionView(props: QuestionViewProps) {
                 </Text>
                 {overlayVisible && (
                   <>
-                    <Text
+                    <View
                       style={{
-                        color: 'black',
                         position: 'absolute',
-                        bottom: 160,
+                        top: 40,
+                        alignItems: 'center',
+                        gap: 8,
                       }}
                     >
-                      Swipe &rarr; To View Markscheme
-                    </Text>
-                    <Text
-                      style={{
-                        color: 'black',
-                        position: 'absolute',
-                        top: 48,
-                        textAlign: 'center',
-                        width: '100%',
-                        fontWeight: 700,
-                        fontSize: 16,
-                      }}
-                    >
-                      {props.title}
-                    </Text>
+                      <Text
+                        style={{
+                          fontWeight: 700,
+                          fontSize: 16,
+                        }}
+                      >
+                        {props.title}
+                      </Text>
+                      {props.description && <Text>{props.description}</Text>}
+                      <Text>Swipe &rarr; To View Markscheme</Text>
+                    </View>
+
                     <View style={styles.interactions}>
                       <Pressable
                         onPress={() => router.push(`/profile/${props.author}`)}
@@ -413,7 +422,10 @@ export default function QuestionView(props: QuestionViewProps) {
                 <Pressable>
                   <View
                     style={{
-                      backgroundColor: theme.colors.surfaceTransparent,
+                      backgroundColor:
+                        colorScheme === 'light'
+                          ? baseTheme.light.surfaceTranslucent
+                          : baseTheme.dark.surfaceTranslucent,
                       display: overlayVisible ? 'flex' : 'none',
                       paddingVertical: 8,
                       gap: 16,
@@ -421,7 +433,7 @@ export default function QuestionView(props: QuestionViewProps) {
                       alignItems: 'center',
                     }}
                   >
-                    <Text style={{ fontSize: 16 }}>
+                    <Text style={styles.text}>
                       How many marks did you get? {marks}
                     </Text>
 
@@ -437,7 +449,7 @@ export default function QuestionView(props: QuestionViewProps) {
                       maximumValue={props.totalMarks}
                     />
 
-                    <Text style={{ fontSize: 16 }}>
+                    <Text style={styles.text}>
                       Select Question Difficulty: {difficulties[difficulty]}
                     </Text>
 

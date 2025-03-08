@@ -13,6 +13,7 @@ const baseTheme = {
     background: '#fff',
     surfaceBright: '#f8f8f8',
     surface: '#eee',
+    surfaceTranslucent: '#eeeeee88',
   },
   dark: {
     text: '#fff',
@@ -20,6 +21,7 @@ const baseTheme = {
     background: '#0f0f0f',
     surface: '#2a2c30',
     surfaceDark: '#1a1a1c',
+    surfaceTranslucent: '#3B3F4655',
   },
 };
 

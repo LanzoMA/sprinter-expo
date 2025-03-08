@@ -100,6 +100,7 @@ export default function HomeScreen() {
             question={item.question}
             markScheme={item.markScheme}
             title={item.title}
+            description={item.description}
             totalMarks={item.totalMarks}
             author={item.author}
             withBottomBar
