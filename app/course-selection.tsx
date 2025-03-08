@@ -28,6 +28,12 @@ export default function CourseSelectionScreen() {
     text: {
       color:
         colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+      fontSize: 16,
+    },
+    main: {
+      flex: 1,
+      justifyContent: 'center',
+      gap: 32,
     },
   });
 
@@ -61,35 +67,39 @@ export default function CourseSelectionScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Select the courses you are studying</Text>
+      <View style={styles.main}>
+        <Text style={styles.text}>Select the courses you are studying</Text>
 
-      <View style={{ gap: 8 }}>
-        {courses.map((course, index) => {
-          return (
-            <BouncyCheckbox
-              key={index}
-              text={`${course.qualification} ${course.examBoard} ${course.name}`}
-              textStyle={{
-                color: baseTheme.dark.text,
-                textDecorationLine: 'none',
-              }}
-              fillColor={baseTheme.common.primary}
-              iconStyle={{
-                borderWidth: 1,
-                borderColor: baseTheme.common.primary,
-              }}
-              onPress={(checked) => {
-                checked
-                  ? setCourseSelection([...courseSelection, course._id])
-                  : setCourseSelection(
-                      courseSelection.filter((item) => item !== course._id)
-                    );
-              }}
-            />
-          );
-        })}
+        <View style={{ gap: 8 }}>
+          {courses.map((course, index) => {
+            return (
+              <BouncyCheckbox
+                key={index}
+                text={`${course.qualification} ${course.examBoard} ${course.name}`}
+                textStyle={{
+                  color:
+                    colorScheme === 'light'
+                      ? baseTheme.light.text
+                      : baseTheme.dark.text,
+                  textDecorationLine: 'none',
+                }}
+                fillColor={baseTheme.common.primary}
+                iconStyle={{
+                  borderWidth: 1,
+                  borderColor: baseTheme.common.primary,
+                }}
+                onPress={(checked) => {
+                  checked
+                    ? setCourseSelection([...courseSelection, course._id])
+                    : setCourseSelection(
+                        courseSelection.filter((item) => item !== course._id)
+                      );
+                }}
+              />
+            );
+          })}
+        </View>
       </View>
-
       <SprinterButton title="Continue" onPress={handleContinue} />
     </View>
   );
