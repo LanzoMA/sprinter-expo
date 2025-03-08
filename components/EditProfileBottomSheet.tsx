@@ -1,4 +1,4 @@
-import { View, Pressable, StyleSheet } from 'react-native';
+import { View, Pressable, StyleSheet, useColorScheme } from 'react-native';
 import { useState, useEffect } from 'react';
 import { Image } from 'expo-image';
 import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
@@ -13,6 +13,7 @@ import {
   storeAccessToken,
 } from '@/constants/token-access';
 import { getImage } from '@/helpers/image';
+import baseTheme from '@/constants/base-theme';
 
 interface EditProfileBottomSheetProps {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
@@ -28,6 +29,7 @@ export default function EditProfileBottomSheet({
   profilePicture,
 }: EditProfileBottomSheetProps) {
   const { theme } = useTheme();
+  const colorScheme = useColorScheme();
 
   const [usernameInput, setUsernameInput] = useState<string>('');
   const [descriptionInput, setDescriptionInput] = useState<string>('');
@@ -48,6 +50,10 @@ export default function EditProfileBottomSheet({
     save: {
       color: theme.colors.primary,
       fontWeight: 700,
+    },
+    text: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
     },
   });
 
@@ -108,8 +114,16 @@ export default function EditProfileBottomSheet({
 
   return (
     <BottomSheet
-      backgroundStyle={{ backgroundColor: theme.colors.surfaceDark }}
-      handleIndicatorStyle={{ backgroundColor: theme.colors.text }}
+      backgroundStyle={{
+        backgroundColor:
+          colorScheme === 'light'
+            ? baseTheme.light.surfaceBright
+            : baseTheme.dark.surfaceDark,
+      }}
+      handleIndicatorStyle={{
+        backgroundColor:
+          colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+      }}
       enablePanDownToClose
       index={-1}
       ref={bottomSheetRef}
@@ -117,7 +131,7 @@ export default function EditProfileBottomSheet({
       <BottomSheetView style={{ alignItems: 'center', gap: 8, padding: 16 }}>
         <View style={styles.options}>
           <Pressable onPress={handleCancel}>
-            <Text>Cancel</Text>
+            <Text style={styles.text}>Cancel</Text>
           </Pressable>
 
           <Pressable onPress={handleSave}>

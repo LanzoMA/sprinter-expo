@@ -11,8 +11,8 @@ const baseTheme = {
     text: '#000',
     subtleText: '#9a9a9a',
     background: '#fff',
+    surfaceBright: '#f8f8f8',
     surface: '#eee',
-    surfaceDark: '#1a1a1c',
   },
   dark: {
     text: '#fff',
