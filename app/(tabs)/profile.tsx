@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
-import { Tab, TabView, useTheme, Text, Icon } from '@rneui/themed';
+import { Tab, TabView, Text, Icon } from '@rneui/themed';
 import BottomSheet from '@gorhom/bottom-sheet';
 import Post from '@/components/Post';
 import { baseUrl } from '@/constants/base-url';
@@ -20,9 +20,9 @@ import ProfileHeader from '@/components/ProfileHeader';
 import AnalyticView from '@/components/AnalyticView';
 import baseTheme from '@/constants/base-theme';
 import AchievementList from '@/components/AchievementList';
+import { Pressable } from 'react-native-gesture-handler';
 
 export default function ProfileScreen() {
-  const { theme } = useTheme();
   const colorScheme = useColorScheme();
 
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -116,16 +116,19 @@ export default function ProfileScreen() {
       <View style={{ padding: 8 }}>
         <View style={{ flexDirection: 'row' }}>
           <View style={{ flex: 1 }} />
-          <Icon
-            name="settings"
-            type="material"
-            size={24}
-            color={theme.colors.text}
-            style={{
-              padding: 8,
-            }}
-            onPress={goToSettings}
-          />
+          <Pressable onPress={goToSettings}>
+            <Icon
+              name="settings"
+              type="material"
+              size={24}
+              color={
+                colorScheme === 'light'
+                  ? baseTheme.light.text
+                  : baseTheme.dark.text
+              }
+              style={{ padding: 8 }}
+            />
+          </Pressable>
         </View>
 
         <ProfileHeader
