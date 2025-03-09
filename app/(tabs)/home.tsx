@@ -1,9 +1,4 @@
-import {
-  ActivityIndicator,
-  FlatList,
-  RefreshControl,
-  View,
-} from 'react-native';
+import { Text, FlatList, RefreshControl, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { baseUrl } from '@/constants/base-url';
 import { getAccessToken } from '@/constants/token-access';
@@ -13,6 +8,7 @@ import Spinner from '@/components/Spinner';
 
 export default function HomeScreen() {
   const [questions, setQuestions] = useState<Array<Question>>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const [refreshing, setRefreshing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -20,6 +16,8 @@ export default function HomeScreen() {
   }, []);
 
   async function getNewQuestions() {
+    setLoading(true);
+
     try {
       const accessToken = await getAccessToken();
 
@@ -36,6 +34,7 @@ export default function HomeScreen() {
       const data = await response.json();
 
       setQuestions(data);
+      setLoading(false);
     } catch (error) {
       console.log(error);
     }
@@ -82,7 +81,13 @@ export default function HomeScreen() {
       decelerationRate="fast"
       ListEmptyComponent={
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Spinner color="#000" scale={1.5} />
+          {loading ? (
+            <Spinner color="#000" scale={1.5} />
+          ) : (
+            <Text style={{ textAlign: 'center' }}>
+              Sorry, no uncompleted questions found for your courses
+            </Text>
+          )}
         </View>
       }
       refreshControl={
