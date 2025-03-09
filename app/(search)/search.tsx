@@ -1,10 +1,7 @@
 import { ScrollView, TextInput, View, useColorScheme } from 'react-native';
 import { useState } from 'react';
 import { useTheme, Text } from '@rneui/themed';
-import BouncyCheckbox from 'react-native-bouncy-checkbox';
-import BouncyCheckboxGroup, {
-  CheckboxButton,
-} from 'react-native-bouncy-checkbox-group';
+import BouncyCheckboxGroup from 'react-native-bouncy-checkbox-group';
 import SearchCard from '@/components/SearchCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
 import { router } from 'expo-router';
@@ -14,76 +11,10 @@ const SearchScreen = () => {
   const { theme } = useTheme();
   const colorScheme = useColorScheme();
 
-  const [easyChecked, setEasyChecked] = useState<boolean>(false);
-  const [okayChecked, setOkayChecked] = useState<boolean>(false);
-  const [mediumChecked, setMediumChecked] = useState<boolean>(false);
-  const [hardChecked, setHardChecked] = useState<boolean>(false);
-
+  const difficulties = ['Easy', 'Okay', 'Medium', 'Hard'];
+  const [difficulty, setDifficulty] = useState<string>('');
   const [minMarks, setMinMarks] = useState<string>('1');
   const [maxMarks, setMaxMarks] = useState<string>('20');
-
-  const sorts: CheckboxButton[] = [
-    {
-      id: '0',
-      text: 'Most Popular',
-      textStyle: {
-        color: theme.colors.text,
-        textDecorationLine: 'none',
-      },
-      fillColor: theme.colors.primary,
-      iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
-    },
-    {
-      id: '1',
-      text: 'Most Favorites',
-      textStyle: {
-        color: theme.colors.text,
-        textDecorationLine: 'none',
-      },
-      fillColor: theme.colors.primary,
-      iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
-    },
-    {
-      id: '2',
-      text: 'Most Difficult',
-      textStyle: {
-        color: theme.colors.text,
-        textDecorationLine: 'none',
-      },
-      fillColor: theme.colors.primary,
-      iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
-    },
-    {
-      id: '3',
-      text: 'Least Difficult',
-      textStyle: {
-        color: theme.colors.text,
-        textDecorationLine: 'none',
-      },
-      fillColor: theme.colors.primary,
-      iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
-    },
-    {
-      id: '4',
-      text: 'Most Marks',
-      textStyle: {
-        color: theme.colors.text,
-        textDecorationLine: 'none',
-      },
-      fillColor: theme.colors.primary,
-      iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
-    },
-    {
-      id: '5',
-      text: 'Least Marks',
-      textStyle: {
-        color: theme.colors.text,
-        textDecorationLine: 'none',
-      },
-      fillColor: theme.colors.primary,
-      iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
-    },
-  ];
 
   return (
     <ScrollView
@@ -99,9 +30,13 @@ const SearchScreen = () => {
       <SprinterSearchBar
         autoFocus
         onSubmitEditing={() =>
-          router.push(
-            `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}`
-          )
+          difficulty
+            ? router.push(
+                `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}&difficulty=${difficulty}`
+              )
+            : router.push(
+                `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}`
+              )
         }
       />
 
@@ -118,42 +53,26 @@ const SearchScreen = () => {
         Filters
       </Text>
 
-      {/* <SearchCard title="Difficulty">
-        <View style={{ gap: 16, paddingBottom: 8 }}>
-          <View style={{ flexDirection: 'row' }}>
-            <BouncyCheckbox
-              fillColor={theme.colors.primary}
-              isChecked={easyChecked}
-              onPress={(checked) => setEasyChecked(checked)}
-            />
-            <Text>Easy</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <BouncyCheckbox
-              fillColor={theme.colors.primary}
-              isChecked={okayChecked}
-              onPress={(checked) => setOkayChecked(checked)}
-            />
-            <Text>Okay</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <BouncyCheckbox
-              fillColor={theme.colors.primary}
-              isChecked={mediumChecked}
-              onPress={(checked) => setMediumChecked(checked)}
-            />
-            <Text>Medium</Text>
-          </View>
-          <View style={{ flexDirection: 'row' }}>
-            <BouncyCheckbox
-              fillColor={theme.colors.primary}
-              isChecked={hardChecked}
-              onPress={(checked) => setHardChecked(checked)}
-            />
-            <Text>Hard</Text>
-          </View>
-        </View>
-      </SearchCard> */}
+      <SearchCard title="Difficulty">
+        <BouncyCheckboxGroup
+          data={difficulties.map((difficulty, index) => {
+            return {
+              id: index.toString(),
+              text: difficulty,
+              textStyle: {
+                color: theme.colors.text,
+                textDecorationLine: 'none',
+              },
+              fillColor: theme.colors.primary,
+              iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
+            };
+          })}
+          onChange={(difficulty) => {
+            setDifficulty(difficulty.id as string);
+          }}
+          style={{ flexDirection: 'column', gap: 16 }}
+        />
+      </SearchCard>
 
       <SearchCard title="Marks">
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -189,14 +108,6 @@ const SearchScreen = () => {
           />
         </View>
       </SearchCard>
-
-      {/* <SearchCard title="Sort By">
-          <BouncyCheckboxGroup
-            data={sorts}
-            onChange={() => {}}
-            style={{ flexDirection: 'column', gap: 8 }}
-          />
-        </SearchCard> */}
     </ScrollView>
   );
 };

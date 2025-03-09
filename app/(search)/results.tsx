@@ -1,4 +1,4 @@
-import { View, useColorScheme, StyleSheet, FlatList } from 'react-native';
+import { View, Text, useColorScheme, StyleSheet, FlatList } from 'react-native';
 import { useEffect, useState } from 'react';
 import { router } from 'expo-router';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
@@ -13,6 +13,7 @@ export default function SearchResultScreen() {
   const searchParams = useSearchParams();
   const minMarks = searchParams.get('minMarks');
   const maxMarks = searchParams.get('maxMarks');
+  const difficulty = searchParams.get('difficulty');
 
   const [results, setResults] = useState<Array<Question>>([]);
 
@@ -27,6 +28,10 @@ export default function SearchResultScreen() {
     header: {
       padding: 8,
     },
+    text: {
+      color:
+        colorScheme === 'light' ? baseTheme.light.text : baseTheme.dark.text,
+    },
   });
 
   useEffect(() => {
@@ -34,7 +39,10 @@ export default function SearchResultScreen() {
   }, []);
 
   async function searchQuestions() {
-    const url = `${baseUrl}/questions/search?minMarks=${minMarks}&maxMarks=${maxMarks}`;
+    let url = `${baseUrl}/questions/search?minMarks=${minMarks}&maxMarks=${maxMarks}`;
+
+    if (difficulty) url += `&difficulty=${difficulty}`;
+
     const response = await fetch(url);
     const data = await response.json();
     setResults(data);
@@ -48,6 +56,9 @@ export default function SearchResultScreen() {
       <FlatList
         data={results}
         numColumns={2}
+        ListEmptyComponent={
+          <Text style={styles.text}>No questions found.</Text>
+        }
         renderItem={({ item }) => (
           <Post
             id={item._id}
