@@ -82,7 +82,7 @@ export default function HomeScreen() {
       decelerationRate="fast"
       ListEmptyComponent={
         <View style={{ flex: 1, justifyContent: 'center' }}>
-          <Spinner color="#000" scale={3} />
+          <Spinner color="#000" scale={1.5} />
         </View>
       }
       refreshControl={

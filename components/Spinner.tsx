@@ -11,6 +11,7 @@ export default function Spinner({ color, scale }: SpinnerProps) {
   return (
     <ActivityIndicator
       style={{ transform: [{ scale: scale || 1.5 }] }}
+      size={'large'}
       color={color || colorScheme === 'light' ? '#000' : '#fff'}
     />
   );

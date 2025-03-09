@@ -85,7 +85,7 @@ export default function ProfileScreen() {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
-        ListEmptyComponent={<Spinner scale={2.5} />}
+        ListEmptyComponent={<Spinner scale={1.5} />}
         showsVerticalScrollIndicator={false}
         renderItem={(post) => {
           return (

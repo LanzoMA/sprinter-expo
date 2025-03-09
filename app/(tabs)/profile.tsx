@@ -208,7 +208,7 @@ export default function ProfileScreen() {
               <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
             }
             ListEmptyComponent={
-              loading ? <Spinner scale={2.5} /> : <Text>No posts found</Text>
+              loading ? <Spinner scale={1.5} /> : <Text>No posts found</Text>
             }
             renderItem={(post) => {
               return (

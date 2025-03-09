@@ -25,7 +25,7 @@ export default function QuestionScreen() {
 
   return loading ? (
     <View style={{ flex: 1, justifyContent: 'center' }}>
-      <Spinner color="#000" scale={2.5} />
+      <Spinner color="#000" scale={1.5} />
     </View>
   ) : (
     <QuestionView
