@@ -14,6 +14,7 @@ export default function SearchResultScreen() {
   const minMarks = searchParams.get('minMarks');
   const maxMarks = searchParams.get('maxMarks');
   const difficulty = searchParams.get('difficulty');
+  const course = searchParams.get('course');
 
   const [results, setResults] = useState<Array<Question>>([]);
 
@@ -42,6 +43,7 @@ export default function SearchResultScreen() {
     let url = `${baseUrl}/questions/search?minMarks=${minMarks}&maxMarks=${maxMarks}`;
 
     if (difficulty) url += `&difficulty=${difficulty}`;
+    if (course) url += `&course=${course}`;
 
     const response = await fetch(url);
     const data = await response.json();

@@ -1,20 +1,34 @@
 import { ScrollView, TextInput, View, useColorScheme } from 'react-native';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTheme, Text } from '@rneui/themed';
 import BouncyCheckboxGroup from 'react-native-bouncy-checkbox-group';
 import SearchCard from '@/components/SearchCard';
 import SprinterSearchBar from '@/components/SprinterSearchBar';
-import { router } from 'expo-router';
+import { RelativePathString, router } from 'expo-router';
 import baseTheme from '@/constants/base-theme';
+import { baseUrl } from '@/constants/base-url';
+import { Course } from '@/constants/models';
 
 const SearchScreen = () => {
   const { theme } = useTheme();
   const colorScheme = useColorScheme();
 
+  const [courses, setCourses] = useState<Array<Course>>([]);
+  const [course, setCourse] = useState<string>('');
   const difficulties = ['Easy', 'Okay', 'Medium', 'Hard'];
   const [difficulty, setDifficulty] = useState<string>('');
   const [minMarks, setMinMarks] = useState<string>('1');
   const [maxMarks, setMaxMarks] = useState<string>('20');
+
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+  async function getCourses() {
+    const response = await fetch(`${baseUrl}/courses`);
+    const data: Array<Course> = await response.json();
+    setCourses(data);
+  }
 
   return (
     <ScrollView
@@ -29,15 +43,14 @@ const SearchScreen = () => {
     >
       <SprinterSearchBar
         autoFocus
-        onSubmitEditing={() =>
-          difficulty
-            ? router.push(
-                `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}&difficulty=${difficulty}`
-              )
-            : router.push(
-                `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}`
-              )
-        }
+        onSubmitEditing={() => {
+          let searchUrl = `/(search)/results?minMarks=${minMarks}&maxMarks=${maxMarks}`;
+
+          if (difficulty) searchUrl += `&difficulty=${difficulty}`;
+          if (course) searchUrl += `&course=${course}`;
+
+          router.push(searchUrl as RelativePathString);
+        }}
       />
 
       <Text
@@ -52,6 +65,26 @@ const SearchScreen = () => {
       >
         Filters
       </Text>
+
+      <SearchCard title="Course">
+        <BouncyCheckboxGroup
+          data={courses.map((course, index) => {
+            return {
+              id: index.toString(),
+              testID: course._id,
+              text: `${course.qualification} ${course.examBoard} ${course.name}`,
+              textStyle: {
+                color: theme.colors.text,
+                textDecorationLine: 'none',
+              },
+              fillColor: theme.colors.primary,
+              iconStyle: { borderWidth: 1, borderColor: theme.colors.primary },
+            };
+          })}
+          onChange={(course) => setCourse(course.testID as string)}
+          style={{ flexDirection: 'column', gap: 16 }}
+        />
+      </SearchCard>
 
       <SearchCard title="Difficulty">
         <BouncyCheckboxGroup
