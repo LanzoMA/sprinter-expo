@@ -14,6 +14,7 @@ import {
 } from '@/constants/token-access';
 import { getImage } from '@/helpers/image';
 import baseTheme from '@/constants/base-theme';
+import Toast from 'react-native-toast-message';
 
 interface EditProfileBottomSheetProps {
   bottomSheetRef: React.RefObject<BottomSheetMethods>;
@@ -83,6 +84,15 @@ export default function EditProfileBottomSheet({
   }
 
   async function updateProfile() {
+    if (usernameInput.includes(' ')) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Username cannot contain spaces',
+      });
+      return;
+    }
+
     const profile = {
       username: usernameInput || username,
       description: descriptionInput || description,
@@ -110,6 +120,12 @@ export default function EditProfileBottomSheet({
     const data = await response.json();
 
     await storeAccessToken(data.accessToken);
+
+    Toast.show({
+      type: 'success',
+      text1: 'Successfully Updated Profile',
+      text2: 'Please sign out and sign back in',
+    });
   }
 
   return (

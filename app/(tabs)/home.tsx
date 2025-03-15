@@ -97,7 +97,7 @@ export default function HomeScreen() {
       onEndReached={() => {
         if (questions.length !== 0) getMoreQuestions();
       }}
-      onEndReachedThreshold={7}
+      onEndReachedThreshold={4}
       renderItem={({ item }) => {
         return (
           <QuestionView
