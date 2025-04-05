@@ -13,14 +13,11 @@ export default function SignUpScreen() {
   const colorScheme = useColorScheme();
 
   const [loading, setLoading] = useState<boolean>(false);
+
   const [email, setEmail] = useState<string>('');
-  const [emailError, setEmailError] = useState<string>('');
   const [username, setUsername] = useState<string>('');
-  const [usernameError, setUsernameError] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [passwordError, setPasswordError] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
-  const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
 
   // Check if email contains @ and .
   const emailRegex = /^.+@.+\.\w+$/;
@@ -66,27 +63,40 @@ export default function SignUpScreen() {
     setLoading(true);
 
     if (!emailRegex.test(email)) {
-      setEmailError('Enter a valid email address');
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Email',
+        text2: 'Enter a valid email address',
+      });
       setLoading(false);
       return;
     }
 
     if (!usernameRegex.test(username)) {
-      setUsernameError('Enter a valid username');
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Username',
+        text2: 'Enter a valid username',
+      });
       setLoading(false);
       return;
     }
 
     if (!passwordRegex.test(password)) {
-      setPasswordError(
-        'Invalid password. Password must be 8 or more characters and contain numbers.'
-      );
+      Toast.show({
+        type: 'error',
+        text1: 'Invalid Password',
+        text2: 'Password must be 8 or more characters and contain numbers.',
+      });
       setLoading(false);
       return;
     }
 
     if (password !== confirmPassword) {
-      setConfirmPasswordError('Passwords do not match');
+      Toast.show({
+        type: 'error',
+        text1: 'Passwords do not match',
+      });
       setLoading(false);
       return;
     }
@@ -148,43 +158,29 @@ export default function SignUpScreen() {
         autoCapitalize="none"
         inputMode="email"
         placeholder="Email"
-        onChangeText={(email) => {
-          setEmail(email.trim());
-          setEmailError('');
-        }}
-        errorMessage={emailError}
+        onChangeText={(email) => setEmail(email.trim())}
       />
 
       <SprinterTextInput
         autoCapitalize="none"
         placeholder="Username"
-        onChangeText={(username) => {
-          setUsername(username.trim());
-          setUsernameError('');
-        }}
-        errorMessage={usernameError}
+        onChangeText={(username) => setUsername(username.trim())}
       />
 
       <SprinterTextInput
         autoCapitalize="none"
         secureTextEntry
         placeholder="Password"
-        onChangeText={(password) => {
-          setPassword(password.trim());
-          setPasswordError('');
-        }}
-        errorMessage={passwordError}
+        onChangeText={(password) => setPassword(password.trim())}
       />
 
       <SprinterTextInput
         autoCapitalize="none"
         secureTextEntry
         placeholder="Confirm Password"
-        onChangeText={(confirmPassword) => {
-          setConfirmPassword(confirmPassword.trim());
-          setConfirmPasswordError('');
-        }}
-        errorMessage={confirmPasswordError}
+        onChangeText={(confirmPassword) =>
+          setConfirmPassword(confirmPassword.trim())
+        }
       />
 
       <SprinterButton title="SIGN UP" onPress={signup} />
