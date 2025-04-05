@@ -15,6 +15,8 @@ export default function ChangePasswordScreen() {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
+  const passwordRegex = /^(?=.*\d).{8,}$/;
+
   const styles = StyleSheet.create({
     container: {
       backgroundColor:
@@ -36,6 +38,16 @@ export default function ChangePasswordScreen() {
 
   async function submit() {
     if (password === '' || confirmPassword === '') return;
+
+    if (!passwordRegex.test(password)) {
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2:
+          'Password insecure. Passwords must be more than 8 characters and contain numbers.',
+      });
+      return;
+    }
 
     if (password !== confirmPassword) {
       Toast.show({
