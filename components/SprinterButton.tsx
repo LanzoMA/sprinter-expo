@@ -1,5 +1,5 @@
-import { TouchableOpacity, Text } from 'react-native';
-import { useTheme } from '@rneui/themed';
+import { TouchableOpacity, Text, StyleSheet } from 'react-native';
+import baseTheme from '@/constants/base-theme';
 
 interface SprinterButtonProps {
   title: string;
@@ -10,23 +10,25 @@ export default function SprinterButton({
   title,
   onPress,
 }: SprinterButtonProps) {
-  const { theme } = useTheme();
+  const styles = StyleSheet.create({
+    background: {
+      backgroundColor: baseTheme.common.primary,
+      height: 48,
+      justifyContent: 'center',
+      alignItems: 'center',
+      borderRadius: 8,
+      padding: 8,
+    },
+    text: {
+      color: baseTheme.dark.text,
+      fontWeight: 700,
+      fontSize: 20,
+    },
+  });
 
   return (
-    <TouchableOpacity
-      style={{
-        backgroundColor: theme.colors.primary,
-        height: 48,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 8,
-        padding: 8,
-      }}
-      onPress={onPress}
-    >
-      <Text style={{ color: theme.colors.text, fontWeight: 700, fontSize: 20 }}>
-        {title}
-      </Text>
+    <TouchableOpacity style={styles.background} onPress={onPress}>
+      <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 }
