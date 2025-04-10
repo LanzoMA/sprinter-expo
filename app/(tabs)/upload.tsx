@@ -242,18 +242,9 @@ export default function UploadScreen() {
           data={courses}
           contentContainerStyle={styles.section}
           horizontal
-          renderItem={(course) => {
-            const { name, qualification, examBoard } = course.item;
-            const title = `${qualification} ${examBoard} ${name}`;
-
-            return (
-              <Chip
-                title={title}
-                onPress={() => {
-                  setCourse(course.item);
-                }}
-              />
-            );
+          renderItem={({ item }) => {
+            const title = `${item.qualification} ${item.examBoard} ${item.name}`;
+            return <Chip title={title} onPress={() => setCourse(item)} />;
           }}
         />
       </View>
